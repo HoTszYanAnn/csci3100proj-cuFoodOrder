@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Bad+Script&display=swap');
+.navBar{
+    background-color: rgb(166, 119, 211) !important;
+}
+.title{
+    font-family: 'Bad Script', cursive !important;
+    flex-grow: 1;
+}
+.root {
+    flex-grow: 1;
+}
+.username{
+    padding:0 1rem;
+}

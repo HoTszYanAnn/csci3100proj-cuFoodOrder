@@ -7,16 +7,19 @@ import {
   Link
 } from "react-router-dom";
 import './App.css';
+import Home from './components/Home';
+import Navigation from './components/Navigation';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <Button variant="contained" color="primary">
-          你好，世界
-        </Button>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <Navigation />
+          <Switch>
+            <Route path="/" component={Home} exact/>
+          </Switch>
+        </div> 
+    </Router>
   );
 }
 

@@ -2,4 +2,10 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap");
 *{
   font-family: 'Roboto Condensed', sans-serif !important;
+  margin: 0;
+}
+.messageBtn{
+  position: fixed !important;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
 }

@@ -18,7 +18,7 @@ export default function NavUserMenu() {
       <List>
         <ListItem>
           <Grid container justify="center">
-            <div class="orderTitle">Your Order</div>
+            <div className="orderTitle">Your Order</div>
           </Grid>
         </ListItem>
         <ListItem>
@@ -27,21 +27,21 @@ export default function NavUserMenu() {
       </List>
       <Divider />
       <List>
-        <ListItem class="pricelist">
+        <ListItem className="pricelist">
           <div>Subtotal</div>
           <div>${subtotal}</div>
         </ListItem>
-        <ListItem class="pricelist">
+        <ListItem className="pricelist">
           <div>Delivery Fee</div>
           <div>${deliveryFee}</div>
         </ListItem>
-        <ListItem class="pricelist totalprice">
+        <ListItem className="pricelist totalprice">
           <div>Total</div>
           <div>${total}</div>
         </ListItem>
       </List>
       <Grid container justify="center">
-        <Button variant="contained" color="secondary">
+        <Button variant="contained" color="secondary" size="large" className="paybtn">
           Make Payment
         </Button>
       </Grid>

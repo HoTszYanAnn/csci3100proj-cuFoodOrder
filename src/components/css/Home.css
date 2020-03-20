@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=Bad+Script&display=swap');
+.topbigimage{
+    width:100%;
+    opacity: 0.5;
+}
+.container {
+    position: relative;
+    margin: 0 auto; /* Center it */
+    margin-bottom: 2rem;
+  }
+
+.container .content-title {
+    position: absolute; /* Position the background text */
+    bottom: 20%; /* At the bottom. Use top:0 to append it to the top */
+    background: rgba(129, 255, 56, 0.5); /* Black background with 0.5 opacity */
+    color: #f1f1f1; /* Grey text */
+    padding-right: 3rem; 
+    padding-left: 8rem; /* Some padding */
+    line-height: 12rem;
+} 
+  
+.container .content-description {
+    position: absolute; /* Position the background text */
+    bottom: 5rem; /* At the bottom. Use top:0 to append it to the top */
+    background: rgba(85, 194, 22, 0.5); /* Black background with 0.5 opacity */
+    color: #f1f1f1; /* Grey text */
+    width: 40%; /* Full width */
+    padding: 20px; /* Some padding */
+    right:0;
+    height: 5rem;
+    font-size: 1.5rem;
+}
+  
+.apptitle{
+    font-family: 'Bad Script', cursive !important;
+    font-size: 5rem;
+}
+.restaurant{
+    width: 80%;
+    max-width: 1024px;
+    margin: auto;
+}
+
+.restaurant-heading{
+    padding-bottom: 1rem;
+}

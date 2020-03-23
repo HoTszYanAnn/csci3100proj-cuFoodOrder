@@ -19,9 +19,9 @@ export default function CenteredGrid() {
   const classes = useStyles();
   const numbers =[1,2,3,4,5,6,7,8,9];
   const cardItems = numbers.map((number) =>
-      <Grid item xs={4}>
-          <RestaurantCard/>
-        </Grid>
+      <Grid item xs={4} key={number}>
+          <RestaurantCard />
+      </Grid>
   )
   return (
     <div className={classes.root}>

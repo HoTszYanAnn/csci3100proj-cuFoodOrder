@@ -16,3 +16,13 @@
 .username{
     padding-left:0.5rem;
 }
+.navlogin-title{
+    font-size:2.5rem !important;
+    display:flex;
+    justify-content: space-around;
+    color:#51b400;
+}
+.loginnav-btngp{
+    display: flex;
+    justify-content: space-between;
+}

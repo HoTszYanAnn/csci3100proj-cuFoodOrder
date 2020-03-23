@@ -7,9 +7,6 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Slide from '@material-ui/core/Slide';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
@@ -18,12 +15,24 @@ import Drawer from '@material-ui/core/Drawer';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Cart from './ShoppingCart.js';
+import Cookies from 'js-cookie';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
 
 function HideOnScroll(props) {
   const { children, window } = props;
-  // Note that you normally won't need to set the window ref as useScrollTrigger
-  // will default to window.
-  // This is only being set here because the demo is in an iframe.
   const trigger = useScrollTrigger({ target: window ? window() : undefined });
 
   return (
@@ -54,17 +63,55 @@ export default function Navigation(props) {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const username = Cookies.get("username");
 
-  const handleChange = event => {
-    setAuth(event.target.checked);
+  const [loginValues, setLoginValues] = React.useState({
+    password: '',
+    username: '',
+    showPassword: false,
+  });
+  const [openLogoutSucc, setOpenLogoutSucc] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const handleCloseLogoutSucc = () => {
+    setOpenLogoutSucc(false);
+  };
+  const handleChangeLogin = prop => event => {
+    setLoginValues({ ...loginValues, [prop]: event.target.value });
   };
 
-  const handleMenu = event => {
+  const handleClickShowPassword = () => {
+    setLoginValues({ ...loginValues, showPassword: !loginValues.showPassword });
+  };
+
+  const handleMouseDownPassword = event => {
+    event.preventDefault();
+  };
+
+  const handleUserMenu = event => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleCloseUserMenu = () => {
     setAnchorEl(null);
+  };
+  const [openLoginBox, setOpenLoginBox] = React.useState(false);
+
+  const OpenLoginBox = () => {
+    setOpenLoginBox(true);
+  };
+
+  const CloseLoginBox = () => {
+    setOpenLoginBox(false);
+  };
+  const Logout = () => {
+    Cookies.remove("username");
+    setOpenLogoutSucc(true);
+  }
+  const SubmitLoginBox = () => {
+    Cookies.set("username", loginValues.username)
+    setOpenLoginBox(false);
   };
 
   const classes = useStyles();
@@ -92,7 +139,7 @@ export default function Navigation(props) {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <Cart/>
+      <Cart />
     </div>
   );
 
@@ -105,17 +152,32 @@ export default function Navigation(props) {
               CU Food Order
             </Typography>
             <div>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-                <div class="username">{auth ? 'Username' : 'Login'}</div>
-              </IconButton>
-              {auth && (
+              {username && (
+                <IconButton
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  color="inherit"
+                  onClick={handleUserMenu}
+                >
+                  <AccountCircle />
+                  <div className="username">{username ? username : 'Login'}</div>
+                </IconButton>
+              )}
+              {
+                !username && (
+                  <IconButton
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    color="inherit"
+                    onClick={OpenLoginBox}
+                  >
+                    <AccountCircle />
+                    <div className="username">{username ? username : 'Login'}</div>
+                  </IconButton>
+                )}
+              {username && (
                 <IconButton edge="start" className="cartbtn" color="inherit" aria-label="cart" onClick={toggleDrawer('right', true)}>
                   <ShoppingCartOutlinedIcon />
                 </IconButton>
@@ -133,21 +195,17 @@ export default function Navigation(props) {
                   horizontal: 'center',
                 }}
                 open={open}
-                onClose={handleClose}
+                onClose={handleCloseUserMenu}
               >
-                {auth && (
+                {username && (
                   <div>
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={handleCloseUserMenu}>Profile</MenuItem>
+                    <MenuItem onClick={handleCloseUserMenu}>My account</MenuItem>
+                    <MenuItem onClick={Logout}>Logout</MenuItem>
                   </div>
                 )}
-                <MenuItem><FormGroup>
-                  <FormControlLabel
-                    control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
-                  />
-                </FormGroup></MenuItem>
               </Menu>
-              {auth && (
+              {username && (
                 <div>
                   <Drawer anchor={'right'} open={state['right']} onClose={toggleDrawer('right', false)}>
                     {list('right')}
@@ -158,7 +216,74 @@ export default function Navigation(props) {
           </Toolbar>
         </AppBar>
       </HideOnScroll>
-
+      <Dialog open={openLoginBox} onClose={CloseLoginBox} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title"><div className="navlogin-title">Login</div></DialogTitle>
+        <DialogContent>
+          <FormControl variant="outlined"
+            margin="dense" fullWidth>
+            <InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-username"
+              value={loginValues.username}
+              onChange={handleChangeLogin('username')}
+              labelWidth={70}
+            />
+          </FormControl>
+          <FormControl variant="outlined"
+            margin="dense" fullWidth>
+            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={loginValues.showPassword ? 'text' : 'password'}
+              value={loginValues.password}
+              onChange={handleChangeLogin('password')}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {loginValues.showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              labelWidth={70}
+            />
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={SubmitLoginBox} variant="outlined" color="primary">
+            Register
+                </Button>
+          <div style={{ flex: '1 0 0' }} />
+          <Button onClick={CloseLoginBox} variant="outlined" color="secondary">
+            Cancel
+                </Button>
+          <Button onClick={SubmitLoginBox} variant="outlined" color="primary">
+            Login
+                </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        fullScreen={fullScreen}
+        open={openLogoutSucc}
+        onClose={handleCloseLogoutSucc}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title" margin="dense">{"Logout Successfully"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You have logged out.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleCloseLogoutSucc} color="primary" variant="outlined">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </React.Fragment>
   );
 }

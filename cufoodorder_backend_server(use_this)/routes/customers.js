@@ -4,10 +4,11 @@ var Customer = require('../models/customer');
 var authorized = require('../middlewares/token_check'); //middleware for authentication
 
 
+
 //authorized cookies checking middlewares
 router.get('/token_check', authorized, function(req, res){
     res.status(200).json({
-        _id: req._id,
+        _id: req.customer._id,
         username: req.customer.username,
         accessRight: req.customer.accessRight,
         authorization: true
@@ -64,6 +65,7 @@ router.get('/logout', authorized, function(req, res){
     });
 
 });
+
 
 
 module.exports = router;

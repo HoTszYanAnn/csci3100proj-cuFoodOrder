@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var server = require("http").createServer(app);
 var io = require("socket.io")(server);
+var cors = require("cors");
 
 
 var Inquire = require('./models/inquire');
@@ -23,6 +24,10 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 
+//use cors for frontend access
+app.use(cors());
+
+
 //routing functions
 /**customers 
  * authorized cookies checking middlewares
@@ -30,7 +35,17 @@ app.use(cookieParser());
  * login function
  * logout function */
 app.use('/catalog/customers', require('./routes/customers'));
+/**inquires
+ * getChatHistory */
 app.use('/catalog/inquires', require('./routes/inquires'));
+/**orders
+ * createBill function
+ * displayOrder
+ * total price
+ * update delivery information
+ * search courier */
+app.use('/catalog/orders', require('./routes/orders'));
+
 
 //routing for websocket io -- i.e. communication between the server and client
 //when websocket connection built, the first "on" function uses a "connection" event firing the anonymous function

@@ -1,0 +1,39 @@
+var express = require('express');
+var router = express.Router();
+var Menu = require('../models/menu');
+var authorized = require('../middlewares/token_check'); //middleware for authentication
+var multer = require('multer');
+var path = require('path');
+
+
+//receving file storage setting
+var storage = multer.diskStorage({
+    destination: function(req, file, callback){
+        callback(null, 'uploadedMenuImages/')
+    },
+    filename: function(req, file, callback){
+        var extension = path.extname(file.originalname);
+        callback(null,  req.body.menuName+ '_' + req.body.dishName + extension);
+    },
+    fileFilter: function(req, file, callback){
+        var imageType = file.mimetype;
+        if((imageType !== 'image/png') || (imageType !== 'image/jpg') || (imageType !== 'image/jpeg')) {
+            return callback(res.json({process: 'failed', details: 'only png/jpg/jepg format is accepted'}), false);
+        }
+        callback(null, true);
+    }
+});
+
+
+//apply the file setting above
+var upload = multer({storage:storage}).single('file');
+// Receive uploaded image for the menu saved in the server
+// using multer module, a kind of mode.js middleware for handling "multipart/form-data" header request
+//i.e. we use multer to handle the uploaded image saving request...
+//front-end needs 3 parameters: req.body.menuName, req.body.dishName, the image(uploading image should be the last order)
+router.post('/upload_photo', upload, function(req, res){  
+    return res.json({process: 'success' , image_path: res.req.file.path, image_name: res.req.file.filename});
+});
+
+
+module.exports = router;

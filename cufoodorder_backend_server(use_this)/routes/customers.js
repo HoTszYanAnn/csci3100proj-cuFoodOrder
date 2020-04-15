@@ -6,7 +6,7 @@ var authorized = require('../middlewares/token_check'); //middleware for authent
 
 
 //authorized cookies checking middlewares
-router.get('/token_check', authorized, function(req, res){
+router.post('/token_check', authorized, function(req, res){
     res.status(200).json({
         _id: req.customer._id,
         username: req.customer.username,
@@ -47,7 +47,7 @@ router.post('/login', function(req, res){
                 if (err) 
                     return res.status(400).send(err);
                 // res.cookie("linkage_expiry", customer.token_expiry);
-                res.cookie("linkage_token", customer.token).status(200).json({process: "success", customerId: customer._id});
+                res.cookie("linkage_token", customer.token).cookie("accessRight", customer.accessRight).status(200).json({process: "success", customerId: customer._id});
             });
         });
     });

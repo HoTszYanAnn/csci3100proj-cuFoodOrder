@@ -47,7 +47,7 @@ router.post('/upload_menu', authorized, function(req, res){
         if(err) 
             return res.json({process: "failed", err});
         else
-            return res.status(200).json({process: "success", details: 'added one 1 new menu'});    
+            return res.status(200).json({process: "success", details: 'added one 1 new menu', menuData});    
     });
 });
 
@@ -57,11 +57,11 @@ router.post('/upload_menu', authorized, function(req, res){
 //then fetch the the remaining data with the additional request...
 //every user including not registered one can use this function, so no 'authorized' middlware is needed.
 router.post('/display_menu', function(req, res){
-    Menu.find(function(err, allMenuData){
+    Menu.find().populate('restaurantName', 'username').exec(function(err, allMenuData){
         if(err)
             return res.json({process: "failed", err});
-        else 
-            return res.json({process: "success", allMenuData}) 
+        else          
+            return res.json({process: "success", allMenuData});
     });
 });
 
@@ -97,6 +97,9 @@ router.post('/delete_menu', authorized, function(req, res){
             return res.json({process: "success", deletedMenuData});
     });
 });
+
+
+
 
 
 module.exports = router;

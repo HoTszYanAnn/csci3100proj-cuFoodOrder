@@ -48,12 +48,12 @@ app.use('/catalog/orders', require('./routes/orders'));
 /**menus
  * receive uploaded photos of the menu from the server
  */
-app.use('/catalog/menus', require('./routes/menus'));
-var fs = require('fs');
-app.get('/form', function(req, res, next){
-    var form = fs.readFileSync('./upload_test.html', {encoding: 'utf8'});
-    res.send(form);
-});
+// app.use('/catalog/menus', require('./routes/menus'));
+// var fs = require('fs');
+// app.get('/form', function(req, res, next){
+//     var form = fs.readFileSync('./upload_test.html', {encoding: 'utf8'});
+//     res.send(form);
+// });
 
 //routing for websocket io -- i.e. communication between the server and client
 //when websocket connection built, the first "on" function uses a "connection" event firing the anonymous function

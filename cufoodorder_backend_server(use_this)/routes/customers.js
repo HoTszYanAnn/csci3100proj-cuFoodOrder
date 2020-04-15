@@ -67,5 +67,18 @@ router.get('/logout', authorized, function(req, res){
 });
 
 
+// search function below
+// see if there is any existed username in the database, if so, return warning
+router.get('/username_match', function(req, res){
+    Customer.findOne({username: req.body.username}, function(err, doc){
+        if(err)
+            return res.json({process: "failed", details: err});
+        else if(!doc)
+            return res.json({process: "success", details: "username can be used"});
+        else
+            return res.json({process: "failed", details: "username existed in the database"});
+    });
+});
+
 
 module.exports = router;

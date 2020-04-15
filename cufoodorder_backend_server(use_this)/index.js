@@ -48,7 +48,7 @@ app.use('/catalog/orders', require('./routes/orders'));
 /**menus
  * receive uploaded photos of the menu from the server
  */
-// app.use('/catalog/menus', require('./routes/menus'));
+app.use('/catalog/menus_test', require('./routes/menus_test'));
 // var fs = require('fs');
 // app.get('/form', function(req, res, next){
 //     var form = fs.readFileSync('./upload_test.html', {encoding: 'utf8'});

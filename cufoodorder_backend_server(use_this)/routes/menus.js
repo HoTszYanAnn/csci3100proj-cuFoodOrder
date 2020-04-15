@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Menu = require('../models/menu_test');
+var Menu = require('../models/menu');
 var authorized = require('../middlewares/token_check'); //middleware for authentication
 var multer = require('multer');
 var path = require('path');

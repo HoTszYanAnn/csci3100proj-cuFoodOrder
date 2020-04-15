@@ -7,7 +7,8 @@ var MenuSchema = new Schema({
     menuList: {type: String},
     description: {type: String},
     price: {type: Number, default:0},
-    imageAddress: {type: String}
+    imageAddress: {type: String},
+    likes: {type: Number}
 });
 
 module.exports = mongoose.model('Menu', MenuSchema);

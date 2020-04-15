@@ -44,7 +44,7 @@ app.use('/catalog/inquires', require('./routes/inquires'));
  * total price
  * update delivery information
  * search courier */
-app.use('/catalog/orders', require('./routes/orders'));
+//app.use('/catalog/orders', require('./routes/orders'));
 /**menus
  * receive uploaded photos of the menu from the server
  */

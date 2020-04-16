@@ -47,7 +47,7 @@ router.post('/login', function(req, res){
                 if (err) 
                     return res.status(400).send(err);
                 // res.cookie("linkage_expiry", customer.token_expiry);
-                res.cookie("linkage_token", customer.token).cookie("accessRight", customer.accessRight).status(200).json({process: "success", customerId: customer._id});
+                res.cookie("linkage_token", customer.token).status(200).json({process: "success", customerId: customer._id, accessRight: customer.accessRight});
             });
         });
     });
@@ -77,6 +77,17 @@ router.get('/username_match', function(req, res){
             return res.json({process: "success", details: "username can be used"});
         else{
             return res.json({process: "failed", details: "username existed in the database"});}
+    });
+});
+
+
+// post all the menus under this username.
+router.post('/username_menu', function(req, res){
+    Customer.find({username: req.body.username}).populate('findMenuUnderUsername').exec(function(err, doc){
+        if(err)
+            return res.json({process: "failed", err});
+        else{
+            return res.json({process: "success", doc});}
     });
 });
 

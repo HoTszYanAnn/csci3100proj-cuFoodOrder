@@ -8,6 +8,7 @@ var CustomerSchema = new Schema({
     name: {type: String, max: 50},
     username: {type: String, max: 20},
     password: {type:String, min:8, max:20},
+    introduction: {type: String},
     address: {type: String},
     mobile: {type: Number},
     emailAddress: {type: String},
@@ -15,6 +16,7 @@ var CustomerSchema = new Schema({
     accessRight: {type: Number, default: 0},
     token: {type: String},
     token_expiry: {type: Number}
+    },{toJSON: { virtuals: true }
 });
 
 // the below part hashing the password before saving data into database
@@ -81,6 +83,13 @@ CustomerSchema.statics.searchToken = function(token, callback){
 
 };
 
+
+//virtual populate get the 'menuName' through query of 'username' in this model
+CustomerSchema.virtual('findMenuUnderUsername', {
+    ref: 'Menu', // The model to use
+    localField: 'username', // Find people where `localField`
+    foreignField: 'menuName', // is equal to `foreignField`
+});
 
 
 module.exports = mongoose.model('Customer', CustomerSchema);

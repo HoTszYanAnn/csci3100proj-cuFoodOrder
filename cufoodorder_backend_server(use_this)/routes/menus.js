@@ -57,7 +57,7 @@ router.post('/upload_menu', authorized, function(req, res){
 //then fetch the the remaining data with the additional request...
 //every user including not registered one can use this function, so no 'authorized' middlware is needed.
 router.post('/display_menu', function(req, res){
-    Menu.find().populate('restaurantName', 'username').exec(function(err, allMenuData){
+    Menu.find().populate('restaurantName', 'username introduction').exec(function(err, allMenuData){
         if(err)
             return res.json({process: "failed", err});
         else          

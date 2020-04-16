@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles  } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -10,13 +10,16 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
+import PropTypes from 'prop-types';
+import {Link as RouterLink} from 'react-router-dom';
+import image from '../img/cuhk.jpeg';
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
     media: {
         height: 0,
         paddingTop: '56.25%', // 16:9
@@ -34,16 +37,27 @@ const useStyles = makeStyles(theme => ({
     avatar: {
         backgroundColor: red[500],
     },
-}));
+});
 
-export default function RecipeReviewCard() {
-    const classes = useStyles();
-    const [expanded, setExpanded] = React.useState(false);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
+class RestaurantCard extends React.Component {
+    
+    constructor(props){
+        super(props);
+        this.state = {
+            expanded : false
+        }
+        this.handleExpandClick = this.handleExpandClick.bind(this);
+    }
+    
+    handleExpandClick = () => {
+        console.log(this.state.expanded);
+        this.setState({ expanded: !this.state.expanded });
     };
+    
+    render(){
 
+    const {classes} = this.props;
+    console.log(this.props);
     return (
         <Card className={classes.root}>
             <CardHeader
@@ -53,56 +67,56 @@ export default function RecipeReviewCard() {
                     </Avatar>
                 }
                 action={
-                    <IconButton aria-label="settings">
-                        <MoreVertIcon />
+                    <IconButton aria-label="settings" component={RouterLink} to={{pathname: `/restaurants/${this.props.linkName}`}}>
+                        <RestaurantIcon />
                     </IconButton>
                 }
-                title="ABC restaurant"
-                subheader="Update: March 20, 2020"
+                title={this.props.restName}
+                subheader={this.props.updateDate}
             />
             <CardMedia
                 className={classes.media}
-                image="../img/cuhk.jpeg"
+                image={image}
                 title="Paella dish"
             />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    description
+                {this.props.description}
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
                 <IconButton aria-label="add to favorites">
                     <FavoriteIcon />
-                    <div>10</div>
+                    <div>{this.props.like}</div>
                 </IconButton>
                 <IconButton
                     className={clsx(classes.expand, {
-                        [classes.expandOpen]: expanded,
+                        [classes.expandOpen]: this.state.expanded,
                     })}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
+                    onClick={this.handleExpandClick}
+                    aria-expanded={this.state.expanded}
                     aria-label="show more"
                 >
                     <ExpandMoreIcon />
                 </IconButton>
             </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    <Typography paragraph>Menu:</Typography>
-                    <Typography paragraph>
-                        1. ...
-                    </Typography>
-                    <Typography paragraph>
-                        2. ...
-                    </Typography>
-                    <Typography paragraph>
-                        3. ...
-                    </Typography>
-                    <Typography>
-                        4. ...
-                    </Typography>
+                    <div>Menu:</div>
+                    {this.props.bestItems.map((bestItem) =>
+                    <Grid container justify="space-between" key={bestItem._id}>
+                        <Grid item>{bestItem.dish}</Grid>
+                        <Grid item>${bestItem.price}</Grid>
+                    </Grid>
+                    )}
                 </CardContent>
             </Collapse>
         </Card>
     );
 }
+}
+
+RestaurantCard.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+export default withStyles(styles)(RestaurantCard);

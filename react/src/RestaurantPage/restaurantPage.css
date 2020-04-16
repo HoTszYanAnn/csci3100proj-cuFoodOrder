@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Bad+Script&display=swap');
 .topbigimage{
     width:100%;
     opacity: 0.5;
@@ -18,7 +17,7 @@
     padding-left: 8rem; /* Some padding */
     line-height: 12rem;
 } 
-  
+
 .container .content-description {
     position: absolute; /* Position the background text */
     bottom: 5rem; /* At the bottom. Use top:0 to append it to the top */
@@ -35,12 +34,8 @@
     font-family: 'Bad Script', cursive !important;
     font-size: 5rem;
 }
-.restaurant{
-    width: 80%;
-    max-width: 1024px;
-    margin: auto;
-}
 
-.restaurant-heading{
-    padding-bottom: 1rem;
+.orderMenuBox{
+    max-width: 1024px;
+    margin: 2rem auto;
 }

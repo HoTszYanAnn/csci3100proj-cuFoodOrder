@@ -45,7 +45,6 @@ export default function NavUserMenu() {
           Make Payment
         </Button>
       </Grid>
-
     </React.Fragment>
   );
 }

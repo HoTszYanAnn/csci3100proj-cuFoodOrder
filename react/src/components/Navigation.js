@@ -15,21 +15,19 @@ import Drawer from '@material-ui/core/Drawer';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Cart from './ShoppingCart.js';
-import Cookies from 'js-cookie';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
+import RegisterBox from './RegisterBox';
+import Cookies from 'js-cookie';
+import LoginBox from './LoginBox'
+import NoticeBox from './NoticeBox';
+import { Link as RouterLink } from 'react-router-dom';
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -60,34 +58,35 @@ const useStyles = makeStyles({
 });
 
 export default function Navigation(props) {
-  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const username = Cookies.get("username");
-
-  const [loginValues, setLoginValues] = React.useState({
-    password: '',
-    username: '',
-    showPassword: false,
-  });
   const [openLogoutSucc, setOpenLogoutSucc] = React.useState(false);
+  const [openRegister, setOpenRegister] = React.useState(false);
+  const [openLoginBox, setOpenLoginBox] = React.useState(false);
+  const [openRegisterSucc, setOpenRegisterSucc] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleCloseLogoutSucc = () => {
     setOpenLogoutSucc(false);
   };
-  const handleChangeLogin = prop => event => {
-    setLoginValues({ ...loginValues, [prop]: event.target.value });
+  const handleOpenRegister = () => {
+    setOpenLoginBox(false);
+    setOpenRegister(true);
+  }
+  const handleCloseRegisterDone = () => {
+    setOpenRegister(false);
+    setOpenRegisterSucc(true);
   };
-
-  const handleClickShowPassword = () => {
-    setLoginValues({ ...loginValues, showPassword: !loginValues.showPassword });
+  const handleCloseRegisterCancel = () => {
+    setOpenRegister(false);
+    setOpenLoginBox(true);
   };
-
-  const handleMouseDownPassword = event => {
-    event.preventDefault();
+  const handleCloseRegisterSucc = () => {
+    setOpenRegisterSucc(false);
   };
+  
 
   const handleUserMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -96,7 +95,6 @@ export default function Navigation(props) {
   const handleCloseUserMenu = () => {
     setAnchorEl(null);
   };
-  const [openLoginBox, setOpenLoginBox] = React.useState(false);
 
   const OpenLoginBox = () => {
     setOpenLoginBox(true);
@@ -107,12 +105,10 @@ export default function Navigation(props) {
   };
   const Logout = () => {
     Cookies.remove("username");
+    Cookies.remove("token");
+    handleCloseUserMenu();
     setOpenLogoutSucc(true);
   }
-  const SubmitLoginBox = () => {
-    Cookies.set("username", loginValues.username)
-    setOpenLoginBox(false);
-  };
 
   const classes = useStyles();
   const [state, setState] = React.useState({
@@ -149,7 +145,9 @@ export default function Navigation(props) {
         <AppBar className="navBar">
           <Toolbar>
             <Typography variant="h5" className="title">
-              CU Food Order
+              <RouterLink to="/" className="titletext">
+                CU Food Order
+              </RouterLink>
             </Typography>
             <div>
               {username && (
@@ -216,74 +214,25 @@ export default function Navigation(props) {
           </Toolbar>
         </AppBar>
       </HideOnScroll>
-      <Dialog open={openLoginBox} onClose={CloseLoginBox} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title"><div className="navlogin-title">Login</div></DialogTitle>
-        <DialogContent>
-          <FormControl variant="outlined"
-            margin="dense" fullWidth>
-            <InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-username"
-              value={loginValues.username}
-              onChange={handleChangeLogin('username')}
-              labelWidth={70}
-            />
-          </FormControl>
-          <FormControl variant="outlined"
-            margin="dense" fullWidth>
-            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={loginValues.showPassword ? 'text' : 'password'}
-              value={loginValues.password}
-              onChange={handleChangeLogin('password')}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {loginValues.showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              labelWidth={70}
-            />
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={SubmitLoginBox} variant="outlined" color="primary">
-            Register
-                </Button>
-          <div style={{ flex: '1 0 0' }} />
-          <Button onClick={CloseLoginBox} variant="outlined" color="secondary">
-            Cancel
-                </Button>
-          <Button onClick={SubmitLoginBox} variant="outlined" color="primary">
-            Login
-                </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        fullScreen={fullScreen}
+      <LoginBox open={openLoginBox} onClose={CloseLoginBox} onRegister={handleOpenRegister} aria-labelledby="form-dialog-title" />
+      <RegisterBox
+        open={openRegister}
+        onSuccClose={handleCloseRegisterDone}
+        onCancelClose={handleCloseRegisterCancel}
+        aria-labelledby="form-dialog-title" />
+      <NoticeBox
         open={openLogoutSucc}
         onClose={handleCloseLogoutSucc}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title" margin="dense">{"Logout Successfully"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            You have logged out.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleCloseLogoutSucc} color="primary" variant="outlined">
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </React.Fragment>
-  );
+        aria-labelledby="form-dialog-title"
+        title="Logged out"
+        content="You have logged out successfully" />
+      <NoticeBox
+        open={openRegisterSucc}
+        onClose={handleCloseRegisterSucc}
+        aria-labelledby="form-dialog-title"
+        title="Register Successfully"
+        content="You have register successfully. Please Login to order!" />
+      </React.Fragment>
+      
+);
 }

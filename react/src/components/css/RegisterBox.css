@@ -1,0 +1,9 @@
+.registerBox {
+    margin-top: 8rem;
+    display: block;
+    text-align: center;
+}
+
+.registerTitle{
+    font-size: 5rem;
+}

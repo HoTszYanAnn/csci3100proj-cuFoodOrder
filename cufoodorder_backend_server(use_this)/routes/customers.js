@@ -83,11 +83,31 @@ router.get('/username_match', function(req, res){
 
 // post all the menus under this username.
 router.post('/username_menu', function(req, res){
-    Customer.find({username: req.body.username}).populate('findMenuUnderUsername').exec(function(err, doc){
+    Customer.find({username: req.body.username}).populate('findMenuUnderUsername', 'menuName').select('username').exec(function(err, doc){
         if(err)
             return res.json({process: "failed", err});
         else{
             return res.json({process: "success", doc});}
+    });
+});
+
+
+//update account
+router.post('/update_account', authorized, function(req, res){
+
+    var updateKeysAndValues = {};
+
+    //below function used to assign keys and values to the object
+    //first parameter is target; second one is the source for copy
+    Object.assign(updateKeysAndValues, req.body);
+
+    // console.log(updateKeysAndValues); //debug
+
+    Customer.findOneAndUpdate({_id: req.body._id}, updateKeysAndValues, function(err, beforeUpdateData){
+        if(err)
+            return res.json({process: "failed", err});
+        else 
+            return res.json({process: "success", beforeUpdateData, newChange: req.body});
     });
 });
 

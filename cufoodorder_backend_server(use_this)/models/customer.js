@@ -87,8 +87,8 @@ CustomerSchema.statics.searchToken = function(token, callback){
 //virtual populate get the 'menuName' through query of 'username' in this model
 CustomerSchema.virtual('findMenuUnderUsername', {
     ref: 'Menu', // The model to use
-    localField: 'username', // Find people where `localField`
-    foreignField: 'menuName', // is equal to `foreignField`
+    localField: '_id', // Find people where `localField`
+    foreignField: 'restaurantName', // is equal to `foreignField`
 });
 
 

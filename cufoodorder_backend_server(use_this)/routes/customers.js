@@ -57,13 +57,13 @@ router.post('/login', function(req, res){
 
 // logout function below
 // using get because logout function doesn't need to be that secure as login
-router.get('/logout', authorized, function(req, res){
-    Customer.findOneAndUpdate({_id: req.customer._id}, {token: "empty"}, function(err, doc){
+// Customer.findOneAndUpdate({_id: req.customer._id}, {token: "empty"}, function(err, doc){
+router.post('/logout', authorized, function(req, res){
+    Customer.findOneAndUpdate({_id: req.body._id}, {token: "empty"}, function(err, doc){
         if(err)
             return res.json({process: "failed", details: err});
         return res.status(200).json({process: "success", details: "logout successfully"});
     });
-
 });
 
 

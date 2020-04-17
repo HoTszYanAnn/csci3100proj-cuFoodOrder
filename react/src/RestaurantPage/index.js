@@ -1,23 +1,62 @@
 import React from 'react';
-import { withRouter } from "react-router";
+import { withRouter, Redirect } from "react-router";
 import image from '../img/cuhk.jpeg';
 import Paper from '@material-ui/core/Paper';
 import './restaurantPage.css';
-
-
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import FormGroup from '@material-ui/core/FormGroup';
+import Ordercard from '../components/ordercard.js';
+import Img from '../img/test.jpg';
+import '../components/css/order.css';
+import ShoppingCart from '../components/ShoppingCart.js'
+const useStyles = makeStyles(theme => ({
+    root: {
+      flexGrow: 1,
+    },
+    paper: {
+      padding: theme.spacing(2),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+    },
+    
+        backgroundColor:'#41c7c2'
+    
+  }));
 class RestaurantsPage extends React.Component {
 
     restaurantTitle = "abc Restaurant";
 
-    menuItems = [{
-        name: "hi222",
-        price: "123"
-    }, {
-        name: "hi",
-        price: "123"
-    }];
-
+   
+    constructor(props){
+        super(props);
+    this.state = {
+        menuItems : [{
+            _id:1233,
+            name: "Hambergur",
+            price: 123,
+            imgs:Img,
+        }, {
+            _id:5646,
+            name: "hi",
+            price: 234,
+            imgs:Img,
+        }]
+    }
+    }
+   
     render() {
+        
+        let cardItems = this.state.menuItems.map((menu) =>
+        <Grid item xs={4} key={menu._id}>
+       <Ordercard 
+         name={menu.name}
+         description={menu.description}
+         price={menu.price}
+         img={menu.imgs}
+        />
+        </Grid>
+        )
         return (
             <React.Fragment>
                 <div className="container">
@@ -31,15 +70,13 @@ class RestaurantsPage extends React.Component {
                 </div>
                 <div className="orderMenuBox">
                 <Paper elevation={3} >
-                    <div>
-                    {this.props.match.params.restName}
-                    {this.menuItems.map((menuItem) =>
-                        <div key={menuItem.name}>
-                            {menuItem.name}
-                            {menuItem.price}
-                        </div>
-                    )}
-                    </div>
+                   
+                   
+                     <Grid container spacing={3}> 
+                    {cardItems}
+                    </Grid>
+                    
+                     
                 </Paper>
                 </div>
             </React.Fragment>

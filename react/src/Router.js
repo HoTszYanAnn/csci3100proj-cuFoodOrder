@@ -18,6 +18,12 @@ const useStyles = makeStyles(theme => ({
 }));
 const LoadableHomePage =  React.lazy(() => import('./HomePage'));
 
+const LoadableProfilePage =  React.lazy(() => import('./ProfilePage'));
+
+const LoadableOrderPage =  React.lazy(() => import('./OrderListPage'));
+
+const LoadableUpdateMenuPage =  React.lazy(() => import('./UpdateMenuPage'));
+
 const LoadableRestSearchPage =  React.lazy(() => import('./LoadingPage'));
 
 const LoadableRestaurantPage =  React.lazy(() => import('./RestaurantPage'));
@@ -35,6 +41,22 @@ function Routes() {
       <Route exact path="/">
         <Suspense fallback={<LoadingPage/>}>
           <LoadableHomePage />
+        </Suspense>  
+      </Route>
+      <Route exact path="/profile">
+        <Suspense fallback={<LoadingPage/>}>
+          <LoadableProfilePage />
+        </Suspense>  
+      </Route>
+      
+      <Route exact path="/order">
+        <Suspense fallback={<LoadingPage/>}>
+          <LoadableOrderPage />
+        </Suspense>  
+      </Route>
+      <Route exact path="/update_menu">
+        <Suspense fallback={<LoadingPage/>}>
+          <LoadableUpdateMenuPage />
         </Suspense>  
       </Route>
       <Route exact path="/restaurants">

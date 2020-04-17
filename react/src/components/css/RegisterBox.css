@@ -7,3 +7,7 @@
 .registerTitle{
     font-size: 5rem;
 }
+
+.ErrorMessage{
+    color: red;
+}

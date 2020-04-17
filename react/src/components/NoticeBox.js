@@ -18,7 +18,7 @@ class NoticeBox extends React.Component {
                 <DialogTitle id="responsive-dialog-title" margin="dense">{this.props.title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-        {this.props.content}
+                        {this.props.content}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

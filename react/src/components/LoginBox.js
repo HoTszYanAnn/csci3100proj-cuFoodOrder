@@ -50,10 +50,8 @@ class LoginBox extends React.Component {
 
     SubmitLoginBox = () => {
         var data = this.loginRequest();
-        console.log(data);
     };
     loginRequest = async () => {
-        const location = window.location.hostname;
         const loginData = {
             method: 'POST',
             headers: {
@@ -68,13 +66,12 @@ class LoginBox extends React.Component {
                 return a;
             });
             if (data.process == 'success') {
-                console.log(data.customerId);
                 this.setErrorMessage("");
                 Cookies.set("token", data.customerId, { expires: 1 });
                 Cookies.set("username", this.state.username, { expires: 1 });
+                Cookies.set("accessRight", data.accessRight, { expires: 1 });
                 this.props.onClose();
             } else {
-                console.log(data.details);
                 this.setErrorMessage(data.details);
             }
             return data;

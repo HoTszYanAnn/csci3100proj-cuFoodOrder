@@ -37,6 +37,9 @@ const styles = theme => ({
     avatar: {
         backgroundColor: red[500],
     },
+    menuItem:{
+        fontSize: '1.4rem'
+    }
 });
 
 class RestaurantCard extends React.Component {
@@ -102,11 +105,11 @@ class RestaurantCard extends React.Component {
             </CardActions>
             <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    <div>Menu:</div>
+                    <div className={classes.menuItem}>Menu:</div>
                     {this.props.bestItems.map((bestItem) =>
                     <Grid container justify="space-between" key={bestItem._id}>
-                        <Grid item>{bestItem.dish}</Grid>
-                        <Grid item>${bestItem.price}</Grid>
+                        <Grid item className={classes.menuItem}>{bestItem.dish}</Grid>
+                        <Grid item className={classes.menuItem}>${bestItem.price}</Grid>
                     </Grid>
                     )}
                 </CardContent>

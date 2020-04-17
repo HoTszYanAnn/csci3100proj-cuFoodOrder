@@ -28,6 +28,7 @@ import Cookies from 'js-cookie';
 import LoginBox from './LoginBox'
 import NoticeBox from './NoticeBox';
 import { Link as RouterLink } from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -61,6 +62,7 @@ export default function Navigation(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const username = Cookies.get("username");
+  const accessRight = Cookies.get("accessRight");
   const [openLogoutSucc, setOpenLogoutSucc] = React.useState(false);
   const [openRegister, setOpenRegister] = React.useState(false);
   const [openLoginBox, setOpenLoginBox] = React.useState(false);
@@ -70,6 +72,7 @@ export default function Navigation(props) {
 
   const handleCloseLogoutSucc = () => {
     setOpenLogoutSucc(false);
+    //this.props.history.push('/');
   };
   const handleOpenRegister = () => {
     setOpenLoginBox(false);
@@ -103,9 +106,26 @@ export default function Navigation(props) {
   const CloseLoginBox = () => {
     setOpenLoginBox(false);
   };
-  const Logout = () => {
+  const Logout = async() => {
+    const token = Cookies.get("token");
+    const logoutData = {
+      method: 'GET',
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ customerId : token})
+    };
+    try {
+      const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/catalog/customers/logout`, logoutData);
+      const data = await fetchResponse.json().then(function (a) {
+      });
+    }catch(e){
+      console.log(e);
+    }
     Cookies.remove("username");
     Cookies.remove("token");
+    Cookies.remove("accessRight");
     handleCloseUserMenu();
     setOpenLogoutSucc(true);
   }
@@ -197,8 +217,11 @@ export default function Navigation(props) {
               >
                 {username && (
                   <div>
-                    <MenuItem onClick={handleCloseUserMenu}>Profile</MenuItem>
-                    <MenuItem onClick={handleCloseUserMenu}>My account</MenuItem>
+                    <MenuItem onClick={handleCloseUserMenu} component={RouterLink} to="/profile">Profile</MenuItem>
+                    <MenuItem component={RouterLink} to="/order">My Order</MenuItem>
+                    {accessRight == 1 && 
+                      <MenuItem component={RouterLink} to="/update_menu">My Menu</MenuItem>
+                    }
                     <MenuItem onClick={Logout}>Logout</MenuItem>
                   </div>
                 )}

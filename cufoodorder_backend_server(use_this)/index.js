@@ -44,7 +44,7 @@ app.use('/catalog/inquires', require('./routes/inquires'));
  * total price
  * update delivery information
  * search courier */
-//app.use('/catalog/orders', require('./routes/orders'));
+app.use('/catalog/orders', require('./routes/orders'));
 /**menus
  * receive uploaded photos of the menu from the server
  */
@@ -55,12 +55,22 @@ app.use('/catalog/menus', require('./routes/menus'));
 //     res.send(form);
 // });
 
+
+// app.get('/chat', function(req, res){
+//     res.sendFile(__dirname + '/chat_app.html');
+// });
+
 //routing for websocket io -- i.e. communication between the server and client
 //when websocket connection built, the first "on" function uses a "connection" event firing the anonymous function
 io.on("connection", function(socket){
+
+    console.log('a user connected' + socket.id); //debug
+
     //below on() receiving information from the client server
     socket.on("chat_dialog", function(message){
-                    
+        
+        console.log(message);  //debug 
+        
         var inquire = new Inquire({
             user_id: message.user_input_id,
             cs_id: message.cs_input_id,
@@ -74,14 +84,16 @@ io.on("connection", function(socket){
                 return res.json({process: "failed", err});
             
             //we need to use the "inquireData" in this function scope
-            Inquire.find({"_id": inquireData._id})
-            .populate("user_id")
-            .populate("cs_id")
+            Inquire.find({_id: inquireData._id})
+            .populate("user_id", 'username')
+            .populate("cs_id", 'username')
             .exec(function(err, inquireData){
                 if(err)
-                return res.json({process: "failed", err});
+                    return res.json({process: "failed", err});
+                else {
+                console.log(inquireData);
                 //use emit() to send inquireData to the client server for further rendering
-                return io.emit("saved_dialog", inquireData)})
+                return io.emit("saved_dialog", inquireData)}})
         });
     });
 });

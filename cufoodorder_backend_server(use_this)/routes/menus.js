@@ -6,7 +6,6 @@ var multer = require('multer');
 var path = require('path');
 
 
-
 //receving file storage setting
 var storage = multer.diskStorage({
     destination: function(req, file, callback){

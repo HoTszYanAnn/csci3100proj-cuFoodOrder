@@ -47,7 +47,12 @@ router.post('/login', function(req, res){
                 if (err) 
                     return res.status(400).send(err);
                 // res.cookie("linkage_expiry", customer.token_expiry);
-                res.cookie("linkage_token", customer.token).status(200).json({process: "success", customerId: customer._id, accessRight: customer.accessRight});
+                res.cookie("linkage_token", customer.token).status(200).json({
+                    process: "success", 
+                    customerId: customer._id,
+                    username: customer.username,
+                    accessRight: customer.accessRight
+                });
             });
         });
     });
@@ -69,7 +74,7 @@ router.post('/logout', authorized, function(req, res){
 
 // search function below
 // see if there is any existed username in the database, if so, return warning
-router.get('/username_match', function(req, res){
+router.post('/username_match', function(req, res){
     Customer.findOne({username: req.body.username}, function(err, doc){
         if(err)
             return res.json({process: "failed", err});
@@ -103,7 +108,7 @@ router.post('/update_account', authorized, function(req, res){
 
     // console.log(updateKeysAndValues); //debug
 
-    Customer.findOneAndUpdate({_id: req.body._id}, updateKeysAndValues, function(err, beforeUpdateData){
+    Customer.findOneAndUpdate({username: req.body.username}, updateKeysAndValues, function(err, beforeUpdateData){
         if(err)
             return res.json({process: "failed", err});
         else 
@@ -111,5 +116,16 @@ router.post('/update_account', authorized, function(req, res){
     });
 });
 
+
+//request all data of that user by username
+router.post('/user_data', authorized, function(req, res){
+
+    Customer.findOne({username: req.body.username}, function(err, customerData){
+        if(err)
+            return res.json({process: "failed", err});
+        else 
+            return res.json({process: "success", customerData});
+    });
+});
 
 module.exports = router;

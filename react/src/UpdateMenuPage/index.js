@@ -30,6 +30,19 @@ class OrderPage extends React.Component {
     render() {
         const username = Cookies.get("username");
         const accessRight = Cookies.get("accessRight");
+        const navbar = props => {
+            <header className="navbar">
+                <nav className="navbar_navigate">
+                    <div className="navbar_logo">LOGO</div>
+                    <div className="navbar_navigate-items">
+                        <ul>
+                            <li>Item 1</li>
+                            <li>Item 2</li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+        };
 
         if (accessRight != "1") {
             return <Redirect to="/" />

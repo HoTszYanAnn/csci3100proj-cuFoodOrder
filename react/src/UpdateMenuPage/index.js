@@ -43,19 +43,19 @@ class OrderPage extends React.Component {
                     </div>
                 </nav>
             </header>
+        };
+        
+        function expand_item-list() {
+        
+        };
+        
+        function expand_menu-list() {
+        
         };*/
 
         if (accessRight != "1") {
             return <Redirect to="/" />
         }
-            
-        /*function expand_item-list() {
-        
-        };
-            
-        function expand_menu-list() {
-        
-        };*/
         
         return (
             <React.Fragment>

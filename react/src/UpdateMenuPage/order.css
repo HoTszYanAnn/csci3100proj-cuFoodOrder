@@ -5,8 +5,14 @@
     background-color: rgb(252, 252, 252);
 }
 
-
 .menuList{
     margin: 0 auto;
     max-width:600px;
+}
+
+.navbar_navigate {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    padding: 0 1rem;
 }

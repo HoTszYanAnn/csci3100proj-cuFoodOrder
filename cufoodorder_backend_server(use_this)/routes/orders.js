@@ -1,37 +1,99 @@
 var express = require('express');
 var router = express.Router();
 var Order = require('../models/order');
-var Menu = require('../models/menu');
-var Customer = require('../models/customer');
-var CartDishes = require('../models/cartdishes');
-
-
-// create a new order
-router.post('/newOrder', function(req, res){
-    var order = new Order({
-        order: req.body.order,
-        name: req.body.name,
-        address: req.body.address,
-        paymentinfo: req.body.paymentinfo,
-        paymentStatus: req.body.paymentStatus,
+var authorized = require('../middlewares/token_check'); //middleware for authentication
+ 
+ 
+//create-bill function
+router.post('/createBill', authorized, function(req, res){
+    var orderList = new Order(req.body);
+ 
+    orderList.save().populate('customer_id', 'name username address paymentInfo').exec(function(err, orderData){
+        if(err) 
+            return res.json({process: "failed", err}); 
+        else {
+            return res.status(200).json({process: "success", orderData});
+            };        
+        });
+});
+ 
+ 
+// display-order History function for customer
+router.post('/orderHistory_customer', authorized, function(req, res){
+    Order.find({customer_id: req.body.customer_id}).populate('customer_id', 'name username address paymentInfo').exec(function(err, orderHistory){
+        if(err)
+            return res.json({process: "failed", err});
+        else    
+            return res.json({process: "success", orderHistory});
     });
-
-    order.save().then(order => {
-        CartDishes.remove({"customer": req.body.customer}) // remove dishes from the cart
-        .exec().then(doc => {
-            res.json({process: "success"});
-        })
-        .catch(error => {
-            res.json({process: "failed"});
-        })
-    })
-    .catch(error => {
-        res.json({process: "failed"});
-    })
-
-})
+});
 
 
+// display-order History function for restaurant
+router.post('/orderHistory_restaurant', authorized, function(req, res){
+    Order.find({restaurant_id: req.body.restaurant_id}).populate('restaurant_id', 'name username address paymentInfo').exec(function(err, orderHistory){
+        if(err)
+            return res.json({process: "failed", err});
+        else    
+            return res.json({process: "success", orderHistory});
+    });
+});
 
 
+// display-order History function for courier
+router.post('/orderHistory_courier', authorized, function(req, res){
+    Order.find({courier_id: req.body.courier_id}).populate('courier_id', 'name username address paymentInfo').exec(function(err, orderHistory){
+        if(err)
+            return res.json({process: "failed", err});
+        else    
+            return res.json({process: "success", orderHistory});
+    });
+});
+ 
+
+//update order
+//can update the order through the Order._id
+router.post('/update_order', authorized, function(req, res){
+ 
+    var updateKeysAndValues = {};
+ 
+    //below function used to assign keys and values to the object
+    //first parameter is target; second one is the source for copy
+    Object.assign(updateKeysAndValues, req.body);
+ 
+    Order.findOneAndUpdate({_id: req.body._id}, updateKeysAndValues, function(err, beforeUpdateOrderData){
+        if(err)
+            return res.json({process: "failed", err});
+        else 
+            return res.json({process: "success", beforeUpdateOrderData, newChange: req.body});
+    });
+});
+ 
+ 
+//cancel order
+router.post('/delete_order', authorized, function(req, res){
+    Order.findOneAndDelete({_id: req.body._id}, function(err, deletedOrderData){
+        if(err)
+            return res.json({process: "failed", err});
+        else 
+            return res.json({process: "success", deletedOrderData});
+    });
+});
+ 
+ 
+// "courier_match" is used to see if the courier's id appeared in the order's database
+// in other words, courier's data should be unique in here
+router.post('/courier_match', authorized, function(req, res){
+    Order.findOne({courier_id: req.body.courier_id}, function(err, doc){
+        if(err)
+            return res.json({process: "failed", err});
+        else if(!doc)
+            return res.json({process: "success", details: "the courier is able"});
+        else{
+            return res.json({process: "failed", details: "the courier is occupied"});
+            };
+    });
+});
+ 
+ 
 module.exports = router;

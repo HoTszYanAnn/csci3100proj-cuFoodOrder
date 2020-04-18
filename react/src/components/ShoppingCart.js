@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -7,13 +7,24 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItemText from '@material-ui/core/ListItemText';
 import './css/ShoppingCart.css';
 import Button from '@material-ui/core/Button';
+import Cookies from 'js-cookie';
+import Cartlist from '../components/cartlist.js';
+import { CookiesProvider } from 'react-cookie';
+const NavUserMenu=props=> {
+  
+  var [subtotal,setSubtotal] = useState(0);
+  const [deliveryFee,setFee] = useState(20);
+  var [total,setTotal] =useState(0);
+ 
+  let cart=sessionStorage.getItem('myCart',)
+  cart=JSON.parse(cart);
+  
+  
+  //var n1=parseInt(subtotal)+parseInt(price);
 
-export default function NavUserMenu() {
-  const subtotal = 100;
-  const deliveryFee = 20;
-  const total = subtotal + deliveryFee;
-
+  
   return (
+     
     <React.Fragment>
       <List>
         <ListItem>
@@ -22,14 +33,21 @@ export default function NavUserMenu() {
           </Grid>
         </ListItem>
         <ListItem>
-          <ListItemText primary="edf" />
+          
+        {cart.map(cart=>
+        <Grid item xs={4} key={cart.id}>
+          <Cartlist 
+            name={cart.name}
+            price={cart.price}
+            />
+            </Grid>)}
         </ListItem>
       </List>
       <Divider />
       <List>
         <ListItem className="pricelist">
           <div>Subtotal</div>
-          <div>${subtotal}</div>
+        <div>$</div>
         </ListItem>
         <ListItem className="pricelist">
           <div>Delivery Fee</div>
@@ -48,3 +66,4 @@ export default function NavUserMenu() {
     </React.Fragment>
   );
 }
+export default NavUserMenu

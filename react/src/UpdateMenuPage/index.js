@@ -34,6 +34,7 @@ class OrderPage extends React.Component {
             <header className="navbar">
                 <nav className="navbar_navigate">
                     <div className="navbar_logo">LOGO</div>
+                    <div className="space"></div>
                     <div className="navbar_navigate-items">
                         <ul>
                             <li><a href="/">Item 1</a></li>

@@ -1,21 +1,24 @@
 
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import Checkbox from '@material-ui/core/Checkbox';
-import CircleChecked from "@material-ui/icons/CheckCircleOutline";
-import CircleUnchecked from "@material-ui/icons/RadioButtonUnchecked";
-import ShoppingCart from '../components/ShoppingCart';
+import Button from '@material-ui/core/Button';
+import Cookies from 'js-cookie';
+import Input from '@material-ui/core/Input';
+import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import IconButton from '@material-ui/core/IconButton';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345
+    maxWidth: 345,
   },
   media: {
     height: 0,
@@ -40,44 +43,49 @@ const useStyles = makeStyles((theme) => ({
     CardHeader: {
       backgroundColor: '#B3FFB3',
       color: '#626769'
-    }
+    },
+    margin:{
+      margin: theme.spacing(1),
+    } 
   }));
 const Order= props=> {
     
     const classes = useStyles();
-    var  [selection,setselect]=useState(false);
-    const [name,setname]=useState(props.name);
-    const [price,setprice]=useState(props.price);
-    const handleChange = (event) => {
-        
-        if(selection==true){
-            setselect(false);
-        }else{
-            setselect(true);
-        }
+    
+ 
+    //var [cartid,setCartid]=useState();
+    var [value, setvalue]=useState(0);
+    
 
-          console.log('changed!!'+selection+props.price)
-        
-       
-      };
   
-  
+    const addToCart = () => {
+      let obj={id:props.id, name:props.name, price: props.price}
+      sessionStorage.setItem('myCart',JSON.stringify(obj));
+
+    
+    }
+    const plusOne=()=>{
+        var n=parseInt(value)+1;
+        setvalue(n);
       
+    }
+    const decOne=()=>{
+      if(value==0){
+        setvalue(0);
+      }else{
+      var n=parseInt(value)-1;
+      setvalue(n);
+    }
+  }
     return (
-      <Card className={classes.root}>
+      
+      <Card className={classes.root}> 
       <CardHeader
         className={classes.CardHeader}
         titleTypographyProps={{ variant: "h6" }}
         title={props.name}
         subheader="September 14, 2016"
-        action={
-          <Checkbox
-            style={{ width: 50, height: 50 }}
-            icon={<CircleUnchecked />}
-            checkedIcon={<CircleChecked />}
-            onChange={handleChange}
-          />
-        }
+        
       />
       <CardMedia
         className={classes.image}
@@ -89,8 +97,23 @@ const Order= props=> {
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p" className={classes.typography}>
           <b className={classes.b}>HK$</b> <b>{props.price}</b>
+          
         </Typography>
+        <Grid container justify="center" paddingTop='10px'>
+          
+        <IconButton  color="primary"onClick={decOne}><IndeterminateCheckBoxIcon/></IconButton>
+        <FormControl className={classes.margin}>
+          <InputLabel htmlFor="standard-adornment-amount">Amount</InputLabel>
+          <Input
+            id="standard-adornment-amount"
+            value={value}
+            disabled
+          />
+        </FormControl>
+        <IconButton  color="primary" onClick={plusOne}><AddBoxIcon/></IconButton>
         
+        <Button paddingTop='10' variant="contained" color="secondary" size="large" onClick={addToCart} >Add to Cart</Button>
+        </Grid>
       </CardContent>
     </Card>
     

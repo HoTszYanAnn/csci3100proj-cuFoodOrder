@@ -30,7 +30,7 @@ class OrderPage extends React.Component {
     render() {
         const username = Cookies.get("username");
         const accessRight = Cookies.get("accessRight");
-        const navbar = props => {
+        /*const navbar = props => {
             <header className="navbar">
                 <nav className="navbar_navigate">
                     <div className="navbar_logo">LOGO</div>
@@ -43,11 +43,19 @@ class OrderPage extends React.Component {
                     </div>
                 </nav>
             </header>
-        };
+        };*/
 
         if (accessRight != "1") {
             return <Redirect to="/" />
         }
+            
+        /*function expand_item-list() {
+        
+        };
+            
+        function expand_menu-list() {
+        
+        };*/
         
         return (
             <React.Fragment>
@@ -55,6 +63,17 @@ class OrderPage extends React.Component {
                     <div className="menuList">
                         update_menu
                     </div>
+                    /*<div className="menuName">
+                        <table>
+                            <tr>
+                                <td>Item</td>
+                                <div className="space"></div>
+                                <td>Price</td>
+                            </tr>
+                            <button onClick={expand_item-list}>Expand item</button>
+                        </table>
+                    </div>
+                    <div><button onClick={expand_menu-list}>Expand menu</button></div>*/
                 </Paper>
             </React.Fragment>
         );

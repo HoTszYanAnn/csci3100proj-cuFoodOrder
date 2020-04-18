@@ -9,7 +9,8 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Ordercard from '../components/ordercard.js';
 import Img from '../img/test.jpg';
 import '../components/css/order.css';
-import ShoppingCart from '../components/ShoppingCart.js'
+import Cookies from 'js-cookie';
+
 const useStyles = makeStyles(theme => ({
     root: {
       flexGrow: 1,
@@ -26,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 class RestaurantsPage extends React.Component {
 
     restaurantTitle = "abc Restaurant";
-
+    
    
     constructor(props){
         super(props);
@@ -41,22 +42,19 @@ class RestaurantsPage extends React.Component {
             name: "hi",
             price: 234,
             imgs:Img,
-        }]
+        }],
+        item:[
+            
+        ]
+        
     }
+    sessionStorage.setItem('myCart',JSON.stringify(this.state.item));
+    
     }
    
     render() {
         
-        let cardItems = this.state.menuItems.map((menu) =>
-        <Grid item xs={4} key={menu._id}>
-       <Ordercard 
-         name={menu.name}
-         description={menu.description}
-         price={menu.price}
-         img={menu.imgs}
-        />
-        </Grid>
-        )
+        
         return (
             <React.Fragment>
                 <div className="container">
@@ -73,10 +71,18 @@ class RestaurantsPage extends React.Component {
                    
                    
                      <Grid container spacing={3}> 
-                    {cardItems}
+                    {this.state.menuItems.map((menu) =>
+                    <Grid item xs={4} key={menu._id}>
+                     <Ordercard 
+                         id= {menu._id}
+                         name={menu.name}
+                         description={menu.description}
+                         price={menu.price}
+                         img={menu.imgs}
+                        />
+                    </Grid>)}
                     </Grid>
-                    
-                     
+                   
                 </Paper>
                 </div>
             </React.Fragment>

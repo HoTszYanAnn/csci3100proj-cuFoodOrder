@@ -8,7 +8,6 @@ import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Button from '@material-ui/core/Button';
-import Cookies from 'js-cookie';
 import Input from '@material-ui/core/Input';
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import AddBoxIcon from '@material-ui/icons/AddBox';
@@ -51,10 +50,10 @@ const useStyles = makeStyles((theme) => ({
 const Order= props=> {
     
     const classes = useStyles();
-    
+    const [open, setOpen] = React.useState(false);
  
     //var [cartid,setCartid]=useState();
-    var [value, setvalue]=useState(0);
+    var [value, setvalue]=useState(1);
     
 
   
@@ -63,7 +62,7 @@ const Order= props=> {
       cart=JSON.parse(cart);
       
       //let obj={id:cart.id, name:cart.name, price: cart.price}
-      let newobj=[{id:props.id, name:props.name, price: props.price}]
+      let newobj=[{id:props.id, name:props.name, price: props.price,quantity:value}]
       
       let obj=[...cart,...newobj];
       console.log(obj);
@@ -77,13 +76,14 @@ const Order= props=> {
       
     }
     const decOne=()=>{
-      if(value==0){
-        setvalue(0);
+      if(value==1){
+        setvalue(1);
       }else{
       var n=parseInt(value)-1;
       setvalue(n);
     }
   }
+ 
     return (
       
       <Card className={classes.root}> 
@@ -120,10 +120,11 @@ const Order= props=> {
         <IconButton  color="primary" onClick={plusOne}><AddBoxIcon/></IconButton>
         
         <Button paddingTop='10' variant="contained" color="secondary" size="large" onClick={addToCart} >Add to Cart</Button>
+       
         </Grid>
       </CardContent>
+      
     </Card>
-    
     );
     
   }

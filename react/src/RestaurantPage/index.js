@@ -5,10 +5,10 @@ import Paper from '@material-ui/core/Paper';
 import './restaurantPage.css';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import FormGroup from '@material-ui/core/FormGroup';
 import Ordercard from '../components/ordercard.js';
 import Img from '../img/test.jpg';
-import Cookies from 'js-cookie';
+
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -47,7 +47,8 @@ class RestaurantsPage extends React.Component {
         ]
         
     }
-    sessionStorage.setItem('myCart',JSON.stringify(this.state.item));
+   
+sessionStorage.setItem('myCart',JSON.stringify(this.state.item));
     
     }
    

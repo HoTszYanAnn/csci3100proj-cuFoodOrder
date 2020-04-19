@@ -43,13 +43,13 @@ class OrderPage extends React.Component {
                     </div>
                 </nav>
             </header>
-        };*/
-        /*
-        function expand_item-list() {
+        };
+        
+        function expand_item() {
         
         };
         
-        function expand_menu-list() {
+        function expand_menu() {
         
         };
         */
@@ -75,10 +75,10 @@ class OrderPage extends React.Component {
                                 <div className="space"></div>
                                 <td>Price</td>
                             </tr>
-                            <button onClick={expand_item-list}>Expand item</button>
+                            <button onClick={expand_item}>Expand item</button>
                         </table>
                     </div>
-                    <div><button onClick={expand_menu-list}>Expand menu</button></div>
+                    <div><button onClick={expand_menu}>Expand menu</button></div>
                 </Paper>
             </React.Fragment>
         );*/

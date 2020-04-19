@@ -95,3 +95,5 @@ app.post('/catalog/menus/deleteMenu', function (req, res) {
         }
     });
 });
+
+app.listen(3000);

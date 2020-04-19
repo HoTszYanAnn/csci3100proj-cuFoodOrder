@@ -56,14 +56,14 @@ class OrderPage extends React.Component {
         if (accessRight != "1") {
             return <Redirect to="/" />
         }
-        
+        /*
         return (
             <React.Fragment>
                 <Paper className="menuContainer">
                     <div className="menuList">
                         update_menu
                     </div>
-                    /*<div className="menuName">
+                    <div className="menuName">
                         <table>
                             <tr>
                                 <td>Item</td>
@@ -73,10 +73,10 @@ class OrderPage extends React.Component {
                             <button onClick={expand_item-list}>Expand item</button>
                         </table>
                     </div>
-                    <div><button onClick={expand_menu-list}>Expand menu</button></div>*/
+                    <div><button onClick={expand_menu-list}>Expand menu</button></div>
                 </Paper>
             </React.Fragment>
-        );
+        );*/
     }
 }
 

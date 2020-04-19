@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormGroup from '@material-ui/core/FormGroup';
 import Ordercard from '../components/ordercard.js';
 import Img from '../img/test.jpg';
-import '../components/css/order.css';
 import Cookies from 'js-cookie';
 
 const useStyles = makeStyles(theme => ({

@@ -10,7 +10,7 @@
     max-width:600px;
 }
 
-/*.navbar_navigate {
+.navbar_navigate {
     align-items: center;
     display: flex;
     height: 100%;
@@ -39,4 +39,4 @@
 
 .space {
     flex: 1;
-}*/
+}

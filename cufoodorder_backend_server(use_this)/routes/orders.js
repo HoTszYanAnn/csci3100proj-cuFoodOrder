@@ -8,7 +8,7 @@ var authorized = require('../middlewares/token_check'); //middleware for authent
 router.post('/createBill', authorized, function(req, res){
     var orderList = new Order(req.body);
  
-    orderList.save().populate('customer_id', 'name username address paymentInfo').exec(function(err, orderData){
+    orderList.save().exec(function(err, orderData){
         if(err) 
             return res.json({process: "failed", err}); 
         else {
@@ -20,7 +20,7 @@ router.post('/createBill', authorized, function(req, res){
  
 // display-order History function for customer
 router.post('/orderHistory_customer', authorized, function(req, res){
-    Order.find({customer_id: req.body.customer_id}).populate('customer_id', 'name username address paymentInfo').exec(function(err, orderHistory){
+    Order.find({customer_name: req.body.custname}).exec(function(err, orderHistory){
         if(err)
             return res.json({process: "failed", err});
         else    
@@ -31,7 +31,7 @@ router.post('/orderHistory_customer', authorized, function(req, res){
 
 // display-order History function for restaurant
 router.post('/orderHistory_restaurant', authorized, function(req, res){
-    Order.find({restaurant_id: req.body.restaurant_id}).populate('restaurant_id', 'name username address paymentInfo').exec(function(err, orderHistory){
+    Order.find({restaurant_name: req.body.restname}).exec(function(err, orderHistory){
         if(err)
             return res.json({process: "failed", err});
         else    
@@ -42,7 +42,7 @@ router.post('/orderHistory_restaurant', authorized, function(req, res){
 
 // display-order History function for courier
 router.post('/orderHistory_courier', authorized, function(req, res){
-    Order.find({courier_id: req.body.courier_id}).populate('courier_id', 'name username address paymentInfo').exec(function(err, orderHistory){
+    Order.find({courier_name: req.body.couriername}).exec(function(err, orderHistory){
         if(err)
             return res.json({process: "failed", err});
         else    
@@ -84,7 +84,7 @@ router.post('/delete_order', authorized, function(req, res){
 // "courier_match" is used to see if the courier's id appeared in the order's database
 // in other words, courier's data should be unique in here
 router.post('/courier_match', authorized, function(req, res){
-    Order.findOne({courier_id: req.body.courier_id}, function(err, doc){
+    Order.findOne({courier_name: req.body.couriername}, function(err, doc){
         if(err)
             return res.json({process: "failed", err});
         else if(!doc)

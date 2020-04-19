@@ -20,7 +20,7 @@ router.post('/createBill', authorized, function(req, res){
  
 // display-order History function for customer
 router.post('/orderHistory_customer', authorized, function(req, res){
-    Order.find({customer_name: req.body.custname}).exec(function(err, orderHistory){
+    Order.find({customer_name: req.body.custname}, function(err, orderHistory){
         if(err)
             return res.json({process: "failed", err});
         else    
@@ -31,7 +31,7 @@ router.post('/orderHistory_customer', authorized, function(req, res){
 
 // display-order History function for restaurant
 router.post('/orderHistory_restaurant', authorized, function(req, res){
-    Order.find({restaurant_name: req.body.restname}).exec(function(err, orderHistory){
+    Order.find({restaurant_name: req.body.restname}, function(err, orderHistory){
         if(err)
             return res.json({process: "failed", err});
         else    
@@ -42,7 +42,7 @@ router.post('/orderHistory_restaurant', authorized, function(req, res){
 
 // display-order History function for courier
 router.post('/orderHistory_courier', authorized, function(req, res){
-    Order.find({courier_name: req.body.couriername}).exec(function(err, orderHistory){
+    Order.find({courier_name: req.body.couriername}, function(err, orderHistory){
         if(err)
             return res.json({process: "failed", err});
         else    

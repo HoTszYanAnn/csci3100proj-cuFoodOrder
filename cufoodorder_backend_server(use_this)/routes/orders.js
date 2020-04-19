@@ -8,7 +8,7 @@ var authorized = require('../middlewares/token_check'); //middleware for authent
 router.post('/createBill', authorized, function(req, res){
     var orderList = new Order(req.body);
  
-    orderList.save().exec(function(err, orderData){
+    orderList.save(function(err, orderData){
         if(err) 
             return res.json({process: "failed", err}); 
         else {

@@ -110,13 +110,19 @@ router.post('/update_account', authorized, function(req, res){
 
     // console.log(updateKeysAndValues); //debug
 
-    Customer.findOneAndUpdate({_id: req.customer._id}, updateKeysAndValues, function(err, beforeUpdateData){
+    Customer.findOne({_id: req.customer._id}, function(err, beforeUpdateData){
         if(err)
             return res.json({process: "failed", err});
         else if (!beforeUpdateData)
             return res.json({process: "failed", details: "document not existed in the database"});
-        else 
-            return res.json({process: "success", beforeUpdateData, newChange: req.body});
+        else {
+            for(var id in req.body) {
+                beforeUpdateData[id] = req.body[id];                
+            }
+            beforeUpdateData.save((err, afterUpdate)=>{
+                return res.json({process: "success", afterUpdate});
+            });
+        }
     });
 });
 

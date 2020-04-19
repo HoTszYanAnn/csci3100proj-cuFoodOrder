@@ -18,11 +18,7 @@ const NavUserMenu=props=> {
  
   let cart=sessionStorage.getItem('myCart',)
   cart=JSON.parse(cart);
-  
-  
-  //var n1=parseInt(subtotal)+parseInt(price);
-
-  
+ 
   return (
      
     <React.Fragment>
@@ -32,15 +28,8 @@ const NavUserMenu=props=> {
             <div className="orderTitle">Your Order</div>
           </Grid>
         </ListItem>
-        <ListItem>
-          
-        {cart.map(cart=>
-        <Grid item xs={4} key={cart.id}>
-          <Cartlist 
-            name={cart.name}
-            price={cart.price}
-            />
-            </Grid>)}
+        <ListItem> 
+        
         </ListItem>
       </List>
       <Divider />

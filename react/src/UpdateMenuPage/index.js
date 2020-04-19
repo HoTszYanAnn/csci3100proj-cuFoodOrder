@@ -45,38 +45,43 @@ class OrderPage extends React.Component {
             </header>
         };
         
-        function expand_item-list() {
+        function expand_item() {
         
         };
         
-        function expand_menu-list() {
+        function expand_menu() {
         
-        };*/
-
+        };
+        */
         if (accessRight != "1") {
             return <Redirect to="/" />
         }
-        
+        return(
+            <div>
+
+            </div>
+        );
+        /*
         return (
             <React.Fragment>
                 <Paper className="menuContainer">
                     <div className="menuList">
                         update_menu
                     </div>
-                    /*<div className="menuName">
+                    <div className="menuName">
                         <table>
                             <tr>
                                 <td>Item</td>
                                 <div className="space"></div>
                                 <td>Price</td>
                             </tr>
-                            <button onClick={expand_item-list}>Expand item</button>
+                            <button onClick={expand_item}>Expand item</button>
                         </table>
                     </div>
-                    <div><button onClick={expand_menu-list}>Expand menu</button></div>*/
+                    <div><button onClick={expand_menu}>Expand menu</button></div>
                 </Paper>
             </React.Fragment>
-        );
+        );*/
     }
 }
 

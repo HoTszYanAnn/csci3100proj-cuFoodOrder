@@ -59,9 +59,16 @@ const Order= props=> {
 
   
     const addToCart = () => {
-      let obj={id:props.id, name:props.name, price: props.price}
+      let cart=sessionStorage.getItem('myCart',)
+      cart=JSON.parse(cart);
+      
+      //let obj={id:cart.id, name:cart.name, price: cart.price}
+      let newobj=[{id:props.id, name:props.name, price: props.price}]
+      
+      let obj=[...cart,...newobj];
+      console.log(obj);
       sessionStorage.setItem('myCart',JSON.stringify(obj));
-
+      
     
     }
     const plusOne=()=>{

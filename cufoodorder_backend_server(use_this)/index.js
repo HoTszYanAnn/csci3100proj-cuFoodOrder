@@ -25,7 +25,9 @@ app.use(cookieParser());
 
 
 //use cors for frontend access
-app.use(cors());
+app.use(cors({
+    "credentials": true
+  }));
 
 
 //routing functions

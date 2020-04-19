@@ -98,6 +98,19 @@ router.post('/courier_match', authorized, function(req, res){
             };
     });
 });
+
+//a
+router.post('/empty_courier', authorized, function(req, res){
+    Order.find({"$or": [{courier_name: null},{courier_name: ''}]}, function(err, doc){
+        if(err)
+            return res.json({process: "failed", err});
+        else if(!doc)
+            return res.json({process: "failed", details: "all list occupied"});
+        else{
+            return res.json({process: "success", doc});
+            };
+    });
+});
  
  
 module.exports = router;

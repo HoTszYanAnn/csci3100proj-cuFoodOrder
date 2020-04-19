@@ -26,6 +26,7 @@ app.use(cookieParser());
 
 //use cors for frontend access
 app.use(cors({
+    "origin": "http://localhost:3001",
     "credentials": true
   }));
 

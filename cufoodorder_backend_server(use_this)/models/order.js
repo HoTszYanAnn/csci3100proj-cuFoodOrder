@@ -11,7 +11,25 @@ var OrderSchema = new Schema({
     paymentInfo: {type: String},
     orderStatus: {type: Number, default: 0},
     remarks: {type: String}
-}, {timestamps: true});
+}, {timestamps: true, toJSON: { virtuals: true }});
+
+OrderSchema.virtual('findNameUnderCustname', {
+    ref: 'Customer', // The model to use
+    localField: 'customer_name', // Find people where `localField`
+    foreignField: 'username', // is equal to `foreignField`
+});
+
+OrderSchema.virtual('findNameUnderRestname', {
+    ref: 'Customer', // The model to use
+    localField: 'restaurant_name', // Find people where `localField`
+    foreignField: 'username', // is equal to `foreignField`
+});
+
+OrderSchema.virtual('findNameUnderCouriername', {
+    ref: 'Customer', // The model to use
+    localField: 'courier_name', // Find people where `localField`
+    foreignField: 'username', // is equal to `foreignField`
+});
  
  
 module.exports = mongoose.model('Order', OrderSchema);

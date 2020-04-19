@@ -17,8 +17,59 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import NoticeBox from '../components/NoticeBox';
+import NumberFormat from 'react-number-format';
+import PropTypes from 'prop-types';
 import './Coorperate.css';
 
+
+
+function CreditCardFormatCustom(props) {
+    const { inputRef, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={(values) => {
+                onChange({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+            format="#### #### #### ####"
+        />
+    );
+}
+
+CreditCardFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+};
+
+function PhoneNumberFormatCustom(props) {
+    const { inputRef, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={(values) => {
+                onChange({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+            format="#### ####"
+        />
+    );
+}
+
+PhoneNumberFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+};
 class CoorperatePage extends React.Component {
 
 
@@ -71,28 +122,16 @@ class CoorperatePage extends React.Component {
         this.setState({ pwError: false, pwErrorText: "" })
     }
     if (prop == "mobile") {
-      let mobileReg = /^-?[0-9]+$/;
-      if (!(mobileReg.test(event.target.value)))
-        this.setState({ mobileError: true, mobileErrorText: "Please input number only!" })
-      else if (event.target.value.length != 8)
+      if (event.target.value.length != 8)
         this.setState({ mobileError: true, mobileErrorText: "The phone number not valid!" })
       else
         this.setState({ mobileError: false, mobileErrorText: "" })
     }
 
     if (prop == "payment") {
-      let payReg = /^-?[0-9]+$/;
-      if (!(payReg.test(event.target.value))) {
-        //this.state.payError = true;
-        //this.state.payErrorText = "Please input number only!";
-        this.setState({ payError: true, payErrorText: "Please input number only!" })
-      } else if (event.target.value.length != 16) {
-        //this.state.payError = true;
-        //this.state.payErrorText = "Please input 16-digit credit card number";
+      if (event.target.value.length != 16) {
         this.setState({ payError: true, payErrorText: "Please input 16-digit credit card number" })
       } else {
-        //this.state.payError = false;
-        //this.state.payErrorText = "";
         this.setState({ payError: false, payErrorText: "" })
       }
     }
@@ -118,10 +157,10 @@ class CoorperatePage extends React.Component {
     }
 
     if (prop == "username") {
-      if (this.compareUsername(event.target.value.length) == "failed")
-        this.setState({ unError: true, unErrorText: "Existed username, please enter a new one" })
+      if (event.target.value.length == 0)
+        this.setState({ unError: true, unErrorText: "Cannot be empty" })
       else
-        this.setState({ unError: false, unErrorText: "" })
+        this.compareUsername(event.target.value);
     }
     this.setState({ [prop]: event.target.value })
   };
@@ -177,11 +216,19 @@ class CoorperatePage extends React.Component {
       },
       body: JSON.stringify({ username: input })
     };
+    console.log(input);
     try {
       const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/catalog/customers/username_match`, compareData);
       const data = await fetchResponse.json().then(function (a) {
         return a.process;
       });
+      if (data == 'failed'){
+        this.setState({ unError: true, unErrorText: "Existed username, please enter a new one" });
+      }
+      else{
+        this.setState({ unError: false, unErrorText: "" })
+      }
+      return;
     } catch (e) {
       return e;
     }
@@ -272,6 +319,7 @@ class CoorperatePage extends React.Component {
                     value={this.state.mobile}
                     onChange={this.handleChangeRegister('mobile')}
                     labelWidth={70}
+                    inputComponent={PhoneNumberFormatCustom}
                   />
                   <div className="ErrorMessage">{this.state.mobileErrorText}</div>
                 </FormControl>
@@ -283,6 +331,7 @@ class CoorperatePage extends React.Component {
                     value={this.state.email}
                     onChange={this.handleChangeRegister('email')}
                     labelWidth={70}
+
                   />
                   <div className="ErrorMessage">{this.state.emailErrorText}</div>
                 </FormControl>
@@ -294,6 +343,7 @@ class CoorperatePage extends React.Component {
                     value={this.state.payment}
                     onChange={this.handleChangeRegister('payment')}
                     labelWidth={70}
+                    inputComponent={CreditCardFormatCustom}
                   />
                   <div className="ErrorMessage">{this.state.payErrorText}</div>
                 </FormControl>

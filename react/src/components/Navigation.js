@@ -10,17 +10,10 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
-import './css/Navigation.css';
 import Drawer from '@material-ui/core/Drawer';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Cart from './ShoppingCart.js';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import RegisterBox from './RegisterBox';
@@ -28,7 +21,8 @@ import Cookies from 'js-cookie';
 import LoginBox from './LoginBox'
 import NoticeBox from './NoticeBox';
 import { Link as RouterLink } from 'react-router-dom';
-import {withRouter} from 'react-router-dom';
+import axios from "axios";
+import './css/Navigation.css';
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -43,10 +37,6 @@ function HideOnScroll(props) {
 
 HideOnScroll.propTypes = {
   children: PropTypes.element.isRequired,
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window: PropTypes.func,
 };
 const useStyles = makeStyles({
@@ -106,23 +96,13 @@ export default function Navigation(props) {
   const CloseLoginBox = () => {
     setOpenLoginBox(false);
   };
+
   const Logout = async() => {
-    const token = Cookies.get("token");
-    const logoutData = {
-      method: 'GET',
-      headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ customerId : token})
-    };
-    try {
-      const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/catalog/customers/logout`, logoutData);
-      const data = await fetchResponse.json().then(function (a) {
-      });
-    }catch(e){
-      console.log(e);
-    }
+    axios.defaults.withCredentials = true
+    let logoutUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/logout` 
+    axios.post(logoutUrl).then(result => {
+        console.log(result);
+    })
     Cookies.remove("username");
     Cookies.remove("token");
     Cookies.remove("accessRight");

@@ -12,6 +12,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 import './css/RegisterBox.css';
 
 
@@ -48,37 +49,27 @@ class LoginBox extends React.Component {
         event.preventDefault();
     };
 
-    SubmitLoginBox = () => {
-        var data = this.loginRequest();
-    };
-    loginRequest = async () => {
-        const loginData = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username: this.state.username, password: this.state.password })
-        };
-        try {
-            const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/catalog/customers/login`, loginData);
-            const data = await fetchResponse.json().then(function (a) {
-                return a;
-            });
-            if (data.process == 'success') {
+    SubmitLoginBox = async () => {
+        console.log("enter");
+        axios.defaults.withCredentials = true
+        const data = { username: this.state.username, password: this.state.password };
+        let loginUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/login` 
+        axios.post(loginUrl, data).then(result => {
+            console.log(result.data);
+            if (result.data.process == "failed"){
+                this.setErrorMessage(result.data.details);
+            }else{
                 this.setErrorMessage("");
-                Cookies.set("token", data.customerId, { expires: 1 });
-                Cookies.set("username", this.state.username, { expires: 1 });
-                Cookies.set("accessRight", data.accessRight, { expires: 1 });
+                console.log(result.data);
+                Cookies.set("token", result.data.customerId, { expires: 1 });
+                Cookies.set("username", result.data.username, { expires: 1 });
+                Cookies.set("accessRight", result.data.accessRight, { expires: 1 });
                 this.props.onClose();
-            } else {
-                this.setErrorMessage(data.details);
             }
-            return data;
-        } catch (e) {
-            return e;
-        }
+            return result;
+        })
     }
+
     render() {
         return (
             <Dialog open={this.props.open} onClose={this.props.onClose}>

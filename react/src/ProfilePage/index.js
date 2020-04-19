@@ -2,10 +2,8 @@ import React from 'react';
 import Cookies from 'js-cookie';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -13,11 +11,61 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import axios from "axios";
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import NoticeBox from '../components/NoticeBox';
+import NumberFormat from 'react-number-format';
+import PropTypes from 'prop-types';
 import './profile.css'
+
+
+function CreditCardFormatCustom(props) {
+    const { inputRef, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={(values) => {
+                onChange({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+            format="#### #### #### ####"
+        />
+    );
+}
+
+CreditCardFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+};
+
+function PhoneNumberFormatCustom(props) {
+    const { inputRef, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={(values) => {
+                onChange({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+            format="#### ####"
+        />
+    );
+}
+
+PhoneNumberFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+};
 
 class ProfilePage extends React.Component {
     constructor(props) {
@@ -48,6 +96,7 @@ class ProfilePage extends React.Component {
             showPassword: false,
             openRegisterSucc: false,
             redirect: false,
+            getData: false,
         };
 
         this.handleClickShowPassword = this.handleClickShowPassword.bind(this)
@@ -61,34 +110,22 @@ class ProfilePage extends React.Component {
     handleChangeRegister = prop => event => {
         //setLoginValues({ ...this.state.loginValues, [prop]: event.target.value });
         if (prop == "password") {
-            if (event.target.value.length < 8)
+            if (event.target.value.length < 8 && event.target.value.length != 0)
                 this.setState({ pwError: true, pwErrorText: "Too Short" })
             else
                 this.setState({ pwError: false, pwErrorText: "" })
         }
         if (prop == "mobile") {
-            let mobileReg = /^-?[0-9]+$/;
-            if (!(mobileReg.test(event.target.value)))
-                this.setState({ mobileError: true, mobileErrorText: "Please input number only!" })
-            else if (event.target.value.length != 8)
+            if (event.target.value.length != 8)
                 this.setState({ mobileError: true, mobileErrorText: "The phone number not valid!" })
             else
                 this.setState({ mobileError: false, mobileErrorText: "" })
         }
 
         if (prop == "payment") {
-            let payReg = /^-?[0-9]+$/;
-            if (!(payReg.test(event.target.value))) {
-                //this.state.payError = true;
-                //this.state.payErrorText = "Please input number only!";
-                this.setState({ payError: true, payErrorText: "Please input number only!" })
-            } else if (event.target.value.length != 16) {
-                //this.state.payError = true;
-                //this.state.payErrorText = "Please input 16-digit credit card number";
+            if (event.target.value.length != 16) {
                 this.setState({ payError: true, payErrorText: "Please input 16-digit credit card number" })
             } else {
-                //this.state.payError = false;
-                //this.state.payErrorText = "";
                 this.setState({ payError: false, payErrorText: "" })
             }
         }
@@ -112,13 +149,6 @@ class ProfilePage extends React.Component {
             else
                 this.setState({ nameError: false, nameErrorText: "" })
         }
-
-        if (prop == "username") {
-            if (this.compareUsername(event.target.value.length) == "failed")
-                this.setState({ unError: true, unErrorText: "Existed username, please enter a new one" })
-            else
-                this.setState({ unError: false, unErrorText: "" })
-        }
         this.setState({ [prop]: event.target.value })
     };
 
@@ -140,60 +170,47 @@ class ProfilePage extends React.Component {
     };
 
     UpdateRequest = async () => {
-        const location = window.location.hostname;
-        const loginData = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: this.state.name, username: this.state.username, password: this.state.password, address: this.state.address, mobile: this.state.mobile, emailAddress: this.state.email, paymentInfo: this.state.payment, accessRight: this.state.accessRight })
-        };
-        /*try {
-            const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/catalog/customers/register`, loginData);
-            const data = await fetchResponse.json().then(function (a) {
-                return a;
-            });
-            if (data.process == 'success') {
-                this.setErrorMessage("");
-                this.props.onClose();
-            } else {
-                this.setErrorMessage(data.err);
-            }
-        } catch (e) {
-            return e;
-        }*/
-    }
-    compareUsername = async (input) => {
-        const compareData = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username: input })
-        };
-        try {
-            const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/catalog/customers/username_match`, compareData);
-            const data = await fetchResponse.json().then(function (a) {
-                return a.process;
-            });
-        } catch (e) {
-            return e;
+        axios.defaults.withCredentials = true
+        let data = null;
+        if (this.state.password) {
+            data = { username: this.state.username, name: this.state.name , password : this.state.password, address : this.state.address, mobile : this.state.mobile, emailAddress: this.state.email, paymentInfo : this.state.payment};
+        } else {
+            data = { username: this.state.username, name: this.state.name , address : this.state.address, mobile : this.state.mobile, emailAddress: this.state.email, paymentInfo : this.state.payment};
         }
+        let updateUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/update_account`
+        axios.post(updateUrl, data).then(result => {
+            console.log(result);
+        })
     }
+    getUserData = async (input) => {
+        axios.defaults.withCredentials = true
+        let getDataUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/user_data`
+        axios.post(getDataUrl).then(result => {
+            let data = result.data.customerData
+            console.log(result);
+            this.setState({ name: data.name, username: data.username, address: data.address, mobile: data.mobile, email: data.emailAddress, payment: data.paymentInfo })
+        })
+    }
+
+
     render() {
         const username = Cookies.get("username");
         const accessRight = Cookies.get("accessRight");
-
-        if (!accessRight) {
+        if (!accessRight || this.state.redirect) {
             return <Redirect to="/" />
         }
+
+        if (!this.state.getData) {
+            this.getUserData(username);
+            this.state.getData = true;
+        }
+
         if (!(this.state.addError) && !(this.state.emailError) && !(this.state.nameError) && !(this.state.unError) && !(this.state.mobileError) && !(this.state.payError) && !(this.state.pwError))
-            if (this.state.username && this.state.accessRight && this.state.address && this.state.email && this.state.mobile && this.state.name && this.state.password && this.state.payment) {
+            if (this.state.username && this.state.address && this.state.email && this.state.mobile && this.state.name && this.state.payment) {
                 this.state.submitBtn = true;
             }
             else {
+                console.log('empty');
                 this.state.submitBtn = false;
             }
         else
@@ -203,6 +220,8 @@ class ProfilePage extends React.Component {
                 <Paper className="profileContainer">
                     <div className="profileForm">
                         <h1>Update Profile</h1>
+                        <h4>*Keep password field empty if you do not want to edit password.</h4>
+                        <h4>*The username cannot be edited.</h4>
                         <form>
                             <DialogContent>
                                 <FormControl variant="outlined"
@@ -220,6 +239,7 @@ class ProfilePage extends React.Component {
                                     margin="dense" fullWidth error={this.state.unError}>
                                     <InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
                                     <OutlinedInput
+                                        disabled
                                         id="outlined-adornment-username"
                                         value={this.state.username}
                                         onChange={this.handleChangeRegister('username')}
@@ -269,6 +289,7 @@ class ProfilePage extends React.Component {
                                         id="outlined-adornment-username"
                                         value={this.state.mobile}
                                         onChange={this.handleChangeRegister('mobile')}
+                                        inputComponent={PhoneNumberFormatCustom}
                                         labelWidth={70}
                                     />
                                     <div className="ErrorMessage">{this.state.mobileErrorText}</div>
@@ -292,6 +313,7 @@ class ProfilePage extends React.Component {
                                         value={this.state.payment}
                                         onChange={this.handleChangeRegister('payment')}
                                         labelWidth={70}
+                                        inputComponent={CreditCardFormatCustom}
                                     />
                                     <div className="ErrorMessage">{this.state.payErrorText}</div>
                                 </FormControl>

@@ -12,8 +12,56 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Cookies from 'js-cookie';
+import NumberFormat from 'react-number-format';
+import PropTypes from 'prop-types';
 
+function CreditCardFormatCustom(props) {
+    const { inputRef, onChange, ...other } = props;
 
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={(values) => {
+                onChange({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+            format="#### #### #### ####"
+        />
+    );
+}
+
+CreditCardFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+};
+
+function PhoneNumberFormatCustom(props) {
+    const { inputRef, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={(values) => {
+                onChange({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+            format="#### ####"
+        />
+    );
+}
+
+PhoneNumberFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+};
 
 class RegisterPage extends React.Component {
 
@@ -51,10 +99,8 @@ class RegisterPage extends React.Component {
 
   handleClickShowPassword = () => {
     this.setState({ showPassword: !this.state.showPassword })
-    //setLoginValues({ ...this.state.loginValues, showPassword: !this.state.showPassword });
   };
   handleChangeLogin = prop => event => {
-    //setLoginValues({ ...this.state.loginValues, [prop]: event.target.value });
     if (prop == "password") {
       if (event.target.value.length < 8)
         this.setState({ pwError: true, pwErrorText: "Too Short" })
@@ -62,28 +108,16 @@ class RegisterPage extends React.Component {
         this.setState({ pwError: false, pwErrorText: "" })
     }
     if (prop == "mobile") {
-      let mobileReg = /^-?[0-9]+$/;
-      if (!(mobileReg.test(event.target.value)))
-        this.setState({ mobileError: true, mobileErrorText: "Please input number only!" })
-      else if (event.target.value.length != 8)
+      if (event.target.value.length != 8)
         this.setState({ mobileError: true, mobileErrorText: "The phone number not valid!" })
       else
         this.setState({ mobileError: false, mobileErrorText: "" })
     }
 
     if (prop == "payment") {
-      let payReg = /^-?[0-9]+$/;
-      if (!(payReg.test(event.target.value))) {
-        //this.state.payError = true;
-        //this.state.payErrorText = "Please input number only!";
-        this.setState({ payError: true, payErrorText: "Please input number only!" })
-      } else if (event.target.value.length != 16) {
-        //this.state.payError = true;
-        //this.state.payErrorText = "Please input 16-digit credit card number";
+      if (event.target.value.length != 16) {
         this.setState({ payError: true, payErrorText: "Please input 16-digit credit card number" })
       } else {
-        //this.state.payError = false;
-        //this.state.payErrorText = "";
         this.setState({ payError: false, payErrorText: "" })
       }
     }
@@ -109,10 +143,10 @@ class RegisterPage extends React.Component {
     }
 
     if (prop == "username") {
-      if (this.compareUsername(event.target.value.length) == "failed")
-        this.setState({ unError: true, unErrorText: "Existed username, please enter a new one" })
+      if (event.target.value.length == 0)
+        this.setState({ unError: true, unErrorText: "Cannot be empty" })
       else
-        this.setState({ unError: false, unErrorText: "" })
+        this.compareUsername(event.target.value);
     }
     this.setState({ [prop]: event.target.value })
   };
@@ -126,11 +160,19 @@ class RegisterPage extends React.Component {
       },
       body: JSON.stringify({ username: input })
     };
+    console.log(input);
     try {
       const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/catalog/customers/username_match`, compareData);
       const data = await fetchResponse.json().then(function (a) {
         return a.process;
       });
+      if (data == 'failed'){
+        this.setState({ unError: true, unErrorText: "Existed username, please enter a new one" });
+      }
+      else{
+        this.setState({ unError: false, unErrorText: "" })
+      }
+      return;
     } catch (e) {
       return e;
     }
@@ -256,6 +298,7 @@ class RegisterPage extends React.Component {
                 id="outlined-adornment-username"
                 value={this.state.mobile}
                 onChange={this.handleChangeLogin('mobile')}
+                inputComponent={PhoneNumberFormatCustom}
                 labelWidth={70}
               />
               <div className="ErrorMessage">{this.state.mobileErrorText}</div>
@@ -279,6 +322,7 @@ class RegisterPage extends React.Component {
                 value={this.state.payment}
                 onChange={this.handleChangeLogin('payment')}
                 labelWidth={70}
+                inputComponent={CreditCardFormatCustom}
               />
               <div className="ErrorMessage">{this.state.payErrorText}</div>
             </FormControl>

@@ -23,10 +23,9 @@ router.post('/register', function(req, res){
     customer.save(function(err, customerData){
         if(err) 
             return res.json({process: "failed", err});
-        
+        else
+            return res.status(200).json({process: "success"});       
     });
-
-    return res.status(200).json({process: "success"});
 
 });
 
@@ -64,10 +63,13 @@ router.post('/login', function(req, res){
 // using get because logout function doesn't need to be that secure as login
 // Customer.findOneAndUpdate({_id: req.customer._id}, {token: "empty"}, function(err, doc){
 router.post('/logout', authorized, function(req, res){
-    Customer.findOneAndUpdate({_id: req.body._id}, {token: "empty"}, function(err, doc){
+    Customer.findOneAndUpdate({_id: req.customer._id}, {token: "empty"}, function(err, doc){
         if(err)
             return res.json({process: "failed", details: err});
-        return res.status(200).json({process: "success", details: "logout successfully"});
+        else if(!doc)
+            return res.json({process: "failed", details: 'document not found in database'});
+        else
+            return res.status(200).json({process: "success", details: "logout successfully"});
     });
 });
 
@@ -108,9 +110,11 @@ router.post('/update_account', authorized, function(req, res){
 
     // console.log(updateKeysAndValues); //debug
 
-    Customer.findOneAndUpdate({username: req.body.username}, updateKeysAndValues, function(err, beforeUpdateData){
+    Customer.findOneAndUpdate({_id: req.customer._id}, updateKeysAndValues, function(err, beforeUpdateData){
         if(err)
             return res.json({process: "failed", err});
+        else if (!beforeUpdateData)
+            return res.json({process: "failed", details: "document not existed in the database"});
         else 
             return res.json({process: "success", beforeUpdateData, newChange: req.body});
     });
@@ -120,7 +124,7 @@ router.post('/update_account', authorized, function(req, res){
 //request all data of that user by username
 router.post('/user_data', authorized, function(req, res){
 
-    Customer.findOne({username: req.body.username}, function(err, customerData){
+    Customer.findOne({_id: req.customer._id}, function(err, customerData){
         if(err)
             return res.json({process: "failed", err});
         else 

@@ -1,46 +1,73 @@
-import React from 'react';
-const cardlist= props=> {
-    
-    
-    return (
-    <div>
-    <div>{props.name}</div>
-    <div>{props.price}</div>
-    </div>
-    );
-    
-  }
-  
-  export default cardlist;
-/*
-import React from 'react';
-import './ListItems.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import FlipMove from 'react-flip-move';
 
+
+import React from 'react';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+import IconButton from '@material-ui/core/IconButton';
+import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import InputLabel from '@material-ui/core/InputLabel';
+import { TextField, Input } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import FormControl from '@material-ui/core/FormControl';
 function ListItems(props){
-    const items = props.items;
-    const listItems = items.map(item =>
-   {
-       return <div className="list" key={item.key}>
-     <p>
-         <input type="text" id={item.key} value={item.text} onChange={(e)=>{
-             props.setUpdate(e.target.value,item.key)}}/>
-        <span>
-       
-        <FontAwesomeIcon className="faicons" onClick={() => {
-            props.deleteItem(item.key)
-        }} icon="trash" />
-        </span>
-     </p>
-     
-    </div>})
-    return <div>
-        <FlipMove duration={300} easing="ease-in-out">
-        {listItems}
-        </FlipMove>
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      flexGrow: 1,
+    },
+    paper: {
+      padding: theme.spacing(2),
+      margin: 'auto',
+      maxWidth: 400,
+    },
+    
+    
+  }));
+  const classes = useStyles();
+      let carts=props.cart;
+      var cartitem=null;
+        if(carts==null){cartitem=null}else{
+          cartitem = carts.map(item =>
+        {
+          return <div className={classes.root} key={item.id}>
+          <Paper className={classes.paper}>
+            <Grid container spacing={2}>
+              <Grid item xs>
+               <TextField value={item.name} disabled></TextField>
+               <TextField value={"$ "+item.price} disabled></TextField>
+              </Grid>
+              <Grid item xs={2} sm container>
+                
+                
+                <IconButton  color="primary"onClick={() =>props.minOne(item.id)}><IndeterminateCheckBoxIcon/></IconButton>
+                <FormControl className={classes.margin}>
+                  <InputLabel >Quantity:</InputLabel>
+                  <Input name='text'
+                  value={item.quantity}
+                   disabled
+                 />
+                 </FormControl>
+                <IconButton  color="primary" onClick={() =>props.plusOne(item.id)}><AddBoxIcon/></IconButton>
+                <Grid item xs={3} sm >
+                <IconButton className="delete" onClick={() =>  
+                props.onDelete(item.id)}><DeleteIcon/></IconButton>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Paper>
+        </div>
+        
+      })}
+        return <div>
+        
+        {cartitem}
+        
     
     </div>;
-  }
-
-  export default ListItems;*/
+    
+  
+}
+  export default ListItems;
+  

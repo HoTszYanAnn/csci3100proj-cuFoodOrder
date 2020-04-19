@@ -10,7 +10,7 @@ var CustomerSchema = new Schema({
     password: {type:String, min:8, max:20},
     introduction: {type: String},
     address: {type: String},
-    mobile: {type: Number},
+    mobile: {type: String},
     emailAddress: {type: String},
     paymentInfo: {type: String},
     accessRight: {type: Number, default: 0},

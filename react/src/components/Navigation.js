@@ -20,7 +20,8 @@ import RegisterBox from './RegisterBox';
 import Cookies from 'js-cookie';
 import LoginBox from './LoginBox'
 import NoticeBox from './NoticeBox';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
+import { createHashHistory } from "history";
 import axios from "axios";
 import './css/Navigation.css';
 
@@ -62,7 +63,8 @@ export default function Navigation(props) {
 
   const handleCloseLogoutSucc = () => {
     setOpenLogoutSucc(false);
-    //this.props.history.push('/');
+    const history = createHashHistory();
+    history.go("/");
   };
   const handleOpenRegister = () => {
     setOpenLoginBox(false);
@@ -112,9 +114,6 @@ export default function Navigation(props) {
 
   const classes = useStyles();
   const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
     right: false,
   });
 
@@ -122,7 +121,6 @@ export default function Navigation(props) {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-
     setState({ ...state, [anchor]: open });
   };
 
@@ -132,10 +130,10 @@ export default function Navigation(props) {
         [classes.fullList]: anchor === 'top' || anchor === 'bottom',
       })}
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
     >
-      <Cart />
+      <Cart 
+        closebtnClick = {toggleDrawer("right", false)}
+      />
     </div>
   );
 

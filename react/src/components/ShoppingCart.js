@@ -130,7 +130,7 @@ render(){
         <Button variant="contained" color="secondary" size="large" className="paybtn" onClick={this.Count} >Get Total</Button>
         </Grid>
         <Grid item xs sm>
-          <Button variant="contained" color="secondary" size="large" className="paybtn">
+          <Button variant="contained" color="secondary" size="large" className="paybtn" onClick={this.props.closebtnClick}>
             Make Payment
           </Button>
           </Grid>

@@ -2,6 +2,10 @@ import React from 'react';
 import Cookies from 'js-cookie';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Customer from "../components/OrderList/Customer";
+import Restaurant from "../components/OrderList/Restaurant";
+import Courier from "../components/OrderList/Courier";
+
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import './order.css'
 
@@ -26,19 +30,13 @@ class OrderPage extends React.Component {
                 <Paper className="orderContainer">
                     <div className="orderList">
                     {accessRight == "0" && // customer -> check order progress/ confirm finish order
-                        <Grid>
-                            
-                        </Grid>
+                        <Customer/>
                     }
                     {accessRight == "1" && // Restaurant -> chekc order -> mark cooking finish/
-                        <Grid>
-                            
-                        </Grid>
+                        <Restaurant/>
                     }
                     {accessRight == "2" && // Courier -> accept order && check order details 
-                        <Grid>
-                            
-                        </Grid>
+                        <Courier/>
                     }
                     </div>
                 </Paper>

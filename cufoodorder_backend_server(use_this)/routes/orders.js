@@ -46,7 +46,11 @@ router.post('/orderHistory_restaurant', authorized, function(req, res){
 
 // display-order History function for courier
 router.post('/orderHistory_courier', authorized, function(req, res){
-    Order.find({courier_name: req.body.couriername}).populate('findNameUnderCouriername', 'name').exec(function(err, orderHistory){
+    Order.find({courier_name: req.body.couriername})
+    .populate('findNameUnderCouriername', 'name mobile')
+    .populate('findNameUnderCustname', 'name mobile address')
+    .populate('findNameUnderRestname', 'name mobile address')
+    .exec(function(err, orderHistory){
         if(err)
             return res.json({process: "failed", err});
         else    

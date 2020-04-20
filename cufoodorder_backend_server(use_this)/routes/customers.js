@@ -50,7 +50,8 @@ router.post('/login', function(req, res){
                     process: "success", 
                     customerId: customer._id,
                     username: customer.username,
-                    accessRight: customer.accessRight
+                    accessRight: customer.accessRight,
+                    name: customer.name
                 });
             });
         });

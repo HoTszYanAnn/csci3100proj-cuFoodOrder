@@ -10,10 +10,12 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
+    "concurrently": "^5.1.0",
     "js-cookie": "^2.2.1",
     "react": "^16.13.0",
     "react-chat-window": "^1.2.1",
     "react-cookie": "^4.0.3",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.13.0",
     "react-loadingg": "^1.7.2",
     "react-number-format": "^4.4.1",
@@ -28,7 +30,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "concurrently \"cd ../cufoodorder_backend_server(use_this) && node index.js\" \"npm start\""
   },
   "browserslist": {
     "production": [

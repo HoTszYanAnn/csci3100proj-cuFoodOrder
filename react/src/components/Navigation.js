@@ -173,7 +173,7 @@ export default function Navigation(props) {
                     <div className="username">{username ? username : 'Login'}</div>
                   </IconButton>
                 )}
-              {username && (
+              {accessRight == 0 && (
                 <IconButton edge="start" className="cartbtn" color="inherit" aria-label="cart" onClick={toggleDrawer('right', true)}>
                   <ShoppingCartOutlinedIcon />
                 </IconButton>

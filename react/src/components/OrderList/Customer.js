@@ -4,8 +4,9 @@ import axios from 'axios';
 import PropTypes from "prop-types";
 import { Link as RouterLink, Redirect, withRouter } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
-import { ScrollArea } from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import '../css/orderCustomers.css'
+
 class Customer extends React.Component {
     constructor(props) {
         super(props);
@@ -52,6 +53,16 @@ class Customer extends React.Component {
         else return "Not Matched"
     }
 
+    calculateTotal = (list) =>{
+        let i = 0;
+        let sum = 0;
+        while (list[i]){
+            sum = sum + list[i].price * list[i].amount
+            i++;
+        } 
+        return sum;
+    }
+
     render() {
         if (this.state.notGetList) {
             this.getOrderList();
@@ -64,7 +75,9 @@ class Customer extends React.Component {
         }
         return (
             <React.Fragment>
-                <hr />
+                <h1 style={{textAlign:'center'}}>Order History</h1>
+                <Scrollbars style={{ height: 800 }}>
+                      <hr />
                 {this.state.orders.map((order, index) =>
                     <div>
                     <Grid key={index} container className="orderHistory">
@@ -81,16 +94,20 @@ class Customer extends React.Component {
                             <Grid item xs={6} className="subtitle">Status: {this.getStatus(order.orderStatus)}</Grid>
                         </Grid>
                         {order.orderList.map((item, index) =>
-                        <Grid container item direction="row" key={index} spacing={3}>
-                            <Grid item xs={6} className="foodItem">Item Name: {item.dish}</Grid>
-                            <Grid item xs={3} className="foodItem">Amount: {item.amount}</Grid>
-                            <Grid item xs={3} item className="priceItem">${item.price}</Grid>
-                        </Grid>
+                            <Grid container item direction="row" key={index} spacing={3}>
+                                <Grid item xs={6} className="foodItem">Item Name: {item.dish}</Grid>
+                                <Grid item xs={3} className="foodItem">Amount: {item.amount}</Grid>
+                                <Grid item xs={3} item className="priceItem">${item.price}</Grid>
+                            </Grid>
                         )}
-                    </Grid>
-                    <hr />
-                    </div>
+                        <Grid container item justify="flex-end">
+                        <Grid item xs={3} item className="priceItem">Total: ${this.calculateTotal(order.orderList)}</Grid>
+                            </Grid>
+                        </Grid>
+                        <hr />
+                    </div>  
                 )}
+               </Scrollbars>
             </React.Fragment>
         );
     }

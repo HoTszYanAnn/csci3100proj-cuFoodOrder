@@ -54,7 +54,7 @@ const Order= props=> {
  
     //var [cartid,setCartid]=useState();
     var [value, setvalue]=useState(1);
-    
+    var [disstate,setDisable]=useState(false);
 
   
     const addToCart = () => {
@@ -67,7 +67,7 @@ const Order= props=> {
       let obj=[...cart,...newobj];
       console.log(obj);
       sessionStorage.setItem('myCart',JSON.stringify(obj));
-      
+      setDisable(true);
     
     }
     const plusOne=()=>{
@@ -119,7 +119,7 @@ const Order= props=> {
         </FormControl>
         <IconButton  color="primary" onClick={plusOne}><AddBoxIcon/></IconButton>
         
-        <Button paddingTop='10' variant="contained" color="secondary" size="large" onClick={addToCart} >Add to Cart</Button>
+        <Button paddingTop='10' variant="contained" color="secondary" size="large" onClick={addToCart} disabled={disstate}>Add to Cart</Button>
        
         </Grid>
       </CardContent>

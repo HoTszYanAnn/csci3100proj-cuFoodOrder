@@ -77,9 +77,13 @@ import Cartlist from '../components/cartlist.js';
    let cart=this.state.cart;
     cart.map(item=>{      
     if(item.id===id){
-      var n=parseInt(item.quantity)+1;
-      item.quantity= n;
+      var n;
+      if(item.quantity==1){
+      n=1;}else{
+      n=parseInt(item.quantity)-1;
+      item.quantity= n;}
     }
+    
   })
   this.setState({
     cart:cart

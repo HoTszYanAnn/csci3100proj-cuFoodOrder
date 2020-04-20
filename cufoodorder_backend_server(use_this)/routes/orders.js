@@ -21,7 +21,7 @@ router.post('/createBill', authorized, function(req, res){
 // display-order History function for customer
 router.post('/orderHistory_customer', authorized, function(req, res){
     Order.find({customer_name: req.body.custname})
-    .populate('findNameUnderCustname', 'name')
+    .populate('findNameUnderCustname', 'name mobile address')
     .populate('findNameUnderRestname', 'name')
     .populate('findNameUnderCouriername', 'name')
     .exec(function(err, orderHistory){
@@ -35,7 +35,7 @@ router.post('/orderHistory_customer', authorized, function(req, res){
 
 // display-order History function for restaurant
 router.post('/orderHistory_restaurant', authorized, function(req, res){
-    Order.find({restaurant_name: req.body.restname}).populate('findNameUnderRestname', 'name').exec(function(err, orderHistory){
+    Order.find({restaurant_name: req.body.restname}).populate('findNameUnderRestname', 'name mobile address').exec(function(err, orderHistory){
         if(err)
             return res.json({process: "failed", err});
         else    

@@ -53,6 +53,7 @@ export default function Navigation(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const username = Cookies.get("username");
+  const name = Cookies.get("name");
   const accessRight = Cookies.get("accessRight");
   const [openLogoutSucc, setOpenLogoutSucc] = React.useState(false);
   const [openRegister, setOpenRegister] = React.useState(false);
@@ -60,7 +61,7 @@ export default function Navigation(props) {
   const [openRegisterSucc, setOpenRegisterSucc] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
+  
   const handleCloseLogoutSucc = () => {
     setOpenLogoutSucc(false);
     const history = createHashHistory();
@@ -108,6 +109,7 @@ export default function Navigation(props) {
     Cookies.remove("username");
     Cookies.remove("token");
     Cookies.remove("accessRight");
+    Cookies.remove("name");
     handleCloseUserMenu();
     setOpenLogoutSucc(true);
   }
@@ -157,7 +159,7 @@ export default function Navigation(props) {
                   onClick={handleUserMenu}
                 >
                   <AccountCircle />
-                  <div className="username">{username ? username : 'Login'}</div>
+              <div className="username">{username}</div>
                 </IconButton>
               )}
               {
@@ -170,7 +172,7 @@ export default function Navigation(props) {
                     onClick={OpenLoginBox}
                   >
                     <AccountCircle />
-                    <div className="username">{username ? username : 'Login'}</div>
+                <div className="username">Login</div>
                   </IconButton>
                 )}
               {accessRight == 0 && (
@@ -196,9 +198,17 @@ export default function Navigation(props) {
                 {username && (
                   <div>
                     <MenuItem onClick={handleCloseUserMenu} component={RouterLink} to="/profile">Profile</MenuItem>
-                    <MenuItem component={RouterLink} to="/order">My Order</MenuItem>
+                    {accessRight != 3 && 
+                      <MenuItem component={RouterLink} to="/order">My Order</MenuItem>
+                    }
                     {accessRight == 1 && 
                       <MenuItem component={RouterLink} to="/update_menu">My Menu</MenuItem>
+                    }
+                    {accessRight == 2 && 
+                      <MenuItem component={RouterLink} to="/match_order">Match Order</MenuItem>
+                    }
+                    {accessRight == 3 && 
+                      <MenuItem component={RouterLink} to="/find_record">Database Record</MenuItem>
                     }
                     <MenuItem onClick={Logout}>Logout</MenuItem>
                   </div>

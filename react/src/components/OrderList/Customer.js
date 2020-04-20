@@ -79,16 +79,32 @@ class Customer extends React.Component {
                 <Scrollbars style={{ height: 800 }}>
                       <hr />
                 {this.state.orders.map((order, index) =>
-                    <div>
-                    <Grid key={index} container className="orderHistory">
-                        <Grid container item className="name" justify="space-between">
-                            <div>Restaurant:</div> 
-                            <div>{order.findNameUnderRestname[0].name}</div>
+                    <div key={index}>
+                    <Grid container className="orderHistory">
+                        <Grid container item className="name" spacing={3}>
+                            <Grid item xs={2}>Restaurant:</Grid> 
+                            <Grid item xs={4} className="rightItem">{order.findNameUnderRestname[0].name}</Grid>
+                            <Grid item xs={2}>Mobile:</Grid> 
+                            <Grid item xs={4} className="rightItem">{order.findNameUnderRestname[0].mobile}</Grid>
                         </Grid>
                         <Grid container item className="name" justify="space-between">
-                            <div>Courier:</div> 
-                            <div>{this.findCourierName(order.findNameUnderCouriername[0])}</div>
+                            <div>Address:</div> 
+                            <div>{order.findNameUnderRestname[0].address}</div>
                         </Grid>
+                        {this.findCourierName(order.findNameUnderCouriername[0]) != 'Not Matched' && 
+                        <Grid container item className="name" spacing={3}>
+                            <Grid item xs={2}>Courier:</Grid>
+                            <Grid item xs={4} className="rightItem">{order.findNameUnderCouriername[0].name}</Grid>
+                            <Grid item xs={2}>Mobile:</Grid> 
+                            <Grid item xs={4} className="rightItem">{order.findNameUnderCouriername[0].mobile}</Grid>
+                        </Grid>
+                        }
+                        {this.findCourierName(order.findNameUnderCouriername[0]) == 'Not Matched' && 
+                        <Grid container item className="name" spacing={3}>
+                            <Grid item xs={2}>Courier:</Grid>
+                            <Grid item xs={4} className="rightItem">Not Matched</Grid>
+                        </Grid>
+                        }
                         <Grid container item spacing={3}>
                             <Grid item xs={6} className="subtitle">Order Date:{order.createdAt.substring(0, 10)}</Grid>
                             <Grid item xs={6} className="subtitle">Status: {this.getStatus(order.orderStatus)}</Grid>

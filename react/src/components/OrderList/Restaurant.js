@@ -49,7 +49,7 @@ class Restaurant extends React.Component {
 
     findCourierName = (value) =>{
         if (value)
-            return value[0].name
+            return value.name
         else return "Not Matched"
     }
 
@@ -62,12 +62,16 @@ class Restaurant extends React.Component {
         } 
         return sum;
     }
-    onClickStartPreparing = async(id) =>{
+
+    onClickStartPreparing = (id) =>{
+        this.startPreparing(id);
+    }
+
+    startPreparing = async(id) =>{
         axios.defaults.withCredentials = true
         const data = { _id: id, orderStatus: 2};
         let getOrderListUrl = `${process.env.REACT_APP_API_URL}/catalog/orders/update_order`
         axios.post(getOrderListUrl, data).then(result => {
-            console.log(result.data);
             if (result.data.process == "failed") {
                 this.setState({ redirectError: true })
             } else {
@@ -93,12 +97,28 @@ class Restaurant extends React.Component {
                 <Scrollbars style={{ height: 800 }}>
                       <hr />
                 {this.state.orders.map((order, index) =>
-                    <div>
-                    <Grid key={index} container className="orderHistory">
-                        <Grid container item className="name" justify="space-between">
-                            <div>Courier:</div> 
-                            <div>{this.findCourierName(order.findNameUnderCouriername)}</div>
+                    <div key={index}>
+                    <Grid container className="orderHistory">
+                        <Grid container item className="name" spacing={3}>
+                            <Grid item xs={2}>Customer:</Grid> 
+                            <Grid item xs={4} className="rightItem">{order.findNameUnderCustname[0].name}</Grid>
+                            <Grid item xs={2}>Mobile:</Grid> 
+                            <Grid item xs={4} className="rightItem">{order.findNameUnderCustname[0].mobile}</Grid>
                         </Grid>
+                        {this.findCourierName(order.findNameUnderCouriername[0]) != 'Not Matched' && 
+                        <Grid container item className="name" spacing={3}>
+                            <Grid item xs={2}>Courier:</Grid>
+                            <Grid item xs={4} className="rightItem">{order.findNameUnderCouriername[0].name}</Grid>
+                            <Grid item xs={2}>Mobile:</Grid> 
+                            <Grid item xs={4} className="rightItem">{order.findNameUnderCouriername[0].mobile}</Grid>
+                        </Grid>
+                        }
+                        {this.findCourierName(order.findNameUnderCouriername[0]) == 'Not Matched' && 
+                        <Grid container item className="name" spacing={3}>
+                            <Grid item xs={2}>Courier:</Grid>
+                            <Grid item xs={4} className="rightItem">Not Matched</Grid>
+                        </Grid>
+                        }
                         <Grid container item spacing={3}>
                             <Grid item xs={6} className="subtitle">Order Date:{order.createdAt.substring(0, 10)}</Grid>
                             <Grid item xs={6} className="subtitle">Status: {this.getStatus(order.orderStatus)}</Grid>
@@ -113,10 +133,10 @@ class Restaurant extends React.Component {
                         <Grid container item justify="flex-end">
                         <Grid item xs={3} item className="priceItem">Total: ${this.calculateTotal(order.orderList)}</Grid>
                         </Grid>
-                        {order.orderStatus == 1 //strange bug button -> map allllllllll fkkkkkk 
+                        {order.orderStatus == 1
                         && 
                             <Grid container item justify="center">
-                                <Button id={index} size="large" variant="outlined" color="secondary" onClick={this.onClickStartPreparing(order.id)}>Start Preparing</Button>
+                                <Button title={order.id} id={order.id} size="large" variant="outlined" color="secondary" onClick={() => this.onClickStartPreparing(order.id)}>Start Preparing</Button>
                             </Grid>
                         }
                         </Grid>

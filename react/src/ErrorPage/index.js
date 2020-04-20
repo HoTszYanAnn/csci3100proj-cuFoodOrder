@@ -1,11 +1,11 @@
 import React from 'react';
 import { WaveTopBottomLoading } from 'react-loadingg';
-import './loadingPage.css'
+import './errorPage.css'
 
 function LoadingPage() {
   return (
-    <div className="center">
-       <h1>Error</h1>
+    <div className="error">
+       <h1>Error. Please back to home page</h1>
     </div>
   );
 }

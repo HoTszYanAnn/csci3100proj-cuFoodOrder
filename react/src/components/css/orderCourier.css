@@ -1,0 +1,24 @@
+.name{
+    font-size:1.5rem;
+}
+.foodItem{
+    text-align: left;
+    font-size: 1.2rem;
+}
+
+.priceItem{
+    text-align: right;
+    font-size: 1.2rem;
+}
+
+.subtitle{
+    font-size: 1.3rem;
+}
+
+.orderHistory{
+    padding: 1rem;
+}
+
+.rightItem{
+    text-align: right;
+}

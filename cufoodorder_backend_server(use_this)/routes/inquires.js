@@ -4,11 +4,19 @@ var Inquire = require('../models/inquire');
 var authorized = require('../middlewares/token_check'); //middleware for authentication
 
 
-router.get('/chatHistory/:user_input_id/:cs_input_id', authorized, function(req, res){
-    Inquire.find({user_id: req.params.user_input_id, cs_id: req.params.cs_input_id}).populate("user_id").populate("cs_id").then(function(err, history){
+router.post('/chatHistory_user', authorized, function(req, res){
+    Inquire.find({user: req.body.user}, function(err, history){
         if(err)
-            return res.json({err});
-        return res.json({history});
+            return res.json({process: 'failed', err});
+        return res.json({process: 'success', history});
+    });
+});
+
+router.post('/chatHistory_cs', authorized, function(req, res){
+    Inquire.find({cs: req.body.cs}, function(err, history){
+        if(err)
+            return res.json({process: 'failed', err});
+        return res.json({process: 'success', history});
     });
 });
 

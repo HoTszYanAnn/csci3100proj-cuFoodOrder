@@ -105,7 +105,10 @@ router.post('/courier_match', authorized, function(req, res){
 
 //a
 router.post('/empty_courier', authorized, function(req, res){
-    Order.find({"$or": [{courier_name: null},{courier_name: ''}]}, function(err, doc){
+    Order.find({"$or": [{courier_name: null},{courier_name: ''}]})
+    .populate('findNameUnderCustname', 'name mobile address')
+    .populate('findNameUnderRestname', 'name mobile address')
+    .exec(function(err, doc){
         if(err)
             return res.json({process: "failed", err});
         else if(!doc)

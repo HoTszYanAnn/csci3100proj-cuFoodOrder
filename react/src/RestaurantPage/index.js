@@ -12,73 +12,66 @@ import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles(theme => ({
     root: {
-      flexGrow: 1,
+        flexGrow: 1,
     },
     paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
 
     },
-    
-        backgroundColor:'#41c7c2',
-   
-    
-  }));
+    backgroundColor: '#41c7c2',
+}));
+
 class RestaurantsPage extends React.Component {
-
-    
-    
-   
-    constructor(props){
+    constructor(props) {
         super(props);
-    this.state = {
-        menuItems : [{
-            _id:1233,
-            menuName: "Hambergur",
-            price: 123,
-            imgs:Img,
-        }, {
-            _id:5646,
-            menuName: "hi",
-            price: 234,
-            imgs:Img,
-        }],
-        item:[
-            
-        ],
-        restmenu:[],
-        restaurantTitle : "abc Restaurant"
-    }
-   
-sessionStorage.setItem('myCart',JSON.stringify(this.state.item));
+        this.state = {
+            menuItems: [{
+                _id: 1233,
+                menuName: "Hambergur",
+                price: 123,
+                imgs: Img,
+            }, {
+                _id: 5646,
+                menuName: "hi",
+                price: 234,
+                imgs: Img,
+            }],
+            item: [
+
+            ],
+            restmenu: [],
+            restaurantTitle: "abc Restaurant"
+        }
+
+        sessionStorage.setItem('myCart', JSON.stringify(this.state.item));
 
     }
-    
-    componentDidMount=()=>{
+
+    componentDidMount = () => {
         this.getMenu();
         console.log(this.state.restmenu._id)
     }
-    getMenu=async()=>{
-        axios.defaults.withCredentials=true
-        var username={username:"hello"};
-        let menuUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/username_menu` ;
-        axios.post(menuUrl,username).then(res=>{
-                if(res.data){
-                var datas= res.data.doc[0].findMenuUnderUsername;
+    getMenu = async () => {
+        axios.defaults.withCredentials = true
+        var username = { username: "hello" };
+        let menuUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/username_menu`;
+        axios.post(menuUrl, username).then(res => {
+            if (res.data) {
+                var datas = res.data.doc[0].findMenuUnderUsername;
                 this.setState({
-                    restmenu:datas
+                    restmenu: datas
                 })
-                console.log(res.data.doc[0].username)}
-                
-            }).catch((e)=>{
-               console.log(e);
-            });
+                console.log(res.data.doc[0].username)
+            }
+
+        }).catch((e) => {
+            console.log(e);
+        });
     }
-   
+
     render() {
-        
-        
         return (
             <React.Fragment>
                 <div className="container">
@@ -91,40 +84,27 @@ sessionStorage.setItem('myCart',JSON.stringify(this.state.item));
                     </div>
                 </div>
                 <div className="orderMenuBox">
-              
-                  
-                   
-                     <Grid container spacing={3}  direction="column"> 
-                    
-                   
-                     {this.state.restmenu.map(({_id,menuName,menuList},i) =>{
-                      return  <Grid  xs={12} direction="row" key={i._id}>
-                       <h1> {menuName}</h1>
-                        <Divider/>
-                    
-                     {menuList.map((menu) =>{
-                        return <Grid item xs={4}  key={menu._id} >
-                                
-                                 <Ordercard 
-                                 id= {menu._id}
-                                 name={menu.dish}
-                                 description={menu.description}
-                                 price={menu.price}
-                                 img={menu.imgs}
-                                 />
-                                 
-                                </Grid>})}
-                        
-                            
+                    <Grid container spacing={3} direction="column">
+                        {this.state.restmenu.map(({ _id, menuName, menuList }, i) => {
+                            return <Grid xs={12} key={i._id}>
+                                <h1> {menuName}</h1>
+                                <Divider />
+                                <Grid container>
+                                {menuList.map((menu) => {
+                                    return <Grid container item xs={4} key={menu._id} >
+                                        <Ordercard
+                                            id={menu._id}
+                                            name={menu.dish}
+                                            description={menu.description}
+                                            price={menu.price}
+                                            img={menu.imgs}
+                                        />
+                                        </Grid>
+                                })}
+                                </Grid>
+                            </Grid>
+                        })}
                     </Grid>
-                        
-                    })}
-                
-                
-                    
-                    </Grid>
-                   
-               
                 </div>
             </React.Fragment>
         );

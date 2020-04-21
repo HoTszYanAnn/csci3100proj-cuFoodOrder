@@ -9,7 +9,7 @@ var cors = require("cors");
 
 
 var Inquire = require('./models/inquire');
-var {addCustomer, quitCustomer, infoCustomer} = require('./middlewares/chat');
+var {addCustomer, quitCustomer, infoCustomer} = require('./middlewares/chat'); //store chatroom status and information
 
 
 //mongoose connection info. with MongoDB Altas
@@ -44,16 +44,16 @@ app.use('/catalog/menus', require('./routes/menus'));
 io.on("connection", function(socket){
 
 
-    socket.on('userinfo', ({customer_name, cs_room})=>{
-        var customer = addCustomer({ connection_id: socket.id, customer_name: customer_name, cs_room});
+    socket.on('userinfo', ({cs_name, customer_room})=>{
+        var customer = addCustomer({ connection_id: socket.id, cs_name: cs_name, customer_room: customer_room});
 
-        socket.join(customer.cs_room);
+        socket.join(customer.customer_room);
 
-        io.to(customer.cs_room).emit('message', {
-            dialog: `${customer.name}, ${customer.cs_room} is at your service.`,
-            connection_id: customer.customer.connection_id,
-            customer_name: customer.customer_name,
-            cs_room: customer.cs_room
+        io.to(customer.customer_room).emit('message', {
+            dialog: `${customer.customer_room}, ${customer.cs_name} is at your service.`,
+            connection_id: customer.connection_id,
+            cs_name: customer.cs_name,
+            customer_room: customer.customer_room
         });
     });
 
@@ -64,8 +64,8 @@ io.on("connection", function(socket){
         var customer = infoCustomer(socket.id);
         
         var inquire = new Inquire({
-            user: customer.customer_name,
-            cs: message.customer_name,
+            user: customer.customer_room,
+            cs: customer.cs_name,
             answered_by: message.answered_by,
             dialog: message.dialog
         });
@@ -81,7 +81,7 @@ io.on("connection", function(socket){
                     return res.json({process: "failed", err});
                 else {
                 //use emit() to send inquireData to the client server for further rendering
-                    return io.to(customer.cs_room).emit("saved_dialog", inquireData)
+                    return io.to(customer.customer_room).emit("saved_dialog", inquireData)
                 }
             }));
         });
@@ -92,7 +92,7 @@ io.on("connection", function(socket){
     socket.on('disconnect', ()=> {
         var customer = quitCustomer(socket.id);
 
-        io.to(customer.cs_room).emit('message', { dialog: `${customer.name} has left.` });
+        io.to(customer.customer_room).emit('message', { dialog: `${customer.customer_room} has left.` });
     });
 });
 

@@ -1,9 +1,10 @@
 //temporary space for storing customer's connection
 var customers = [];
 
-var addCustomer = ({ connection_id, customer_name, cs_room }) => {
+//let cs can freely join any customer room
+var addCustomer = ({ connection_id, cs_name, customer_room }) => {
 
-  var customer = { connection_id, customer_name, cs_room };
+  var customer = { connection_id, cs_name, customer_room };
 
   customers.push(customer);
 

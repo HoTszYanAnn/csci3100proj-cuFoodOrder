@@ -4,7 +4,7 @@ import './loadingPage.css'
 
 function LoadingPage() {
   return (
-    <div class="loading">
+    <div className="loading">
       <br/>
        <WaveTopBottomLoading color="green"/>
     </div>

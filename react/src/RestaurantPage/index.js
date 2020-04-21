@@ -18,14 +18,16 @@ const useStyles = makeStyles(theme => ({
       padding: theme.spacing(2),
       textAlign: 'center',
       color: theme.palette.text.secondary,
+
     },
     
-        backgroundColor:'#41c7c2'
+        backgroundColor:'#41c7c2',
+   
     
   }));
 class RestaurantsPage extends React.Component {
 
-    restaurantTitle = "abc Restaurant";
+    
     
    
     constructor(props){
@@ -46,7 +48,7 @@ class RestaurantsPage extends React.Component {
             
         ],
         restmenu:[],
-        
+        restaurantTitle : "abc Restaurant"
     }
    
 sessionStorage.setItem('myCart',JSON.stringify(this.state.item));
@@ -59,7 +61,7 @@ sessionStorage.setItem('myCart',JSON.stringify(this.state.item));
     }
     getMenu=async()=>{
         axios.defaults.withCredentials=true
-        var username={username:"hi"};
+        var username={username:"hello"};
         let menuUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/username_menu` ;
         axios.post(menuUrl,username).then(res=>{
                 if(res.data){
@@ -67,7 +69,7 @@ sessionStorage.setItem('myCart',JSON.stringify(this.state.item));
                 this.setState({
                     restmenu:datas
                 })
-                console.log(res.data.doc[0].findMenuUnderUsername)}
+                console.log(res.data.doc[0].username)}
                 
             }).catch((e)=>{
                console.log(e);
@@ -82,37 +84,47 @@ sessionStorage.setItem('myCart',JSON.stringify(this.state.item));
                 <div className="container">
                     <img src={image} className="topbigimage" />
                     <div className="content-title">
-                        <div className="apptitle">{this.restaurantTitle}</div>
+                        <div className="apptitle">{this.state.restaurantTitle}</div>
                     </div>
                     <div className="content-description">
                         <div>For ... description</div>
                     </div>
                 </div>
                 <div className="orderMenuBox">
-                <Paper elevation={3} >
+              
                   
                    
-                     <Grid container spacing={3}> 
+                     <Grid container spacing={3}  direction="column"> 
                     
                    
+                     {this.state.restmenu.map(({_id,menuName,menuList},i) =>{
+                      return  <Grid  xs={12} direction="row" key={i._id}>
+                       <h1> {menuName}</h1>
+                        <Divider/>
                     
-                    
-                    {this.state.menuItems.map((menu) =>
-                    <Grid item xs={4} key={menu._id}>
-                     <Ordercard 
-                         id= {menu._id}
-                         name={menu.menuName}
-                         description={menu.description}
-                         price={menu.price}
-                         img={menu.imgs}
-                        />
-                    </Grid>)}
+                     {menuList.map((menu) =>{
+                        return <Grid item xs={4}  key={menu._id} >
+                                
+                                 <Ordercard 
+                                 id= {menu._id}
+                                 name={menu.dish}
+                                 description={menu.description}
+                                 price={menu.price}
+                                 img={menu.imgs}
+                                 />
+                                 
+                                </Grid>})}
+                        
+                            
+                    </Grid>
+                        
+                    })}
                 
                 
                     
                     </Grid>
                    
-                </Paper>
+               
                 </div>
             </React.Fragment>
         );

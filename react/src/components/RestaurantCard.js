@@ -58,7 +58,8 @@ class RestaurantCard extends React.Component {
     };
     
     render(){
-
+    sessionStorage.setItem('restName',JSON.stringify(this.props.restName));  
+    
     const {classes} = this.props;
     console.log(this.props);
     return (

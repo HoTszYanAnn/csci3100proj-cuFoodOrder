@@ -1,7 +1,6 @@
 import React from 'react';
 import { withRouter, Redirect } from "react-router";
 import image from '../img/cuhk.jpeg';
-import Paper from '@material-ui/core/Paper';
 import './restaurantPage.css';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -42,20 +41,27 @@ class RestaurantsPage extends React.Component {
 
             ],
             restmenu: [],
-            restaurantTitle: "abc Restaurant"
+            restaurantTitle: "abc Restaurant",
+            name : "" 
         }
 
         sessionStorage.setItem('myCart', JSON.stringify(this.state.item));
+       
 
     }
 
     componentDidMount = () => {
+        
         this.getMenu();
-        console.log(this.state.restmenu._id)
+        
     }
     getMenu = async () => {
+        let restName=sessionStorage.getItem('restName',)
+        restName=JSON.parse(restName);
+        
         axios.defaults.withCredentials = true
-        var username = { username: "hello" };
+        var username={username:restName}
+        
         let menuUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/username_menu`;
         axios.post(menuUrl, username).then(res => {
             if (res.data) {
@@ -63,7 +69,7 @@ class RestaurantsPage extends React.Component {
                 this.setState({
                     restmenu: datas
                 })
-                console.log(res.data.doc[0].username)
+                console.log(res.data.doc)
             }
 
         }).catch((e) => {
@@ -86,10 +92,10 @@ class RestaurantsPage extends React.Component {
                 <div className="orderMenuBox">
                     <Grid container spacing={3} direction="column">
                         {this.state.restmenu.map(({ _id, menuName, menuList }, i) => {
-                            return <Grid xs={12} key={i._id}>
+                            return <Grid item xs={12} key={i._id}>
                                 <h1> {menuName}</h1>
                                 <Divider />
-                                <Grid container>
+                                <Grid container spacing={3}>
                                 {menuList.map((menu) => {
                                     return <Grid container item xs={4} key={menu._id} >
                                         <Ordercard

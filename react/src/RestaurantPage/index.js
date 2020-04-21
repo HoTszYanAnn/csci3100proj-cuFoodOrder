@@ -7,8 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Ordercard from '../components/ordercard.js';
 import Img from '../img/test.jpg';
-
-
+import axios from 'axios';
+import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -33,23 +33,45 @@ class RestaurantsPage extends React.Component {
     this.state = {
         menuItems : [{
             _id:1233,
-            name: "Hambergur",
+            menuName: "Hambergur",
             price: 123,
             imgs:Img,
         }, {
             _id:5646,
-            name: "hi",
+            menuName: "hi",
             price: 234,
             imgs:Img,
         }],
         item:[
             
-        ]
+        ],
+        restmenu:[],
         
     }
    
 sessionStorage.setItem('myCart',JSON.stringify(this.state.item));
+
+    }
     
+    componentDidMount=()=>{
+        this.getMenu();
+        console.log(this.state.restmenu._id)
+    }
+    getMenu=async()=>{
+        axios.defaults.withCredentials=true
+        var username={username:"hi"};
+        let menuUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/username_menu` ;
+        axios.post(menuUrl,username).then(res=>{
+                if(res.data){
+                var datas= res.data.doc[0].findMenuUnderUsername;
+                this.setState({
+                    restmenu:datas
+                })
+                console.log(res.data.doc[0].findMenuUnderUsername)}
+                
+            }).catch((e)=>{
+               console.log(e);
+            });
     }
    
     render() {
@@ -68,19 +90,26 @@ sessionStorage.setItem('myCart',JSON.stringify(this.state.item));
                 </div>
                 <div className="orderMenuBox">
                 <Paper elevation={3} >
-                   
+                  
                    
                      <Grid container spacing={3}> 
+                    
+                   
+                    
+                    
                     {this.state.menuItems.map((menu) =>
                     <Grid item xs={4} key={menu._id}>
                      <Ordercard 
                          id= {menu._id}
-                         name={menu.name}
+                         name={menu.menuName}
                          description={menu.description}
                          price={menu.price}
                          img={menu.imgs}
                         />
                     </Grid>)}
+                
+                
+                    
                     </Grid>
                    
                 </Paper>

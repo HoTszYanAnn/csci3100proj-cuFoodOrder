@@ -103,7 +103,7 @@ class RestaurantsPage extends React.Component {
                                             name={menu.dish}
                                             description={menu.description}
                                             price={menu.price}
-                                            img={menu.imgs}
+                                            img={menu.imageAddress}
                                         />
                                         </Grid>
                                 })}

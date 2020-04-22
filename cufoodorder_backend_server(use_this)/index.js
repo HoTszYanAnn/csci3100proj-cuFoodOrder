@@ -9,7 +9,7 @@ var cors = require("cors");
 
 
 var Inquire = require('./models/inquire');
-var {addCustomer, quitCustomer, infoCustomer} = require('./middlewares/chat'); //store chatroom status and information
+var {addCustomer, quitCustomer, infoCustomer, addcs} = require('./middlewares/chat'); //store chatroom status and information
 
 
 //mongoose connection info. with MongoDB Altas
@@ -44,32 +44,31 @@ app.use('/catalog/menus', require('./routes/menus'));
 io.on("connection", function(socket){
 
 
-    socket.on('userinfo', ({cs_name, customer_room})=>{
-        var customer = addCustomer({ connection_id: socket.id, cs_name: cs_name, customer_room: customer_room});
+    socket.on('userinfo', ({customer_room})=>{
+        var customer = addCustomer({ connection_id: socket.id, customer_room: customer_room});
 
         socket.join(customer.customer_room);
 
-        io.to(customer.customer_room).emit('join_message', {
+        io.to(customer.customer_room).emit('join_cust', {
+            dialog: `customer ${customer.customer_room} is in room.`,
+            connection_id: customer.connection_id,
+            customer_room: customer.customer_room
+        });
+    });
+
+
+    socket.on('csinfo', ({cs_name, customer_room})=>{
+        var customer = addcs({cs_name: cs_name, customer_room: customer_room});
+
+        socket.join(customer.customer_room);
+
+        io.to(customer.customer_room).emit('join_cs', {
             dialog: `${customer.customer_room}, ${customer.cs_name} is at your service.`,
             connection_id: customer.connection_id,
             cs_name: customer.cs_name,
             customer_room: customer.customer_room
         });
     });
-
-
-    // socket.on('csinfo', ({cs_name, customer_room})=>{
-    //     var customer = addCustomer({ connection_id: socket.id, cs_name: cs_name, customer_room: customer_room});
-
-    //     socket.join(customer.customer_room);
-
-    //     io.to(customer.customer_room).emit('join_message', {
-    //         dialog: `${customer.customer_room}, ${customer.cs_name} is at your service.`,
-    //         connection_id: customer.connection_id,
-    //         cs_name: customer.cs_name,
-    //         customer_room: customer.customer_room
-    //     });
-    // });
 
 
     //below on() receiving information from the client server
@@ -108,7 +107,7 @@ io.on("connection", function(socket){
     socket.on('disconnect', ()=> {
         var customer = quitCustomer(socket.id);
 
-        io.to(customer.customer_room).emit('exit_message', { dialog: `${customer.customer_room} has left.` });
+        io.to(customer.customer_room).emit('exit_message', { dialog: `user has left.` });
     });
 });
 

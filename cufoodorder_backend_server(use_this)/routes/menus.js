@@ -110,14 +110,48 @@ router.post('/likes_menu_plus', authorized, function(req, res){
 });
 
 
-//likes decrement
-router.post('/likes_menu_minus', authorized, function(req, res){
+// //likes decrement
+// router.post('/likes_menu_minus', authorized, function(req, res){
 
-    Menu.findOneAndUpdate({_id: req.body._id}, { $inc: { likes : -1 }}, function(err, beforeMinus){
-        if(err)
+//     Menu.findOneAndUpdate({_id: req.body._id}, { $inc: { likes : -1 }}, function(err, beforeMinus){
+//         if(err)
+//             return res.json({process: "failed", err});
+//         else 
+//             return res.json({process: "success", beforeMinus});
+//     });
+// });
+
+
+//display_menu by restaurant name
+router.post('/display_menu_restname', function(req, res){
+    // query = Menu.find().populate('restaurantName', 'username introduction')
+    // .exec(function(err, allMenuData){
+    //     if(err)
+    //         return res.json({process: "failed", err});
+    //     else          
+    //         return res.json({process: "success", allMenuData});
+    // });
+    
+    Menu.aggregate([
+        {$group: {
+            _id: {restaurantName: '$restaurantName'},
+            menuName: {$push: '$menuName'}
+        }},
+        {$lookup: {from: 'customers', localField: '_id.restaurantName', foreignField: '_id', as: 'user'}},
+        {$lookup: {from: 'menus', localField: 'menuName', foreignField: 'menuName', as: 'menu'}},
+        {$project: {
+            'user.username': 1,
+            'user.name': 1,
+            menuName: 1,
+            'menu.menuList': 1,
+            'menu.menuName':1
+        }}], function (err, doc) {
+        if (err) {
             return res.json({process: "failed", err});
-        else 
-            return res.json({process: "success", beforeMinus});
+        } else {
+            console.log(doc);
+            return res.json({process: "success", doc});
+        }
     });
 });
 

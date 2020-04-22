@@ -78,6 +78,9 @@ class ProfilePage extends React.Component {
             email: '',
             payment: '',
             mobile: '',
+            introduction: '',
+            introError: '',
+            introErrorText: '',
             pwError: false,
             pwErrorText: '',
             mobileError: false,
@@ -149,6 +152,7 @@ class ProfilePage extends React.Component {
             else
                 this.setState({ nameError: false, nameErrorText: "" })
         }
+        console.log(prop +'.'+'event.target.value')
         this.setState({ [prop]: event.target.value })
     };
 
@@ -173,9 +177,9 @@ class ProfilePage extends React.Component {
         axios.defaults.withCredentials = true
         let data = null;
         if (this.state.password) {
-            data = { username: this.state.username, name: this.state.name , password : this.state.password, address : this.state.address, mobile : this.state.mobile, emailAddress: this.state.email, paymentInfo : this.state.payment};
+            data = { username: this.state.username, name: this.state.name , password : this.state.password, address : this.state.address, mobile : this.state.mobile, emailAddress: this.state.email, paymentInfo : this.state.payment, introduction: this.state.introduction};
         } else {
-            data = { username: this.state.username, name: this.state.name , address : this.state.address, mobile : this.state.mobile, emailAddress: this.state.email, paymentInfo : this.state.payment};
+            data = { username: this.state.username, name: this.state.name , address : this.state.address, mobile : this.state.mobile, emailAddress: this.state.email, paymentInfo : this.state.payment, introduction: this.state.introduction};
         }
         let updateUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/update_account`
         axios.post(updateUrl, data).then(result => {
@@ -188,7 +192,7 @@ class ProfilePage extends React.Component {
         axios.post(getDataUrl).then(result => {
             let data = result.data.customerData
             console.log(result);
-            this.setState({ name: data.name, username: data.username, address: data.address, mobile: data.mobile, email: data.emailAddress, payment: data.paymentInfo })
+            this.setState({ name: data.name, username: data.username, address: data.address, mobile: data.mobile, email: data.emailAddress, payment: data.paymentInfo, introduction:data.introduction })
         })
     }
 
@@ -317,6 +321,19 @@ class ProfilePage extends React.Component {
                                     />
                                     <div className="ErrorMessage">{this.state.payErrorText}</div>
                                 </FormControl>
+                                {accessRight == 1 &&
+                                <FormControl variant="outlined"
+                                    margin="dense" fullWidth error={this.state.introError}>
+                                    <InputLabel htmlFor="outlined-adornment-username">Introduction</InputLabel>
+                                    <OutlinedInput
+                                        id="outlined-adornment-username"
+                                        value={this.state.introduction}
+                                        onChange={this.handleChangeRegister('introduction')}
+                                        labelWidth={70}
+                                    />
+                                    <div className="ErrorMessage">{this.state.introErrorText}</div>
+                                </FormControl>
+                                }
                             </DialogContent>
                             <DialogActions>
                                 <div style={{ flex: '1 0 0' }} />

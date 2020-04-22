@@ -41,6 +41,7 @@ class RestaurantsPage extends React.Component {
 
             ],
             restmenu: [],
+            userData:'',
             restaurantTitle: "abc Restaurant",
             name : "" 
         }
@@ -51,9 +52,17 @@ class RestaurantsPage extends React.Component {
     }
 
     componentDidMount = () => {
-        
         this.getMenu();
-        
+        this.getUserData();
+    }
+    getUserData = async (input) => {
+        axios.defaults.withCredentials = true
+        let getDataUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/user_data`
+        axios.post(getDataUrl).then(result => {
+            let data = result.data.customerData
+            console.log(result);
+            this.setState({ userData: data})
+        })
     }
     getMenu = async () => {
         let restName=sessionStorage.getItem('restName',)
@@ -78,15 +87,17 @@ class RestaurantsPage extends React.Component {
     }
 
     render() {
+
+
         return (
             <React.Fragment>
                 <div className="container">
                     <img src={image} className="topbigimage" />
                     <div className="content-title">
-                        <div className="apptitle">{this.state.restaurantTitle}</div>
+                        <div className="apptitle">{this.state.userData.name}</div>
                     </div>
                     <div className="content-description">
-                        <div>For ... description</div>
+                        <div>{this.state.userData.introduction}</div>
                     </div>
                 </div>
                 <div className="orderMenuBox">

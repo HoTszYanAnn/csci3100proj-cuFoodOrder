@@ -26,82 +26,55 @@ class RestaurantsPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            menuItems: [{
-                _id: 1233,
-                menuName: "Hambergur",
-                price: 123,
-                imgs: Img,
-            }, {
-                _id: 5646,
-                menuName: "hi",
-                price: 234,
-                imgs: Img,
-            }],
-            item: [
-
-            ],
             restmenu: [],
-            userData:'',
+            restData:'',
             restaurantTitle: "abc Restaurant",
-            name : "" 
+            name : "" ,
+            item : [],
+            cart : []
         }
-
         sessionStorage.setItem('myCart', JSON.stringify(this.state.item));
-       
-
     }
 
     componentDidMount = () => {
         this.getMenu();
-        this.getUserData();
+        console.log(this.state.restData);
     }
-    getUserData = async (input) => {
-        axios.defaults.withCredentials = true
-        let getDataUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/user_data`
-        axios.post(getDataUrl).then(result => {
-            let data = result.data.customerData
-            console.log(result);
-            this.setState({ userData: data})
-        })
-    }
+
+
     getMenu = async () => {
-        let restName=sessionStorage.getItem('restName',)
-        restName=JSON.parse(restName);
-        
+        let restName=this.props.match.params.restName
         axios.defaults.withCredentials = true
         var username={username:restName}
-        
         let menuUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/username_menu`;
         axios.post(menuUrl, username).then(res => {
             if (res.data) {
-                var datas = res.data.doc[0].findMenuUnderUsername;
+                var datas = res.data.doc[0];
+                console.log(res.data)
                 this.setState({
-                    restmenu: datas
+                    restmenu: datas.findMenuUnderUsername,
+                    restData: datas
                 })
-                console.log(res.data.doc)
             }
-
         }).catch((e) => {
             console.log(e);
         });
     }
 
     render() {
-
-
         return (
             <React.Fragment>
                 <div className="container">
-                    <img src={image} className="topbigimage" />
+                    <img src={this.state.restData.image} className="topbigimage" />
                     <div className="content-title">
-                        <div className="apptitle">{this.state.userData.name}</div>
+                        <div className="apptitle">{this.state.restData.name}</div>
                     </div>
                     <div className="content-description">
-                        <div>{this.state.userData.introduction}</div>
+                        <div>{this.state.restData.introduction}</div>
                     </div>
                 </div>
                 <div className="orderMenuBox">
-                    <Grid container spacing={3} direction="column">
+                    <Grid container spacing={3}>
                         {this.state.restmenu.map(({ _id, menuName, menuList }, i) => {
                             return <Grid item xs={12} key={i._id}>
                                 <h1> {menuName}</h1>

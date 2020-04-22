@@ -10,19 +10,32 @@ class Restaurants extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      menus: [],
+      restaurants: [],
       redirect: false,
-      notGet: true
     }
   }
 
+
+  componentDidMount(){
+    this.getRestaurantsMenu();
+  }
+  plusOne  = async (id) => {
+    axios.defaults.withCredentials = true
+    let addLikeUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/likes_rest_plus`
+    console.log(id)
+    let data = { _id: id }
+    axios.post(addLikeUrl, data).then(result => {
+        console.log(result)
+        this.setState({state:this.state})
+        this.getRestaurantsMenu();
+    })
+}
   getRestaurantsMenu = async () => {
     axios.defaults.withCredentials = true
-    let getMenuDataUrl = `${process.env.REACT_APP_API_URL}/catalog/menus/display_menu`
-    axios.post(getMenuDataUrl).then(result => {
-        this.setState({ showingMenu:"", menus: result.data.allMenuData })
+    let getRestsDataUrl = `${process.env.REACT_APP_API_URL}/catalog/menus/display_menu_restname`
+    axios.post(getRestsDataUrl).then(result => {
+        this.setState({ showingMenu:"", restaurants: result.data.doc })
     })
-    this.setState({notGet:false});
   }
 
   render() {
@@ -30,24 +43,14 @@ class Restaurants extends React.Component {
       return <Redirect to='/error' />;
     }
     
-    if (this.state.notGet)
-      this.getRestaurantsMenu();
-    console.log(this.state.menus)
-    
     return (
       <div>
         <Grid container spacing={3}>
-          {this.state.menus && this.state.menus.map((menu) =>
-            <Grid item xs={4} key={menu._id}>
+          {this.state.restaurants && this.state.restaurants.map((restaurant, index) =>
+            <Grid item xs={4} key={index}>
               <RestaurantCard
-                restName={menu.restaurantName.username}
-                updateDate="March 20, 2020"
-                description="... testing 123"
-                like={menu.likes}
-                bestItems={menu.menuList}
-                linkName={menu.restaurantName.username}
-                id = {menu._id}
-                getAgain ={this.getRestaurantsMenu}
+                restaurant = {restaurant}
+                plusOne = {this.plusOne}
               />
             </Grid>)}
         </Grid>

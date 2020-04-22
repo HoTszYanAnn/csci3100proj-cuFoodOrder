@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import PropTypes from "prop-types";
 import { Link as RouterLink, Redirect, withRouter } from 'react-router-dom';
-import { Grid } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import '../css/orderCustomers.css'
 
@@ -32,7 +32,7 @@ class Customer extends React.Component {
             return result;
         })
     }
-    
+
     getStatus = (value) => {
         if (value == 0) {
             return "not paid"
@@ -47,20 +47,35 @@ class Customer extends React.Component {
         }
     }
 
-    findCourierName = (value) =>{
+    findCourierName = (value) => {
         if (value)
             return value.name
         else return "Not Matched"
     }
 
-    calculateTotal = (list) =>{
+    calculateTotal = (list) => {
         let i = 0;
         let sum = 0;
-        while (list[i]){
+        while (list[i]) {
             sum = sum + list[i].price * list[i].amount
             i++;
-        } 
+        }
         return sum;
+    }
+    onClickDelete = async(id) =>{
+        axios.defaults.withCredentials = true
+        var data={  _id : id }
+        let deleteUrl = `${process.env.REACT_APP_API_URL}/catalog/orders/delete_order`;
+        axios.post(deleteUrl, data).then(res => {
+            console.log(res);
+            this.getOrderList();
+        }).catch((e) => {
+            console.log(e);
+        });
+    }
+
+    onClickStartPayment =(id)=>{
+
     }
 
     render() {
@@ -73,57 +88,67 @@ class Customer extends React.Component {
                 <Redirect to="/error" />
             );
         }
+
+        
         return (
             <React.Fragment>
-                <h1 style={{textAlign:'center'}}>Order History</h1>
+                <h1 style={{ textAlign: 'center' }}>Order History</h1>
                 <Scrollbars style={{ height: 800 }}>
-                      <hr />
-                {this.state.orders.map((order, index) =>
-                    <div key={index}>
-                    <Grid container className="orderHistory">
-                        <Grid container item className="name" spacing={3}>
-                            <Grid item xs={2}>Restaurant:</Grid> 
-                            <Grid item xs={4} className="rightItem">{order.findNameUnderRestname[0].name}</Grid>
-                            <Grid item xs={2}>Mobile:</Grid> 
-                            <Grid item xs={4} className="rightItem">{order.findNameUnderRestname[0].mobile}</Grid>
-                        </Grid>
-                        <Grid container item className="name" justify="space-between">
-                            <div>Address:</div> 
-                            <div>{order.findNameUnderRestname[0].address}</div>
-                        </Grid>
-                        {this.findCourierName(order.findNameUnderCouriername[0]) != 'Not Matched' && 
-                        <Grid container item className="name" spacing={3}>
-                            <Grid item xs={2}>Courier:</Grid>
-                            <Grid item xs={4} className="rightItem">{order.findNameUnderCouriername[0].name}</Grid>
-                            <Grid item xs={2}>Mobile:</Grid> 
-                            <Grid item xs={4} className="rightItem">{order.findNameUnderCouriername[0].mobile}</Grid>
-                        </Grid>
-                        }
-                        {this.findCourierName(order.findNameUnderCouriername[0]) == 'Not Matched' && 
-                        <Grid container item className="name" spacing={3}>
-                            <Grid item xs={2}>Courier:</Grid>
-                            <Grid item xs={4} className="rightItem">Not Matched</Grid>
-                        </Grid>
-                        }
-                        <Grid container item spacing={3}>
-                            <Grid item xs={6} className="subtitle">Order Date:{order.createdAt.substring(0, 10)}</Grid>
-                            <Grid item xs={6} className="subtitle">Status: {this.getStatus(order.orderStatus)}</Grid>
-                        </Grid>
-                        {order.orderList.map((item, index) =>
-                            <Grid container item direction="row" key={index} spacing={3}>
-                                <Grid item xs={6} className="foodItem">Item Name: {item.dish}</Grid>
-                                <Grid item xs={3} className="foodItem">Amount: {item.amount}</Grid>
-                                <Grid item xs={3} item className="priceItem">${item.price}</Grid>
+                    <hr />
+                    {this.state.orders.map((order, index) =>
+                        <div key={index}>
+                            <Grid container className="orderHistory">
+                                <Grid container item className="name" spacing={3}>
+                                    <Grid item xs={2}>Restaurant:</Grid>
+                                    <Grid item xs={4} className="rightItem">{order.findNameUnderRestname[0].name}</Grid>
+                                    <Grid item xs={2}>Mobile:</Grid>
+                                    <Grid item xs={4} className="rightItem">{order.findNameUnderRestname[0].mobile}</Grid>
+                                </Grid>
+                                <Grid container item className="name" justify="space-between">
+                                    <div>Address:</div>
+                                    <div>{order.findNameUnderRestname[0].address}</div>
+                                </Grid>
+                                {this.findCourierName(order.findNameUnderCouriername[0]) != 'Not Matched' &&
+                                    <Grid container item className="name" spacing={3}>
+                                        <Grid item xs={2}>Courier:</Grid>
+                                        <Grid item xs={4} className="rightItem">{order.findNameUnderCouriername[0].name}</Grid>
+                                        <Grid item xs={2}>Mobile:</Grid>
+                                        <Grid item xs={4} className="rightItem">{order.findNameUnderCouriername[0].mobile}</Grid>
+                                    </Grid>
+                                }
+                                {this.findCourierName(order.findNameUnderCouriername[0]) == 'Not Matched' &&
+                                    <Grid container item className="name" spacing={3}>
+                                        <Grid item xs={2}>Courier:</Grid>
+                                        <Grid item xs={4} className="rightItem">Not Matched</Grid>
+                                    </Grid>
+                                }
+                                <Grid container item spacing={3}>
+                                    <Grid item xs={6} className="subtitle">Order Date:{order.createdAt.substring(0, 10)}</Grid>
+                                    <Grid item xs={6} className="subtitle">Status: {this.getStatus(order.orderStatus)}</Grid>
+                                </Grid>
+                                {order.orderList.map((item, index) =>
+                                    <Grid container item direction="row" key={index} spacing={3}>
+                                        <Grid item xs={6} className="foodItem">Item Name: {item.dish}</Grid>
+                                        <Grid item xs={3} className="foodItem">Amount: {item.amount}</Grid>
+                                        <Grid item xs={3} item className="priceItem">${item.price}</Grid>
+                                    </Grid>
+                                )}
+                                <Grid container item justify="flex-end">
+                                    <Grid item xs={3} item className="priceItem">Total: ${this.calculateTotal(order.orderList)}</Grid>
+                                </Grid>
+
+                                {order.orderStatus == 0
+                                    &&
+                                    <Grid container item justify="center">
+                                        <Button title={order.id} id={order.id} size="large" variant="outlined" color="primary" style={{marginRight: '1rem'}} onClick={() => this.onClickStartPayment(order.id)}>Make Payment</Button>
+                                        <Button title={order.id} id={order.id} size="large" variant="outlined" color="secondary" onClick={() => this.onClickDelete(order.id)}>Delete Order</Button>
+                                    </Grid>
+                                }
                             </Grid>
-                        )}
-                        <Grid container item justify="flex-end">
-                        <Grid item xs={3} item className="priceItem">Total: ${this.calculateTotal(order.orderList)}</Grid>
-                            </Grid>
-                        </Grid>
-                        <hr />
-                    </div>  
-                )}
-               </Scrollbars>
+                            <hr />
+                        </div>
+                    )}
+                </Scrollbars>
             </React.Fragment>
         );
     }

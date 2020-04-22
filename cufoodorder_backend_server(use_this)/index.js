@@ -21,7 +21,7 @@ mongoose.connect('mongodb+srv://csci3100:projwebb@cluster0-exfag.mongodb.net/tes
 
 //read the json data in body  
 app.use(bodyParser.urlencoded({parameterLimit: 100000, limit: '50mb', extended: true}));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(cookieParser());
 
 

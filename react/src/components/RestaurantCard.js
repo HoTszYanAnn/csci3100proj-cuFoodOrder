@@ -58,7 +58,7 @@ class RestaurantCard extends React.Component {
     };
     
     render(){
-    sessionStorage.setItem('restName',JSON.stringify(this.props.restName));  
+    
     
     const {classes} = this.props;
     console.log(this.props);
@@ -71,7 +71,7 @@ class RestaurantCard extends React.Component {
                     </Avatar>
                 }
                 action={
-                    <IconButton aria-label="settings" component={RouterLink} to={{pathname: `/restaurants/${this.props.linkName}`}}>
+                    <IconButton aria-label="settings" onclick={sessionStorage.setItem('restName',JSON.stringify(this.props.restName))} component={RouterLink} to={{pathname: `/restaurants/${this.props.linkName}`}}>
                         <RestaurantIcon />
                     </IconButton>
                 }

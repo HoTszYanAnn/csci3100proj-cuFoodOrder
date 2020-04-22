@@ -91,7 +91,7 @@ router.post('/username_match', function(req, res){
 
 // post all the menus under this username.
 router.post('/username_menu', function(req, res){
-    Customer.find({username: req.body.username}).populate('findMenuUnderUsername').select('username name introduction').exec(function(err, doc){
+    Customer.find({username: req.body.username}).populate('findMenuUnderUsername').exec(function(err, doc){
         if(err)
             return res.json({process: "failed", err});
         else{

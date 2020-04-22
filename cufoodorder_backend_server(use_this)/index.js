@@ -49,7 +49,7 @@ io.on("connection", function(socket){
 
         socket.join(customer.customer_room);
 
-        io.to(customer.customer_room).emit('message', {
+        io.to(customer.customer_room).emit('join_message', {
             dialog: `${customer.customer_room}, ${customer.cs_name} is at your service.`,
             connection_id: customer.connection_id,
             cs_name: customer.cs_name,
@@ -58,16 +58,32 @@ io.on("connection", function(socket){
     });
 
 
+    // socket.on('csinfo', ({cs_name, customer_room})=>{
+    //     var customer = addCustomer({ connection_id: socket.id, cs_name: cs_name, customer_room: customer_room});
+
+    //     socket.join(customer.customer_room);
+
+    //     io.to(customer.customer_room).emit('join_message', {
+    //         dialog: `${customer.customer_room}, ${customer.cs_name} is at your service.`,
+    //         connection_id: customer.connection_id,
+    //         cs_name: customer.cs_name,
+    //         customer_room: customer.customer_room
+    //     });
+    // });
+
+
     //below on() receiving information from the client server
     socket.on("chat_dialog", function(message){
         
         var customer = infoCustomer(socket.id);
-        
+        //message = {author, type, data{text}}
+
+
         var inquire = new Inquire({
             user: customer.customer_room,
             cs: customer.cs_name,
-            answered_by: message.answered_by,
-            dialog: message.dialog
+            answered_by: message.author,
+            dialog: message.data.text
         });
 
         //save the dialog into the database
@@ -81,7 +97,7 @@ io.on("connection", function(socket){
                     return res.json({process: "failed", err});
                 else {
                 //use emit() to send inquireData to the client server for further rendering
-                    return io.to(customer.customer_room).emit("saved_dialog", inquireData)
+                    return io.to(customer.customer_room).emit("saved_dialog", inquireData);
                 }
             }));
         });
@@ -92,7 +108,7 @@ io.on("connection", function(socket){
     socket.on('disconnect', ()=> {
         var customer = quitCustomer(socket.id);
 
-        io.to(customer.customer_room).emit('message', { dialog: `${customer.customer_room} has left.` });
+        io.to(customer.customer_room).emit('exit_message', { dialog: `${customer.customer_room} has left.` });
     });
 });
 

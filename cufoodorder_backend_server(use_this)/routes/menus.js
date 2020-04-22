@@ -98,16 +98,16 @@ router.post('/delete_menu', authorized, function(req, res){
 });
 
 
-//likes increment
-router.post('/likes_menu_plus', authorized, function(req, res){
+// //likes increment
+// router.post('/likes_menu_plus', authorized, function(req, res){
 
-    Menu.findOneAndUpdate({_id: req.body._id}, { $inc: { likes : +1 }}, function(err, beforePlus){
-        if(err)
-            return res.json({process: "failed", err});
-        else 
-            return res.json({process: "success", beforePlus});
-    });
-});
+//     Menu.findOneAndUpdate({_id: req.body._id}, { $inc: { likes : +1 }}, function(err, beforePlus){
+//         if(err)
+//             return res.json({process: "failed", err});
+//         else 
+//             return res.json({process: "success", beforePlus});
+//     });
+// });
 
 
 // //likes decrement

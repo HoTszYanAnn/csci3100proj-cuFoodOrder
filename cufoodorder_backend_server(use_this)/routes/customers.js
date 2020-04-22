@@ -139,4 +139,17 @@ router.post('/user_data', authorized, function(req, res){
     });
 });
 
+
+//likes increment
+router.post('/likes_rest_plus', authorized, function(req, res){
+
+    Customer.findOneAndUpdate({_id: req.body._id}, { $inc: { likes : +1 }}, function(err, beforePlus){
+        if(err)
+            return res.json({process: "failed", err});
+        else 
+            return res.json({process: "success", beforePlus});
+    });
+});
+
+
 module.exports = router;

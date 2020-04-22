@@ -14,7 +14,9 @@ var CustomerSchema = new Schema({
     emailAddress: {type: String},
     paymentInfo: {type: String},
     accessRight: {type: Number, default: 0},
-    token: {type: String}
+    token: {type: String},
+    image: {type: String},
+    likes: {type: Number}
     },{toJSON: { virtuals: true }
 });
 

@@ -97,7 +97,7 @@ io.on("connection", function(socket){
                     return res.json({process: "failed", err});
                 else {
                 //use emit() to send inquireData to the client server for further rendering
-                    return io.to(customer.customer_room).emit("saved_dialog", inquireData);
+                    return io.to(customer.customer_room).emit("saved_dialog", message);
                 }
             }));
         });

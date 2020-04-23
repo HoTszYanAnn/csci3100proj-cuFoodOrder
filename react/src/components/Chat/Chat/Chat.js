@@ -16,8 +16,8 @@ class Chat extends Component {
     }
     
     joinRoom = () => {
-        console.log('clicked')
-        /*this.socket = io(process.env.REACT_APP_API_URL)
+        /*console.log('clicked')
+        this.socket = io(process.env.REACT_APP_API_URL)
         this.setState({isOpen: !this.state.isOpen})
         this.socket.emit('userinfo', { cs_name:'csTest', customer_room: 'restTest' }, (error) => {
             console.log(error)

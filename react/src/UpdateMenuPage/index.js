@@ -11,6 +11,7 @@ import './updateMenu.css';
 import NoticeBox from '../components/NoticeBox';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
+import {defaultImage }from '../img/defaultImage'
 
 function PriceFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
@@ -54,7 +55,7 @@ class UpdateMenuPage extends React.Component {
                 dish: '',
                 description: '',
                 price: '',
-                imageAddress: null
+                imageAddress: defaultImage
             }
         }
         this.handleChangeItem = this.handleChangeItem.bind(this);

@@ -19,6 +19,7 @@ import { Link as RouterLink, Redirect } from 'react-router-dom';
 import NoticeBox from '../components/NoticeBox';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
+import {defaultImage }from '../img/defaultImage'
 import './Coorperate.css';
 
 
@@ -183,14 +184,15 @@ class CoorperatePage extends React.Component {
   };
 
   RegisterRequest = async () => {
-    const location = window.location.hostname;
+    const imageUrl= defaultImage;
+    console.log(imageUrl);
     const loginData = {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name: this.state.name, username: this.state.username, password: this.state.password, address: this.state.address, mobile: this.state.mobile, emailAddress: this.state.email, paymentInfo: this.state.payment, accessRight: this.state.accessRight, introduction: '', image:'', likes: 0 })
+      body: JSON.stringify({ image: imageUrl, name: this.state.name, username: this.state.username, password: this.state.password, address: this.state.address, mobile: this.state.mobile, emailAddress: this.state.email, paymentInfo: this.state.payment, accessRight: this.state.accessRight, introduction: '', likes: '0' })
     };
     try {
       const fetchResponse = await fetch(`${process.env.REACT_APP_API_URL}/catalog/customers/register`, loginData);
@@ -198,6 +200,7 @@ class CoorperatePage extends React.Component {
         return a;
       });
       if (data.process == 'success') {
+        console.log(data)
         this.setErrorMessage("");
         this.props.onClose();
       } else {

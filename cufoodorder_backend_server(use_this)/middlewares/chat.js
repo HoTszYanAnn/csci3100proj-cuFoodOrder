@@ -31,4 +31,12 @@ var addcs = ({cs_name, customer_room}) => {
   }
 };
 
-module.exports = { addCustomer, quitCustomer, infoCustomer, addcs};
+var findemptyroom = ()=>{
+
+  customers.filter((item, index, array)=>{
+    return item.cs_name === null;
+  })
+
+}
+
+module.exports = { addCustomer, quitCustomer, infoCustomer, addcs, findemptyroom};

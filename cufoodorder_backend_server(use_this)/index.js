@@ -48,6 +48,8 @@ io.on("connection", function(socket){
     socket.on('userinfo', ({customer_room})=>{
         var customer = addCustomer({ connection_id: socket.id, customer_room: customer_room});
 
+        console.log(customer);
+
         socket.join(customer.customer_room);
 
         io.to(customer.customer_room).emit('join_cust', {
@@ -60,6 +62,8 @@ io.on("connection", function(socket){
 
     socket.on('csinfo', ({cs_name, customer_room})=>{
         var customer = addcs({cs_name: cs_name, customer_room: customer_room});
+
+        console.log(customer);
 
         socket.join(customer.customer_room);
 

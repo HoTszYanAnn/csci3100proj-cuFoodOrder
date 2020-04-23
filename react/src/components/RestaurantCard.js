@@ -108,18 +108,20 @@ class RestaurantCard extends React.Component {
                 </CardActions>
                 <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
                     <CardContent>
-                        <div className={classes.menuItem}>Menu:</div>
+                        <Grid container>
+                        <Grid item xs={12} className={classes.menuItem}>Menu:</Grid>
                         {this.props.restaurant.menu.map((menu, index) =>
                             <Grid container justify="space-between" key={index}>
-                                <Grid item className={classes.menuItem}>{menu.menuName}</Grid>
+                                <Grid item xs= {12}className={classes.menuItem} style={{marginTop: '1rem', borderBottom:'solid 1px black'}}>{menu.menuName}</Grid>
                                 {menu.menuList.map((item, index) =>
-                                    <Grid key={index}>
-                                        <Grid item className={classes.menuItem}>{item.dish}</Grid>
-                                        <Grid item className={classes.menuItem}> {item.price}</Grid>
+                                    <Grid item container key={index}>
+                                        <Grid item xs={8} className={classes.menuItem}>{item.dish}</Grid>
+                                        <Grid item xs={4} style={{testAlign:'right'}} className={classes.menuItem}>HK${item.price}</Grid>
                                     </Grid>
                                 )}
                             </Grid>
                             )}
+                            </Grid>
                     </CardContent>
                 </Collapse>
             </Card>

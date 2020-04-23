@@ -14,6 +14,7 @@ class Customer extends React.Component {
             redirectError: false,
             orders: [],
             notGetList: true,
+            redirectPayment:''
         };
     }
 
@@ -74,8 +75,8 @@ class Customer extends React.Component {
         });
     }
 
-    onClickStartPayment =(id)=>{
-
+    onClickStartPayment = (id) =>{
+        this.setState({redirectPayment: id});
     }
 
     render() {
@@ -88,7 +89,11 @@ class Customer extends React.Component {
                 <Redirect to="/error" />
             );
         }
-
+        if (this.state.redirectPayment){
+            return(
+                <Redirect to={{ pathname: `/payment/${this.state.redirectPayment}` }}/>
+            )
+        }
         
         return (
             <React.Fragment>

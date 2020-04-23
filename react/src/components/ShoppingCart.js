@@ -20,6 +20,7 @@ class NavUserMenu extends React.Component {
       total: 0,
       cart: JSON.parse(sessionStorage.getItem('myCart')),
       reducer: (accumulator, currentValue) => accumulator + currentValue,
+      redirectPayment: false,
     }
     this.deleteItem = this.deleteItem.bind(this)
     this.Count = this.Count.bind(this)
@@ -107,7 +108,10 @@ class NavUserMenu extends React.Component {
     let createUrl = `${process.env.REACT_APP_API_URL}/catalog/orders/createBill`;
     axios.post(createUrl, order).then(res => {
         console.log(res.data)
-      //this.props.closebtnClick();
+        this.setState({redirectPayment : res.data.orderData.id})
+        let item = []
+        sessionStorage.setItem('myCart', JSON.stringify(item));
+        this.props.closebtnClick();
     }).catch((e) => {
       console.log(e);
     });
@@ -115,7 +119,11 @@ class NavUserMenu extends React.Component {
 
 
   render() {
-
+    if (this.state.redirectPayment){
+      return(
+          <Redirect to={{ pathname: `/payment/${this.state.redirectPayment}` }}/>
+      )
+  }
     return (
 
       <React.Fragment>

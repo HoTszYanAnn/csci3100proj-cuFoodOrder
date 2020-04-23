@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: ['20px']
   },
   CardHeader: {
-    backgroundColor: '#B3FFB3',
     color: '#626769'
   },
   margin: {
@@ -82,7 +81,7 @@ const Order = props => {
       setvalue(n);
     }
   }
-
+  const colorList=['#D2FFBC', '#BDEAFF','#FFFFBD', '#DCBDFF', '#FFEABD']
   return (
 
     <Card className={classes.root}>
@@ -90,12 +89,13 @@ const Order = props => {
         className={classes.CardHeader}
         titleTypographyProps={{ variant: "h6" }}
         title={props.name}
+        style={{backgroundColor: colorList[Math.floor(Math.random() * 5)]}}
         subheader={props.description}
       />
       <CardMedia
         className={classes.image}
         image={props.img}
-        title="Paella dish"
+        title={props.name}
         alignItems="center"
         justify="center"
       />

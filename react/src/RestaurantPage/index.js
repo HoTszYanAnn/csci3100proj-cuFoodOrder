@@ -78,7 +78,7 @@ class RestaurantsPage extends React.Component {
                         {this.state.restmenu.map(({ _id, menuName, menuList }, i) => {
                             return <Grid item xs={12} key={i._id}>
                                 <h1> {menuName}</h1>
-                                <Divider />
+                                <Divider style={{margin: '1rem 0'}}/>
                                 <Grid container spacing={3}>
                                 {menuList.map((menu) => {
                                     return <Grid container item xs={4} key={menu._id} >

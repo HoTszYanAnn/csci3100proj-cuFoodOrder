@@ -1,9 +1,9 @@
 import React from 'react';
 import Cookies from 'js-cookie';
-import { Paper, Grid, Button } from '@material-ui/core';
+import { Paper, Grid, Button, Input } from '@material-ui/core';
 import axios from "axios";
 import { Link as RouterLink, Redirect } from 'react-router-dom';
-import './profile.css'
+import './inquiry.css'
 import io from 'socket.io-client'
 import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -14,7 +14,8 @@ class InquiryPage extends React.Component {
             inRoom: false,
             messageList: [],
             newMessage: '',
-            emptyRoomList:[]
+            emptyRoomList:[],
+            customerName:'',
         };
         this.socket = io(process.env.REACT_APP_API_URL)
     }
@@ -29,10 +30,10 @@ class InquiryPage extends React.Component {
         });
         
         this.socket.on('join_cs', (data) =>{
-            //console.log(data);
-            //data.dialog.split(',')
+            console.log(data);
+            console.log(data.dialog.split(',')[0])
             let message = {
-                author: 'them',
+                author: 'me',
                 type: 'text',
                 data: {
                   text: data.dialog
@@ -45,10 +46,12 @@ class InquiryPage extends React.Component {
 
     }
 
-    _onMessageWasSent(text) {
-        console.log(text);
+    _onMessageWasSent = () => {
+        console.log(this.state.newMessage);
         let message={
-
+            author: 'them',
+            type: 'text',
+            data: { text : this.state.newMessage }
         }
         this.socket.emit('chat_dialog', message, (error) => {
             console.log(error)
@@ -69,7 +72,11 @@ class InquiryPage extends React.Component {
         this.socket.emit('csinfo', { customer_room: roomName, cs_name: Cookies.get('username') }, (error) => {
             console.log(error)
         });
-        this.setState({inRoom: true})
+        this.setState({inRoom: true, customerName: roomName})
+    }
+
+    handleValueChange = prop => event =>{
+        this.setState({[prop]: event.target.value});
     }
 
     render() {
@@ -83,7 +90,7 @@ class InquiryPage extends React.Component {
             this.getRoomListData();
             this.state.getData = true;
         }
-
+        console.log(this.socket);
         return (
             <React.Fragment>
                 <Paper className="profileContainer">
@@ -98,13 +105,15 @@ class InquiryPage extends React.Component {
                     }
                     {this.state.inRoom &&
                         <div className="profileForm">
-                            <h1>Inquiry Waiting List</h1>
+                            <h1>{this.state.customerName}</h1>
                             <Scrollbars style={{ height: 800 }}>
-                                {this.state.messageList.map((message)=> 
-                                    <div>
-                                       {message.author}
-                                    </div>
-                                )}
+                            {this.state.messageList.map((message)=> 
+                                <Grid className={message.author == 'me'? 'leftBubble': 'rightBubble'}>
+                                    {message.author == 'me' ? this.state.customerName: 'me'}:{message.data.text}
+                                </Grid>
+                            )}    
+                                <Input value={this.state.newMessage} onChange={this.handleValueChange('newMessage')}/>
+                                <Button onClick={this._onMessageWasSent}>send</Button>
                             </Scrollbars>
                         </div>
                     }

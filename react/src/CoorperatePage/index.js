@@ -316,7 +316,7 @@ class CoorperatePage extends React.Component {
                 </FormControl>
                 <FormControl variant="outlined"
                   margin="dense" fullWidth error={this.state.mobileError}>
-                  <InputLabel htmlFor="outlined-adornment-username">Mobile</InputLabel>
+                  <InputLabel htmlFor="outlined-adornment-username">Tel No.</InputLabel>
                   <OutlinedInput
                     id="outlined-adornment-username"
                     value={this.state.mobile}

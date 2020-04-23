@@ -22,7 +22,7 @@ class Chat extends Component {
                 messageList: [...this.state.messageList, data]
             })
         });
-        this.socket.on('exit_dialog', (data) => {
+        this.socket.on('exit_message', (data) => {
             console.log(data);
             let message = {
                 author: 'them',
@@ -67,6 +67,7 @@ class Chat extends Component {
     joinRoom = () => {
         console.log('clicked')
         if (!this.state.isOpen){
+            this.setState({messageList: []})
             this.socket.emit('userinfo', { customer_room: Cookies.get('username') }, (error) => {
                 console.log(error)
             });

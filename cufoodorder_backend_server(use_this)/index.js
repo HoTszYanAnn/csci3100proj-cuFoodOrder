@@ -131,7 +131,7 @@ io.on("connection", function(socket){
         console.log(customer);
         if(customer){
             io.to(customer.customer_room).emit('exit_message', { dialog: `user has left.` });
-            socket.close();
+            socket.disconnect();
         }
     });
 });

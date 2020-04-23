@@ -15,7 +15,7 @@ let addCustomer = ({ connection_id, customer_room }) => {
 }
 
 let quitCustomer = (connection_id) => {
-  let index = customers.findIndex((customer) => customer.connecton_id === connection_id);
+  let index = customers.findIndex(customer => customer.connection_id === connection_id);
 
   if(index !== -1) 
     //if found in temporary list, starting from index, deleting one element

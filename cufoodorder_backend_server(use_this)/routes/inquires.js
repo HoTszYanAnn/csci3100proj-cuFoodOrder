@@ -23,8 +23,7 @@ router.post('/chatHistory_cs', authorized, function(req, res){
 
 
 router.post('/empty_room', authorized, function(req, res){
-    empty_room = findemptyroom;
-
+    empty_room = findemptyroom();
     return res.json({process: 'success', empty_room});
 });
 

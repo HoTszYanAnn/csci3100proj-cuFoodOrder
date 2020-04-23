@@ -62,7 +62,18 @@ let addcs = ({connection_id, cs_name, customer_room}) => {
 // };
 
 
-let findemptyroom = customers.filter((item, index, array)=>{return ((item.cs_flag==="no")&&(item.need_flag==="yes"))})
+let findemptyroom = () => {
+  let empty =[]
+  for (let i = 0; i < customers.length; i++){
+    if (customers[i].cs_flag ==='no'&& customers[i].need_flag==="yes"){
+      empty.push(customers[i])
+    }
+  }
+  return empty;
+  /*customers.filter((item, index, array)=>{ console.log(item);
+  return ((item.cs_flag==="no")&&(item.need_flag==="yes"))
+  })*/
+}
 
 // module.exports = { addCustomer, quitCustomer, infoCustomer, addcs, findemptyroom};
 

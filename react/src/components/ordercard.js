@@ -96,7 +96,6 @@ const Order = props => {
         className={classes.image}
         image={props.img}
         title={props.name}
-        alignItems="center"
         justify="center"
       />
       <CardContent>
@@ -104,7 +103,7 @@ const Order = props => {
           <b className={classes.b}>HK$</b> <b>{props.price}</b>
         </Typography>
 
-        <Grid container justify="center" paddingTop='10px'>
+        <Grid container justify="center">
           <IconButton color="primary" onClick={decOne} disabled={disstate || props.disableBtn || (Cookies.get('accessRight') == 0 ? false:true)}><IndeterminateCheckBoxIcon /></IconButton>
           <FormControl className={classes.margin}>
             <InputLabel htmlFor="standard-adornment-amount">Amount</InputLabel>
@@ -119,7 +118,7 @@ const Order = props => {
           <IconButton color="primary" onClick={plusOne} disabled={disstate || props.disableBtn || (Cookies.get('accessRight') == 0? false:true)}><AddBoxIcon /></IconButton>
         </Grid>
         <Grid container justify="center">
-        <Button paddingTop='10' variant="contained" color="secondary" size="large" onClick={addToCart} disabled={disstate || props.disableBtn || (Cookies.get('accessRight') == 0? false:true)}>Add to Cart</Button>
+        <Button variant="contained" color="secondary" size="large" onClick={addToCart} disabled={disstate || props.disableBtn || (Cookies.get('accessRight') == 0? false:true)}>Add to Cart</Button>
         </Grid>
       </CardContent>
 

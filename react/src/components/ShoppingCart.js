@@ -71,7 +71,7 @@ class NavUserMenu extends React.Component {
     cart.map(item => {
       if (item.id === id) {
         var n = parseInt(item.amount) + 1;
-        item.amount= n;
+        item.amount = n;
       }
     })
     this.setState({
@@ -104,14 +104,14 @@ class NavUserMenu extends React.Component {
   createOrder = async () => {
     axios.defaults.withCredentials = true
     let cart = JSON.parse(sessionStorage.getItem('myCart'))
-    var order = { customer_name: Cookies.get("username"), restaurant_name: this.props.history.location.pathname.split("/")[2], orderList: cart, orderStatus: 0}
+    var order = { customer_name: Cookies.get("username"), restaurant_name: this.props.history.location.pathname.split("/")[2], orderList: cart, orderStatus: 0 }
     let createUrl = `${process.env.REACT_APP_API_URL}/catalog/orders/createBill`;
     axios.post(createUrl, order).then(res => {
-        console.log(res.data)
-        this.setState({redirectPayment : res.data.orderData.id})
-        let item = []
-        sessionStorage.setItem('myCart', JSON.stringify(item));
-        this.props.closebtnClick();
+      console.log(res.data)
+      this.setState({ redirectPayment: res.data.orderData.id })
+      let item = []
+      sessionStorage.setItem('myCart', JSON.stringify(item));
+      this.props.closebtnClick();
     }).catch((e) => {
       console.log(e);
     });
@@ -119,13 +119,15 @@ class NavUserMenu extends React.Component {
 
 
   render() {
-    if (this.state.redirectPayment){
-      return(
-          <Redirect to={{ pathname: `/payment/${this.state.redirectPayment}` }}/>
+    if (this.state.redirectPayment) {
+      return (
+        <Redirect to={{ pathname: `/payment/${this.state.redirectPayment}` }} />
       )
-  }
+    }
+    let empty = false;
+    if (JSON.parse(sessionStorage.getItem('myCart')).length == 0)
+      empty = true;
     return (
-
       <React.Fragment>
         <List>
           <ListItem>
@@ -134,7 +136,6 @@ class NavUserMenu extends React.Component {
             </Grid>
           </ListItem>
           <ListItem>
-
             <Cartlist
               cart={this.state.cart}
               onDelete={this.deleteItem}
@@ -166,7 +167,7 @@ class NavUserMenu extends React.Component {
             <Button variant="contained" color="secondary" size="large" className="paybtn" onClick={this.Count} >Get Total</Button>
           </Grid>*/}
           <Grid item xs sm container justify="center">
-            <Button variant="contained" color="secondary" size="large" className="paybtn" onClick={this.createOrder}>
+            <Button variant="contained" color="secondary" size="large" className="paybtn" disabled={empty} onClick={this.createOrder}>
               Make Payment
             </Button>
           </Grid>

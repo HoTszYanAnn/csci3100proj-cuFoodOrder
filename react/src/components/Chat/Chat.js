@@ -96,6 +96,7 @@ class Chat extends Component {
                 showEmoji
                 isOpen={this.state.isOpen}
                 handleClick={this.joinRoom}
+                showEmoji={false}
             />
 
         </div>)

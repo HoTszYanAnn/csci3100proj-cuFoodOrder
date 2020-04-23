@@ -101,7 +101,7 @@ io.on("connection", function(socket){
 
         let inquire = new Inquire({
             user: customer.customer_room,
-            cs: customer.cs_name.username,
+            cs: cs_name.username,
             answered_by: message.author,
             dialog: message.data.text
         });

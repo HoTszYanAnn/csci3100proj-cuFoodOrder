@@ -139,6 +139,7 @@ router.post('/display_menu_restname', function(req, res){
         }},
         {$lookup: {from: 'customers', localField: '_id.restaurantName', foreignField: '_id', as: 'user'}},
         {$lookup: {from: 'menus', localField: 'menuName', foreignField: 'menuName', as: 'menu'}},
+        {$sort: { 'user.likes': -1}},
         {$project: {
             'user.username': 1,
             'user.name': 1,

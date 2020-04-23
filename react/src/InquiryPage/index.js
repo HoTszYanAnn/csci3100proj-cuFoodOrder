@@ -10,8 +10,6 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 class InquiryPage extends React.Component {
-
-
     constructor(props) {
         super(props);
         this.state = {
@@ -33,7 +31,8 @@ class InquiryPage extends React.Component {
 
     componentDidUpdate() {
         if (this.state.inRoom)
-            this.state.mounted && this.scrollbars.current.scrollToBottom();
+            this.state.mounted && this.scrollbars.current.scrollToBottom();    
+        this.getRoomListData();
     }
     componentWillMount() {
         this.socket.on('saved_dialog', (data) => {
@@ -61,11 +60,11 @@ class InquiryPage extends React.Component {
     }
 
     _onMessageWasSent = () => {
-        console.log(this.state.newMessage);
+        let text = this.state.newMessage
         let message = {
             author: 'them',
             type: 'text',
-            data: { text: this.state.newMessage }
+            data: { text }
         }
         this.socket.emit('chat_dialog', message, (error) => {
             console.log(error)
@@ -108,28 +107,25 @@ class InquiryPage extends React.Component {
         if (accessRight != 3 || this.state.redirect) {
             return <Redirect to="/" />
         }
-
-        if (!this.state.getData) {
-            // this.getRoomListData();
-            this.state.getData = true;
-        }
         console.log(this.socket);
         return (
             <React.Fragment>
                 <Paper className="profileContainer">
-
                     {!this.state.inRoom &&
                         <div className="profileForm">
                             <h1 style={{ textAlign: "center" }}>Inquiry Waiting List</h1>
                             <Scrollbars style={{ height: 500 }}>
-                                <Paper variant="outlined" style={{ margin: '1rem 0' }}>
-                                    <Grid container direction="column" alignItems="center" style={{ margin: '1rem 0' }}>
-                                        <Grid item xs={6} style={{ marginBottom: '1rem' }}><h2>RoomName</h2></Grid>
-                                        <Grid item xs={6}>
-                                            <Button size="large" variant="outlined" color="primary" onClick={() => this.clickInRoom('annowo')}>Join</Button>
+                                {this.state.emptyRoomList && this.state.emptyRoomList.map((room, index) =>
+                                    <Paper key={index} variant="outlined" style={{ margin: '1rem 0' }}>
+                                        <Grid container direction="column" alignItems="center" style={{ margin: '1rem 0' }}>
+                                            <Grid item xs={6} style={{ marginBottom: '1rem' }}><h2>{room.customer_room}</h2></Grid>
+                                            <Grid item xs={6}>
+                                                <Button size="large" variant="outlined" color="primary" onClick={() => this.clickInRoom(room.customer_room)}>Join</Button>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </Paper>
+
+                                    </Paper>
+                                )}
                             </Scrollbars>
                         </div>
                     }
@@ -162,11 +158,11 @@ class InquiryPage extends React.Component {
                                 </Scrollbars>
                                 <Grid item container style={{ bottom: '0', backgroundColor: '#f4f7f9', width: '100%', padding: "1rem" }}>
                                     <Grid item xs={11}>
-                                        <Input 
-                                            style={{ width: '100%' }} 
-                                            value={this.state.newMessage} 
-                                            onChange={this.handleValueChange('newMessage')} 
-                                            onKeyUp={(event) => { if (event.key == 'Enter') this._onMessageWasSent();}} 
+                                        <Input
+                                            style={{ width: '100%' }}
+                                            value={this.state.newMessage}
+                                            onChange={this.handleValueChange('newMessage')}
+                                            onKeyUp={(event) => { if (event.key == 'Enter') this._onMessageWasSent(); }}
                                         />
                                     </Grid>
                                     <Grid item xs={1}>

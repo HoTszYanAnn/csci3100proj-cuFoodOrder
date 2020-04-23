@@ -146,7 +146,8 @@ router.post('/display_menu_restname', function(req, res){
             'menu.menuList': 1,
             'menu.menuName':1,
             'user.image': 1,
-            'user.likes': 1
+            'user.likes': 1,
+            'user.introduction': 1
         }}], function (err, doc) {
         if (err) {
             return res.json({process: "failed", err});

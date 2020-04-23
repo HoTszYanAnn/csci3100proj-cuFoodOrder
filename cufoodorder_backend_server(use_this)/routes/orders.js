@@ -21,6 +21,7 @@ router.post('/createBill', authorized, function(req, res){
 // display-order History function for customer
 router.post('/orderHistory_customer', authorized, function(req, res){
     Order.find({customer_name: req.body.custname})
+    .sort('-createdAt')
     .populate('findNameUnderCustname', 'name mobile address')
     .populate('findNameUnderRestname', 'name mobile address')
     .populate('findNameUnderCouriername', 'name mobile address')
@@ -36,6 +37,7 @@ router.post('/orderHistory_customer', authorized, function(req, res){
 // display-order History function for restaurant
 router.post('/orderHistory_restaurant', authorized, function(req, res){
     Order.find({restaurant_name: req.body.restname})
+    .sort('-createdAt')
     .populate('findNameUnderCustname', 'name mobile address')
     .populate('findNameUnderRestname', 'name mobile address')
     .populate('findNameUnderCouriername', 'name mobile address')
@@ -51,6 +53,7 @@ router.post('/orderHistory_restaurant', authorized, function(req, res){
 // display-order History function for courier
 router.post('/orderHistory_courier', authorized, function(req, res){
     Order.find({courier_name: req.body.couriername})
+    .sort('-createdAt')
     .populate('findNameUnderCustname', 'name mobile address')
     .populate('findNameUnderRestname', 'name mobile address')
     .populate('findNameUnderCouriername', 'name mobile address')

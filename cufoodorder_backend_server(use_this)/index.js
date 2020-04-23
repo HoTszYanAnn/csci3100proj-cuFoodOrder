@@ -46,7 +46,7 @@ io.on("connection", function(socket){
 //debug line
 
     socket.on('userinfo', ({customer_room})=>{
-        var customer = addCustomer({ connection_id: socket.id, customer_room: customer_room});
+        let customer = addCustomer({ connection_id: socket.id, customer_room: customer_room});
 
         console.log(customer);
 
@@ -61,7 +61,7 @@ io.on("connection", function(socket){
 
 
     socket.on('csinfo', ({cs_name, customer_room})=>{
-        var customer = addcs({connection_id: socket.id, cs_name: cs_name, customer_room: customer_room});
+        let customer = addcs({connection_id: socket.id, cs_name: cs_name, customer_room: customer_room});
 
         console.log(customer);
 
@@ -79,11 +79,11 @@ io.on("connection", function(socket){
     //below on() receiving information from the client server
     socket.on("chat_dialog", function(message){
         
-        var customer = infoCustomer(socket.id);
+        let customer = infoCustomer(socket.id);
         //message = {author, type, data{text}}
 
 
-        var inquire = new Inquire({
+        let inquire = new Inquire({
             user: customer.customer_room,
             cs: customer.cs_name,
             answered_by: message.author,
@@ -110,7 +110,7 @@ io.on("connection", function(socket){
 
     // event listener to disconnection
     socket.on('disconnect', ()=> {
-        var customer = quitCustomer(socket.id);
+        let customer = quitCustomer(socket.id);
 
         if(customer)
             io.to(customer.customer_room).emit('exit_message', { dialog: `user has left.` });

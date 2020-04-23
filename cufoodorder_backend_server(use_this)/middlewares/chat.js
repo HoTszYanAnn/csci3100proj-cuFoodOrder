@@ -23,7 +23,12 @@ let quitCustomer = (connection_id) => {
     return customers.splice(index, 1)[0];
 }
 
-let infoCustomer = (connection_id) => {customers.find((customer) => customer.connection_id === connection_id)};
+let infoCustomer = (connection_id) => {
+  customers.find(
+    (item, index, array) => {
+      return item.connection_id === connection_id
+    });
+}
 
 // var addcs = ({cs_name, customer_room}) => {
 //   var index = customers.findIndex((customer) => customer.customer_room === customer_room);

@@ -108,7 +108,8 @@ io.on("connection", function(socket){
     socket.on('disconnect', ()=> {
         var customer = quitCustomer(socket.id);
 
-        io.to(customer.customer_room).emit('exit_message', { dialog: `user has left.` });
+        if(customer)
+            io.to(customer.customer_room).emit('exit_message', { dialog: `user has left.` });
     });
 });
 

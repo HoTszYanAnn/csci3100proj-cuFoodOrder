@@ -64,6 +64,7 @@ class LoginBox extends React.Component {
                 console.log(result.data);
                 Cookies.set("token", result.data.customerId, { expires: 1 });
                 Cookies.set("username", result.data.username, { expires: 1 });
+                Cookies.set("name", result.data.name, { expires: 1 });
                 Cookies.set("accessRight", result.data.accessRight, { expires: 1 });
                 this.props.onClose();
                 const history = createHashHistory();

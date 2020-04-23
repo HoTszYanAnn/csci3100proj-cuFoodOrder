@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import PropTypes from "prop-types";
 import { Link as RouterLink, Redirect, withRouter } from 'react-router-dom';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, Paper ,Divider} from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import '../css/orderCustomers.css'
 
@@ -99,22 +99,21 @@ class Customer extends React.Component {
             <React.Fragment>
                 <h1 style={{ textAlign: 'center' }}>Order History</h1>
                 <Scrollbars style={{ height: 800 }}>
-                    <hr />
                     {this.state.orders.map((order, index) =>
-                        <div key={index}>
+                        <Paper variant="outlined" elevation={3} style={{marginBottom: '1rem'}} key={index}>
                             <Grid container className="orderHistory">
-                                <Grid container item className="name" spacing={3}>
+                                <Grid container item className="name" spacing={3} >
                                     <Grid item xs={2}>Restaurant:</Grid>
                                     <Grid item xs={4} className="rightItem">{order.findNameUnderRestname[0].name}</Grid>
                                     <Grid item xs={2}>Mobile:</Grid>
                                     <Grid item xs={4} className="rightItem">{order.findNameUnderRestname[0].mobile}</Grid>
                                 </Grid>
-                                <Grid container item className="name" justify="space-between">
+                                <Grid container item className="subtitle" justify="space-between" style={{marginBottom:'5px'}}>
                                     <div>Address:</div>
                                     <div>{order.findNameUnderRestname[0].address}</div>
                                 </Grid>
                                 {this.findCourierName(order.findNameUnderCouriername[0]) != 'Not Matched' &&
-                                    <Grid container item className="name" spacing={3}>
+                                    <Grid container item className="name" spacing={3} style={{marginBottom:'5px'}}>
                                         <Grid item xs={2}>Courier:</Grid>
                                         <Grid item xs={4} className="rightItem">{order.findNameUnderCouriername[0].name}</Grid>
                                         <Grid item xs={2}>Mobile:</Grid>
@@ -122,24 +121,35 @@ class Customer extends React.Component {
                                     </Grid>
                                 }
                                 {this.findCourierName(order.findNameUnderCouriername[0]) == 'Not Matched' &&
-                                    <Grid container item className="name" spacing={3}>
+                                    <Grid container item className="name" spacing={3} style={{marginBottom:'5px'}}>
                                         <Grid item xs={2}>Courier:</Grid>
                                         <Grid item xs={4} className="rightItem">Not Matched</Grid>
                                     </Grid>
                                 }
                                 <Grid container item spacing={3}>
                                     <Grid item xs={6} className="subtitle">Order Date:{order.createdAt.substring(0, 10)}</Grid>
-                                    <Grid item xs={6} className="subtitle">Status: {this.getStatus(order.orderStatus)}</Grid>
+                                    <Grid item xs={6} className="subtitle">Status: <span style={{color:'#F08080' }}>{this.getStatus(order.orderStatus)}</span></Grid>
+                                </Grid>
+                                <Grid container item>
+                                    <Grid item xs={3} item className="subtitle">Order Details:</Grid>
+                                </Grid>
+                                <Grid container item direction="row" key={index} spacing={3}>
+                                    <Grid item xs={6} className="subtitle">Dish</Grid>
+                                    <Grid item xs={3} className="subtitle">Amount</Grid>
+                                    <Grid item xs={3} item className="priceItem subtitle">Price</Grid>
                                 </Grid>
                                 {order.orderList.map((item, index) =>
                                     <Grid container item direction="row" key={index} spacing={3}>
-                                        <Grid item xs={6} className="foodItem">Item Name: {item.dish}</Grid>
-                                        <Grid item xs={3} className="foodItem">Amount: {item.amount}</Grid>
+                                        <Grid item xs={6} className="foodItem">{item.dish}</Grid>
+                                        <Grid item xs={3} className="foodItem">{item.amount}</Grid>
                                         <Grid item xs={3} item className="priceItem">${item.price}</Grid>
                                     </Grid>
                                 )}
                                 <Grid container item justify="flex-end">
-                                    <Grid item xs={3} item className="priceItem">Total: ${this.calculateTotal(order.orderList)}</Grid>
+                                    <Grid item xs={3} item className="priceItem">Delievery Fee: $20</Grid>
+                                </Grid>
+                                <Grid container item justify="flex-end">
+                                    <Grid item xs={3} item className="priceItem">Total: ${this.calculateTotal(order.orderList)+ 20}</Grid>
                                 </Grid>
 
                                 {order.orderStatus == 0
@@ -150,8 +160,7 @@ class Customer extends React.Component {
                                     </Grid>
                                 }
                             </Grid>
-                            <hr />
-                        </div>
+                        </Paper>
                     )}
                 </Scrollbars>
             </React.Fragment>

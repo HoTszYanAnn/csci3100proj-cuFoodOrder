@@ -14,7 +14,7 @@ function HomePage() {
           <div className="apptitle">CU Food Order</div>
         </div>
         <div className="content-description">
-          <div>For ... description</div>
+          <div>Fast Service, Delicious Food</div>
         </div>
       </div>
       <div className="mainContent">

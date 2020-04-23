@@ -23,7 +23,8 @@ class InquiryPage extends React.Component {
         };
         this.msgsScrollbars = React.createRef();
         this.scrollbars = React.createRef();
-        this.socket = io(process.env.REACT_APP_API_URL)
+        this.socket = io(process.env.REACT_APP_API_URL);
+        this.exitRoom = this.exitRoom.bind(this);
     }
     componentDidMount() {
         this.setState({ mounted: true });
@@ -56,6 +57,19 @@ class InquiryPage extends React.Component {
                 messageList: [...this.state.messageList, message]
             })
         })
+        this.socket.on('exit_dialog', (data) => {
+            console.log(data);
+            let message = {
+                author: 'them',
+                type: 'text',
+                data: {
+                  text: data.dialog
+                }
+              }
+            this.setState({
+                messageList: [...this.state.messageList, message]
+            })
+        });
 
     }
 
@@ -77,11 +91,13 @@ class InquiryPage extends React.Component {
         let getDataUrl = `${process.env.REACT_APP_API_URL}/catalog/inquires/empty_room`
         axios.post(getDataUrl).then(result => {
             let data = result.data.empty_room
-            console.log(result);
             this.setState({ emptyRoomList: data })
         })
     }
     exitRoom = () => {
+        this.socket.emit('exit', (error) => {
+            console.log(error)
+        });
         this.setState({
             inRoom: false,
             messageList: [],
@@ -107,7 +123,6 @@ class InquiryPage extends React.Component {
         if (accessRight != 3 || this.state.redirect) {
             return <Redirect to="/" />
         }
-        console.log(this.socket);
         return (
             <React.Fragment>
                 <Paper className="profileContainer">

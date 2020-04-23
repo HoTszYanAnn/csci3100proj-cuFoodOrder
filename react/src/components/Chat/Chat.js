@@ -22,7 +22,20 @@ class Chat extends Component {
                 messageList: [...this.state.messageList, data]
             })
         });
-
+        this.socket.on('exit_dialog', (data) => {
+            console.log(data);
+            let message = {
+                author: 'them',
+                type: 'text',
+                data: {
+                  text: data.dialog
+                }
+              }
+            this.setState({
+                messageList: [...this.state.messageList, message]
+            })
+        });
+        
         this.socket.on('join_cust', (data) =>{
             console.log(data);
             let message = {
@@ -58,6 +71,10 @@ class Chat extends Component {
                 console.log(error)
             });
         }else{
+            console.log('exit')
+            this.socket.emit('exit', (error) => {
+                console.log(error)
+            });
             this.setState({messageList: []})
         }
         this.setState({isOpen: !this.state.isOpen})

@@ -83,7 +83,7 @@ class RestaurantCard extends React.Component {
                 <CardMedia
                     className={classes.media}
                     image={this.props.restaurant.user[0].image}
-                    title="Paella dish"
+                    title={this.props.restaurant.user[0].name}
                 />
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">

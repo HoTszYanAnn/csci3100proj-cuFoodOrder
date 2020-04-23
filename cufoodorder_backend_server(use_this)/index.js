@@ -128,7 +128,7 @@ io.on("connection", function(socket){
     // event listener to disconnection
     socket.on('exit', ()=> {
         let customer = quitCustomer(socket.id);
-
+        console.log(customer);
         if(customer){
             io.to(customer.customer_room).emit('exit_message', { dialog: `user has left.` });
             socket.close();

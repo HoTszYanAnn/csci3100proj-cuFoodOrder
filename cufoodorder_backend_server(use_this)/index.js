@@ -43,7 +43,7 @@ app.use('/catalog/menus', require('./routes/menus'));
 //routing for websocket io -- i.e. communication between the server and client
 //when websocket connection built, the first "on" function uses a "connection" event firing the anonymous function
 io.on("connection", function(socket){
-
+//debug line
 
     socket.on('userinfo', ({customer_room})=>{
         var customer = addCustomer({ connection_id: socket.id, customer_room: customer_room});
@@ -61,7 +61,7 @@ io.on("connection", function(socket){
 
 
     socket.on('csinfo', ({cs_name, customer_room})=>{
-        var customer = addcs({cs_name: cs_name, customer_room: customer_room});
+        var customer = addcs({connection_id: socket.id, cs_name: cs_name, customer_room: customer_room});
 
         console.log(customer);
 

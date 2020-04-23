@@ -125,6 +125,10 @@ class NavUserMenu extends React.Component {
       )
     }
     let empty = false;
+    if (JSON.parse(sessionStorage.getItem('myCart')) == null){
+      let item = []
+      sessionStorage.setItem('myCart', JSON.stringify(item));
+    }
     if (JSON.parse(sessionStorage.getItem('myCart')).length == 0)
       empty = true;
     return (

@@ -18,18 +18,50 @@ class Chat extends Component {
     componentWillMount() {
         this.socket.on('saved_dialog', (data) => {
             console.log(data);
-            console.log('test');
             this.setState({
                 messageList: [...this.state.messageList, data]
             })
         });
+
+        this.socket.on('join_cust', (data) =>{
+            console.log(data);
+            let message = {
+                author: 'them',
+                type: 'text',
+                data: {
+                  text: data.dialog
+                }
+              }
+            this.setState({
+                messageList: [...this.state.messageList, message]
+            })
+        })
+        this.socket.on('join_cs', (data) =>{
+            console.log(data);
+            let message = {
+                author: 'them',
+                type: 'text',
+                data: {
+                  text: data.dialog
+                }
+              }
+            this.setState({
+                messageList: [...this.state.messageList, message]
+            })
+        })
       }
+    
     joinRoom = () => {
         console.log('clicked')
+        if (!this.state.isOpen){
+            this.socket.emit('userinfo', { customer_room: Cookies.get('username') }, (error) => {
+                console.log(error)
+            });
+        }else{
+            this.setState({messageList: []})
+        }
         this.setState({isOpen: !this.state.isOpen})
-        this.socket.emit('userinfo', { customer_room: 'restTest' }, (error) => {
-            console.log(error)
-          });
+        
     }
 
     _onMessageWasSent(message) {

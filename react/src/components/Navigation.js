@@ -207,6 +207,9 @@ export default function Navigation(props) {
                     {accessRight == 3 && 
                       <MenuItem component={RouterLink} to="/find_record">Database Record</MenuItem>
                     }
+                    {accessRight == 3 && 
+                      <MenuItem component={RouterLink} to="/inquiry">Inquiry</MenuItem>
+                    }
                     <MenuItem onClick={Logout}>Logout</MenuItem>
                   </div>
                 )}

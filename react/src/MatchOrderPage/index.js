@@ -44,22 +44,22 @@ class MatchOrderPage extends React.Component {
             return "delivered"
         }
     }
-    calculateTotal = (list) =>{
+    calculateTotal = (list) => {
         let i = 0;
         let sum = 0;
-        while (list[i]){
+        while (list[i]) {
             sum = sum + list[i].price * list[i].amount
             i++;
-        } 
+        }
         return sum;
     }
-    onClickChangeStatus = (id) =>{
+    onClickChangeStatus = (id) => {
         this.changeStatus(id);
     }
 
-    changeStatus = async(id) =>{
+    changeStatus = async (id) => {
         axios.defaults.withCredentials = true
-        const data = { _id: id, courier_name: Cookies.get("username")};
+        const data = { _id: id, courier_name: Cookies.get("username") };
         let getOrderListUrl = `${process.env.REACT_APP_API_URL}/catalog/orders/update_order`
         axios.post(getOrderListUrl, data).then(result => {
             if (result.data.process == "failed") {
@@ -86,9 +86,8 @@ class MatchOrderPage extends React.Component {
                     <div className="orderList">
                         <h1 style={{ textAlign: 'center' }}>Match Order</h1>
                         <Scrollbars style={{ height: 800 }}>
-                            <hr />
                             {this.state.orders.map((order, index) =>
-                                <div key={index}>
+                                <Paper variant="outlined" elevation={3} style={{ marginBottom: '1rem' }} key={index}>
                                     <Grid container className="orderHistory">
                                         <Grid container item className="name" spacing={3}>
                                             <Grid item xs={2}>Customer:</Grid>
@@ -96,7 +95,7 @@ class MatchOrderPage extends React.Component {
                                             <Grid item xs={2}>Mobile:</Grid>
                                             <Grid item xs={4} className="rightItem">{order.findNameUnderCustname[0].mobile}</Grid>
                                         </Grid>
-                                        <Grid container item className="name" justify="space-between">
+                                        <Grid container item className="subtitle" style={{ marginBottom: '5px' }} justify="space-between">
                                             <div>Address:</div>
                                             <div>{order.findNameUnderCustname[0].address}</div>
                                         </Grid>
@@ -106,30 +105,40 @@ class MatchOrderPage extends React.Component {
                                             <Grid item xs={2}>Mobile:</Grid>
                                             <Grid item xs={4} className="rightItem">{order.findNameUnderRestname[0].mobile}</Grid>
                                         </Grid>
-                                        <Grid container item className="name" justify="space-between">
+                                        <Grid container item className="subtitle" style={{ marginBottom: '10px' }} justify="space-between">
                                             <div>Address:</div>
                                             <div>{order.findNameUnderRestname[0].address}</div>
                                         </Grid>
                                         <Grid container item spacing={3}>
-                                            <Grid item xs={6} className="name">Order Date:{order.createdAt.substring(0, 10)}</Grid>
-                                            <Grid item xs={6} className="name">Status: {this.getStatus(order.orderStatus)}</Grid>
+                                            <Grid item xs={6} className="subtitle">Order Date:{order.createdAt.substring(0, 10)}</Grid>
+                                            <Grid item xs={6} className="subtitle">Status: <span style={{ color: '#F08080' }}>{this.getStatus(order.orderStatus)}</span></Grid>
+                                        </Grid>
+                                        <Grid container item>
+                                            <Grid item xs={3} item className="subtitle">Order Details:</Grid>
+                                        </Grid>
+                                        <Grid container item direction="row" key={index} spacing={3}>
+                                            <Grid item xs={6} className="subtitle">Dish</Grid>
+                                            <Grid item xs={3} className="subtitle">Amount</Grid>
+                                            <Grid item xs={3} item className="priceItem subtitle">Price</Grid>
                                         </Grid>
                                         {order.orderList.map((item, index) =>
                                             <Grid container item direction="row" key={index} spacing={3}>
-                                                <Grid item xs={6} className="foodItem">Item Name: {item.dish}</Grid>
-                                                <Grid item xs={3} className="foodItem">Amount: {item.amount}</Grid>
+                                                <Grid item xs={6} className="foodItem">{item.dish}</Grid>
+                                                <Grid item xs={3} className="foodItem">{item.amount}</Grid>
                                                 <Grid item xs={3} item className="priceItem">${item.price}</Grid>
                                             </Grid>
                                         )}
                                         <Grid container item justify="flex-end">
-                                            <Grid item xs={3} item className="name rightItem">Total: ${this.calculateTotal(order.orderList)}</Grid>
+                                            <Grid item xs={3} item className="priceItem">Delievery Fee: $20</Grid>
+                                        </Grid>
+                                        <Grid container item justify="flex-end">
+                                            <Grid item xs={3} item className="priceItem">Total: ${this.calculateTotal(order.orderList) + 20}</Grid>
                                         </Grid>
                                         <Grid container item justify="center">
                                             <Button title={order.id} id={order.id} size="large" variant="outlined" color="secondary" onClick={() => this.onClickChangeStatus(order.id)}>Accept</Button>
                                         </Grid>
                                     </Grid>
-                                    <hr />
-                                </div>
+                                </Paper>
                             )}
                         </Scrollbars>
                     </div>

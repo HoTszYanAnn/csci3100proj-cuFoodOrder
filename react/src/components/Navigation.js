@@ -156,7 +156,7 @@ export default function Navigation(props) {
                   onClick={handleUserMenu}
                 >
                   <AccountCircle />
-              <div className="username">{username}</div>
+              <div className="username">{name}</div>
                 </IconButton>
               )}
               {

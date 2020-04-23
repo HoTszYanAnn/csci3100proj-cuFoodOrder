@@ -4,8 +4,8 @@ import io from "socket.io-client";
 import { Fab } from '@material-ui/core';
 import ChatIcon from '@material-ui/icons/Chat';
 import { withTheme } from '@material-ui/core/styles';
-import Chat from './Chat/Chat/Chat'
-
+import Chat from './Chat/Chat'
+import Cookies from 'js-cookie';
 class ChatBox extends Component {
 
     constructor(props){
@@ -27,6 +27,11 @@ class ChatBox extends Component {
         this.setState({chatOpen: true});
     }
     render() {
+        let accessRight = Cookies.get('accessRight');
+        let display = true
+        if (accessRight == 3 || !accessRight){
+            display = false
+        }
         return (
             <div>
                {/*} <Fab color="primary" aria-label="add" style={{
@@ -36,7 +41,7 @@ class ChatBox extends Component {
                 }}>
                     <ChatIcon onClick={this.openChat}/>
             </Fab>*/}
-                <Chat open={this.state.chatOpen} onClose={this.handleCloseChat}/>
+                {display && <Chat open={this.state.chatOpen} onClose={this.handleCloseChat}/>}
             </div>
             )
     }

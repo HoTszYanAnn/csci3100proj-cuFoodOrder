@@ -13,22 +13,30 @@ class Chat extends Component {
             isOpen : false
         }
         
-    }
-    
-    joinRoom = () => {
-        /*console.log('clicked')
         this.socket = io(process.env.REACT_APP_API_URL)
+    }
+    componentWillMount() {
+        this.socket.on('saved_dialog', (data) => {
+            console.log(data);
+            console.log('test');
+            this.setState({
+                messageList: [...this.state.messageList, data]
+            })
+        });
+      }
+    joinRoom = () => {
+        console.log('clicked')
         this.setState({isOpen: !this.state.isOpen})
-        this.socket.emit('userinfo', { cs_name:'csTest', customer_room: 'restTest' }, (error) => {
+        this.socket.emit('userinfo', { customer_room: 'restTest' }, (error) => {
             console.log(error)
-          });*/
+          });
     }
 
     _onMessageWasSent(message) {
-        this.setState({
-            messageList: [...this.state.messageList, message]
+        console.log(message);
+        this.socket.emit('chat_dialog', message, (error) =>{
+            console.log(error)
         })
-
     }
 
     _sendMessage(text) {
@@ -48,7 +56,7 @@ class Chat extends Component {
         <div>
             <Launcher
                 agentProfile={{
-                    teamName: 'react-chat-window',
+                    teamName: 'CU Food Order Customer Service',
                     imageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png'
                 }}
                 onMessageWasSent={this._onMessageWasSent.bind(this)}

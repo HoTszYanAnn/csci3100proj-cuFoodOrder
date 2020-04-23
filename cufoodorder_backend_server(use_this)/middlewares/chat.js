@@ -33,19 +33,22 @@ let infocs = (customer_room) => customers.find((item, index, array) => {return (
 //     return customers[index];
 //   }
 // };
+
 let infocust = (customer_room) => {
-  let index = customers.findIndex((customer) => {((customer.customer_room === customer_room)&&(customer.need_flag==="yes"))});
-  if(index !== -1) {
-    customers[index].need_flag = 'no';
-    return customers[index];
-}
+  for (let i =0; i< customers.length; i++){
+    if ((customers[i].customer_room === customer_room)&&(customers[i].need_flag==="yes")){
+      customers[i].need_flag = 'no';
+      console.log(customers[i])
+      return customers[i];
+    }
+  }
 };
 
 
 
 let addcs = ({connection_id, cs_name, customer_room}) => {
   let customer = { connection_id: connection_id, username: cs_name, customer_room: customer_room, cs_flag: "yes"};
-
+  infocust(customer_room);
   customers.push(customer);
 
   return customer;
@@ -65,7 +68,7 @@ let addcs = ({connection_id, cs_name, customer_room}) => {
 let findemptyroom = () => {
   let empty =[]
   for (let i = 0; i < customers.length; i++){
-    if (customers[i].cs_flag ==='no'&& customers[i].need_flag==="yes"){
+    if (customers[i].cs_flag ==='no' && customers[i].need_flag==="yes"){
       empty.push(customers[i])
     }
   }

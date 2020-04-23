@@ -89,7 +89,8 @@ io.on("connection", function(socket){
         //message = {author, type, data{text}}
 
         let cs_name = infocs(customer.customer_room)
-        console.log(cs_name.username);
+        // console.log(cs_name.username);
+        
 
 
         // let inquire = new Inquire({
@@ -125,11 +126,13 @@ io.on("connection", function(socket){
 
 
     // event listener to disconnection
-    socket.on('disconnect', ()=> {
+    socket.on('exit', ()=> {
         let customer = quitCustomer(socket.id);
 
-        if(customer)
+        if(customer){
             io.to(customer.customer_room).emit('exit_message', { dialog: `user has left.` });
+            socket.close();
+        }
     });
 });
 

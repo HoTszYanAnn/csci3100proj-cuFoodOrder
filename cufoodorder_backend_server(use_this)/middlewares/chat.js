@@ -1,5 +1,5 @@
 //temporary space for storing customer's connection
-var customers = [];
+let customers = [];
 // var customer = { connection_id, cs_name, customer_room };
 //debug line
 
@@ -7,7 +7,7 @@ var customers = [];
 //let cs can freely join any customer room
 let addCustomer = ({ connection_id, customer_room }) => {
 
-  let customer = { connection_id: connection_id, username: customer_room, customer_room: customer_room, cs_flag: "no"};
+  let customer = { connection_id: connection_id, username: customer_room, customer_room: customer_room, cs_flag: "no", need_flag:"yes"};
 
   customers.push(customer);
 
@@ -23,13 +23,9 @@ let quitCustomer = (connection_id) => {
     return customers.splice(index, 1)[0];
 }
 
-let infoCustomer = (connection_id) => {
-  customers.find(
-    (item, index, array) => {
-      return item.connection_id === connection_id
-    });
-}
+let infoCustomer = (connection_id) => customers.find((item, index, array) => {return item.connection_id === connection_id});
 
+let infocs = (customer_room) => customers.find((item, index, array) => {return ((item.customer_room === customer_room)&&(item.cs_flag==="yes"))});
 // var addcs = ({cs_name, customer_room}) => {
 //   var index = customers.findIndex((customer) => customer.customer_room === customer_room);
 //   if(index !== -1) {
@@ -37,6 +33,15 @@ let infoCustomer = (connection_id) => {
 //     return customers[index];
 //   }
 // };
+let infocust = (customer_room) => {
+  let index = customers.findIndex((customer) => {((customer.customer_room === customer_room)&&(customer.need_flag==="yes"))});
+  if(index !== -1) {
+    customers[index].need_flag = 'no';
+    return customers[index];
+}
+};
+
+
 
 let addcs = ({connection_id, cs_name, customer_room}) => {
   let customer = { connection_id: connection_id, username: cs_name, customer_room: customer_room, cs_flag: "yes"};
@@ -57,6 +62,8 @@ let addcs = ({connection_id, cs_name, customer_room}) => {
 // };
 
 
-let findemptyroom = customers.filter((item, index, array)=>{return (item.cs_flag==="no")})
+let findemptyroom = customers.filter((item, index, array)=>{return ((item.cs_flag==="no")&&(item.need_flag==="yes"))})
 
-module.exports = { addCustomer, quitCustomer, infoCustomer, addcs, findemptyroom};
+// module.exports = { addCustomer, quitCustomer, infoCustomer, addcs, findemptyroom};
+
+module.exports = { addCustomer, quitCustomer, infoCustomer, addcs, infocs, infocust,findemptyroom};

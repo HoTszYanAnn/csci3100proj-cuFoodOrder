@@ -9,7 +9,7 @@ var cors = require("cors");
 
 
 var Inquire = require('./models/inquire');
-var {addCustomer, quitCustomer, infoCustomer, addcs} = require('./middlewares/chat'); //store chatroom status and information
+let {addCustomer, quitCustomer, infoCustomer, addcs, infocs} = require('./middlewares/chat'); //store chatroom status and information
 
 
 //mongoose connection info. with MongoDB Altas
@@ -68,9 +68,9 @@ io.on("connection", function(socket){
         socket.join(customer.customer_room);
 
         io.to(customer.customer_room).emit('join_cs', {
-            dialog: `${customer.customer_room}, ${customer.cs_name} is at your service.`,
+            dialog: `${customer.customer_room}, ${customer.username} is at your service.`,
             connection_id: customer.connection_id,
-            cs_name: customer.cs_name,
+            cs_name: customer.username,
             customer_room: customer.customer_room
         });
     });
@@ -78,14 +78,30 @@ io.on("connection", function(socket){
 
     //below on() receiving information from the client server
     socket.on("chat_dialog", function(message){
+
+        let connection_id = socket.id;
+
+        console.log(connection_id);
         
-        let customer = infoCustomer(socket.id);
+        let customer = infoCustomer(connection_id);
+
+        console.log("debud "+ customer)
         //message = {author, type, data{text}}
 
+        let cs_name = infocs(customer.customer_room)
+        console.log(cs_name.username);
+
+
+        // let inquire = new Inquire({
+        //     user: customer.customer_room,
+        //     cs: customer.cs_name,
+        //     answered_by: message.author,
+        //     dialog: message.data.text
+        // });
 
         let inquire = new Inquire({
             user: customer.customer_room,
-            cs: customer.cs_name,
+            cs: customer.cs_name.username,
             answered_by: message.author,
             dialog: message.data.text
         });

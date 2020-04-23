@@ -81,6 +81,7 @@ class ProfilePage extends React.Component {
             introduction: '',
             introError: '',
             introErrorText: '',
+            image:'',
             pwError: false,
             pwErrorText: '',
             mobileError: false,
@@ -152,8 +153,16 @@ class ProfilePage extends React.Component {
             else
                 this.setState({ nameError: false, nameErrorText: "" })
         }
-        console.log(prop +'.'+'event.target.value')
-        this.setState({ [prop]: event.target.value })
+        if (prop == 'file') {
+            let reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+            reader.onloadend = () => {
+                this.setState({image : reader.result})
+            }
+        }else {
+            console.log(prop +'.'+'event.target.value')
+            this.setState({ [prop]: event.target.value })
+        }
     };
 
     handleCloseRegisterSucc = () => {
@@ -173,16 +182,20 @@ class ProfilePage extends React.Component {
         this.handleOpenRegisterSucc();
     };
 
-    UpdateRequest = async () => {
+    UpdateRequest = async () => { 
         axios.defaults.withCredentials = true
+        axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
         let data = null;
+        console.log(this.state.image)
         if (this.state.password) {
-            data = { username: this.state.username, name: this.state.name , password : this.state.password, address : this.state.address, mobile : this.state.mobile, emailAddress: this.state.email, paymentInfo : this.state.payment, introduction: this.state.introduction};
+            data = { username: this.state.username, name: this.state.name , password : this.state.password, address : this.state.address, mobile : this.state.mobile, emailAddress: this.state.email, paymentInfo : this.state.payment, introduction: this.state.introduction, image:this.state.image};
         } else {
-            data = { username: this.state.username, name: this.state.name , address : this.state.address, mobile : this.state.mobile, emailAddress: this.state.email, paymentInfo : this.state.payment, introduction: this.state.introduction};
+            data = { username: this.state.username, name: this.state.name , address : this.state.address, mobile : this.state.mobile, emailAddress: this.state.email, paymentInfo : this.state.payment, introduction: this.state.introduction , image:this.state.image};
         }
         let updateUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/update_account`
-        axios.post(updateUrl, data).then(result => {
+        axios.post(updateUrl, data, {
+           headers: {'Access-Control-Allow-Origin': '*'} }
+        ).then(result => {
             console.log(result);
         })
     }
@@ -192,7 +205,7 @@ class ProfilePage extends React.Component {
         axios.post(getDataUrl).then(result => {
             let data = result.data.customerData
             console.log(result);
-            this.setState({ name: data.name, username: data.username, address: data.address, mobile: data.mobile, email: data.emailAddress, payment: data.paymentInfo, introduction:data.introduction })
+            this.setState({ name: data.name, username: data.username, address: data.address, mobile: data.mobile, email: data.emailAddress, payment: data.paymentInfo, introduction:data.introduction, image: data.image })
         })
     }
 
@@ -322,6 +335,8 @@ class ProfilePage extends React.Component {
                                     <div className="ErrorMessage">{this.state.payErrorText}</div>
                                 </FormControl>
                                 {accessRight == 1 &&
+                                <div>
+                                
                                 <FormControl variant="outlined"
                                     margin="dense" fullWidth error={this.state.introError}>
                                     <InputLabel htmlFor="outlined-adornment-username">Introduction</InputLabel>
@@ -333,6 +348,10 @@ class ProfilePage extends React.Component {
                                     />
                                     <div className="ErrorMessage">{this.state.introErrorText}</div>
                                 </FormControl>
+                                    <div>Select Main Page Image:</div>
+                                    <div><input type="file" onChange={this.handleChangeRegister('file')} /> </div>
+                                    <img src={this.state.image} style={{width:'100%'}}/>
+                                </div>
                                 }
                             </DialogContent>
                             <DialogActions>

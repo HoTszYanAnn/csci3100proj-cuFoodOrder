@@ -17,8 +17,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import image from '../img/cuhk.jpeg';
-import axios from 'axios';
+import Cookies from "js-cookie";
+
 const styles = theme => ({
     media: {
         height: 0,
@@ -47,7 +47,8 @@ class RestaurantCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            expanded: false
+            expanded: false,
+            login: false,
         }
         this.handleExpandClick = this.handleExpandClick.bind(this);
     }
@@ -57,48 +58,42 @@ class RestaurantCard extends React.Component {
         this.setState({ expanded: !this.state.expanded });
     };
 
-    addLike = async (id) => {
-        axios.defaults.withCredentials = true
-        let addLikeUrl = `${process.env.REACT_APP_API_URL}/catalog/menus/likes_menu_plus `
-        let data = {_id : id}
-        axios.post(addLikeUrl, data).then(result => {
-            console.log(result)
-            this.props.getAgain();
-        })
-    }
     render() {
         const { classes } = this.props;
         console.log(this.props);
+        if (Cookies.get("username") && !this.state.login){
+            this.setState({login:true})
+        }
+
         return (
             <Card className={classes.root}>
                 <CardHeader
                     avatar={
                         <Avatar aria-label="recipe" className={classes.avatar}>
-                            A
-                    </Avatar>
+                            {this.props.restaurant.user[0].name.charAt(0).toUpperCase()}
+                        </Avatar>
                     }
                     action={
-                        <IconButton aria-label="settings" onClick={sessionStorage.setItem('restName', JSON.stringify(this.props.restName))} component={RouterLink} to={{ pathname: `/restaurants/${this.props.linkName}` }}>
+                        <IconButton aria-label="settings" onClick={sessionStorage.setItem('restName', JSON.stringify(this.props.restaurant.user[0].username))} component={RouterLink} to={{ pathname: `/restaurants/${this.props.restaurant.user[0].username}` }}>
                             <RestaurantIcon />
                         </IconButton>
                     }
-                    title={this.props.restName}
-                    subheader={this.props.updateDate}
+                    title={this.props.restaurant.user[0].name}
                 />
                 <CardMedia
                     className={classes.media}
-                    image={image}
+                    image={this.props.restaurant.user[0].image}
                     title="Paella dish"
                 />
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        {this.props.description}
+                        {this.props.restaurant.user[0].introduction}
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                    <IconButton aria-label="add to favorites" onClick={() => this.addLike(this.props.id)}>
-                        <FavoriteIcon style={{color: 'pink'}}/>
-                        <div>{this.props.like}</div>
+                    <IconButton aria-label="add to favorites" disabled={!this.state.login}  onClick={() => this.props.plusOne(this.props.restaurant._id.restaurantName)}>
+                        <FavoriteIcon style={{ color: this.state.login ? 'pink': 'grey'}} />
+                        <div>{this.props.restaurant.user[0].likes}</div>
                     </IconButton>
                     <IconButton
                         className={clsx(classes.expand, {
@@ -114,12 +109,17 @@ class RestaurantCard extends React.Component {
                 <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
                     <CardContent>
                         <div className={classes.menuItem}>Menu:</div>
-                        {this.props.bestItems.map((bestItem) =>
-                            <Grid container justify="space-between" key={bestItem._id}>
-                                <Grid item className={classes.menuItem}>{bestItem.dish}</Grid>
-                                <Grid item className={classes.menuItem}>${bestItem.price}</Grid>
+                        {this.props.restaurant.menu.map((menu, index) =>
+                            <Grid container justify="space-between" key={index}>
+                                <Grid item className={classes.menuItem}>{menu.menuName}</Grid>
+                                {menu.menuList.map((item, index) =>
+                                    <Grid key={index}>
+                                        <Grid item className={classes.menuItem}>{item.dish}</Grid>
+                                        <Grid item className={classes.menuItem}> {item.price}</Grid>
+                                    </Grid>
+                                )}
                             </Grid>
-                        )}
+                            )}
                     </CardContent>
                 </Collapse>
             </Card>
@@ -128,6 +128,6 @@ class RestaurantCard extends React.Component {
 }
 
 RestaurantCard.propTypes = {
-    classes: PropTypes.object.isRequired,
+                    classes: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(RestaurantCard);

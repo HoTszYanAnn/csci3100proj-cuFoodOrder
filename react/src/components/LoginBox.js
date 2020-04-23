@@ -13,6 +13,7 @@ import FormControl from '@material-ui/core/FormControl';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { createHashHistory } from "history";
 import './css/RegisterBox.css';
 
 
@@ -65,6 +66,8 @@ class LoginBox extends React.Component {
                 Cookies.set("username", result.data.username, { expires: 1 });
                 Cookies.set("accessRight", result.data.accessRight, { expires: 1 });
                 this.props.onClose();
+                const history = createHashHistory();
+                history.go("/");
             }
             return result;
         })

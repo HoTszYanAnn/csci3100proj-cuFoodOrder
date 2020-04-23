@@ -16,7 +16,16 @@ router.post('/createBill', authorized, function(req, res){
             };        
         });
 });
- 
+
+//findOneOrderById
+router.post('/find_order_by_id', authorized, function(req, res){
+    Order.findOne({_id: req.body.id}).exec(function(err, orderDetails){
+        if(err)
+            return res.json({process: "failed", err});
+        else    
+            return res.json({process: "success", orderDetails});
+    });
+});
  
 // display-order History function for customer
 router.post('/orderHistory_customer', authorized, function(req, res){

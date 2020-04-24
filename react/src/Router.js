@@ -18,6 +18,7 @@ const LoadableRestSearchPage = React.lazy(() => import('./LoadingPage'));
 const LoadableRestaurantPage = React.lazy(() => import('./RestaurantPage'));
 const LoadableCoorperatePage = React.lazy(() => import('./CoorperatePage'));
 const LoadablePaymentPage = React.lazy(() => import('./PaymentPage'));
+const LoadableInquiryPage = React.lazy(() => import('./InquiryPage'));
 
 class Routes extends React.Component {
 
@@ -55,6 +56,11 @@ class Routes extends React.Component {
           <Route exact path="/restaurants">
             <Suspense fallback={<LoadingPage />}>
               <LoadableRestSearchPage />
+            </Suspense>
+          </Route>
+          <Route exact path="/inquiry">
+            <Suspense fallback={<LoadingPage />}>
+              <LoadableInquiryPage />
             </Suspense>
           </Route>
           <Route exact path="/match_order">

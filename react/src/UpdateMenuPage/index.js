@@ -181,6 +181,17 @@ class UpdateMenuPage extends React.Component {
         if (this.state.process == '') {
             this.getExistMenu();
         }
+        let emptyField = false;
+        if (this.state.nowMenu){
+            console.log(this.state.nowMenu.menuList)
+            for (let i = 0; i < this.state.nowMenu.menuList.length; i++){
+                console.log(this.state.nowMenu.menuList[i])
+                if (this.state.nowMenu.menuList[i].dish == "" || this.state.nowMenu.menuList[i].description == "" || this.state.nowMenu.menuList[i].price == ""){
+                    emptyField = true;
+                    break;
+                }
+            }
+        }
         return (
             <React.Fragment>
                 <Paper className="updateMenuContainer">
@@ -234,6 +245,7 @@ class UpdateMenuPage extends React.Component {
                                                 <Input
                                                     value={this.state.nowMenu.menuList[index].dish}
                                                     onChange={this.handleChangeItem('dish', index)}
+                                                    required
                                                 />
                                             </FormControl>
                                         </Grid>
@@ -243,6 +255,7 @@ class UpdateMenuPage extends React.Component {
                                                 <Input
                                                     value={this.state.nowMenu.menuList[index].description}
                                                     onChange={this.handleChangeItem('description', index)}
+                                                    required
                                                 />
                                             </FormControl>
                                         </Grid>
@@ -253,6 +266,7 @@ class UpdateMenuPage extends React.Component {
                                                     value={this.state.nowMenu.menuList[index].price}
                                                     onChange={this.handleChangeItem('price', index)}
                                                     inputComponent={PriceFormatCustom}
+                                                    required
                                                 />
                                             </FormControl>
                                         </Grid>
@@ -278,8 +292,8 @@ class UpdateMenuPage extends React.Component {
                             {(this.state.showingMenu != this.state.menus.length) &&
                                 <Grid container item xs={12} spacing={3} style={{ marginBottom: '1rem' }} >
                                     <Grid item xs={4}><Button style={{ width: '100%' }} variant="outlined" size="large" color="secondary" onClick={this.deleteMenu}>Delete</Button></Grid>
-                                    <Grid item xs={4}><Button style={{ width: '100%' }} variant="outlined" size="large" color="primary" onClick={this.cancelMenu}>Cancel</Button></Grid>
-                                    <Grid item xs={4}><Button style={{ width: '100%', borderColor: 'green', color: 'green'  }} variant="outlined" size="large" color="primary" onClick={this.updateMenu}>Update</Button></Grid>
+                                    <Grid item xs={4}><Button style={{ width: '100%' }} variant="outlined" size="large" onClick={this.cancelMenu}>Cancel</Button></Grid>
+                                    <Grid item xs={4}><Button style={{ width: '100%' }} variant="outlined" size="large" color="primary" disabled={emptyField} onClick={this.updateMenu}>Update</Button></Grid>
                                 </Grid>
                             }
                             {(this.state.showingMenu == this.state.menus.length) &&

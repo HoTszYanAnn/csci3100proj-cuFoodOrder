@@ -36,7 +36,30 @@ CreditCardFormatCustom.propTypes = {
 
 function ExpiryFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
+    function limit(val, max) {
+        if (val.length === 1 && val[0] > max[0]) {
+            val = '0' + val;
+        }
 
+        if (val.length === 2) {
+            if (Number(val) === 0) {
+                val = '01';
+
+                //this can happen when user paste number
+            } else if (val > max) {
+                val = max;
+            }
+        }
+
+        return val;
+    }
+
+    function cardExpiry(val) {
+        let month = limit(val.substring(0, 2), '12');
+        let year = val.substring(2, 4);
+
+        return month + (year.length ? '/' + year : '');
+    }
     return (
         <NumberFormat
             {...other}
@@ -48,7 +71,9 @@ function ExpiryFormatCustom(props) {
                     },
                 });
             }}
-            format="##/##"
+            format={cardExpiry}
+            placeholder="MM/YY"
+            mask={['M', 'M', 'Y', 'Y']}
         />
     );
 }
@@ -110,8 +135,8 @@ class PaymentPage extends React.Component {
             this.setState({ issuer: true });
         }
     };
-    handlePaySuccBox= ()=>{
-        this.setState({paySuccBox: false, redirect: true});
+    handlePaySuccBox = () => {
+        this.setState({ paySuccBox: false, redirect: true });
     }
     handleInputFocus = id => {
         this.setState({
@@ -192,10 +217,10 @@ class PaymentPage extends React.Component {
         let getOrderListUrl = `${process.env.REACT_APP_API_URL}/catalog/orders/update_order`
         axios.post(getOrderListUrl, data).then(result => {
             console.log(result)
-            this.setState({paySuccBox: true})
+            this.setState({ paySuccBox: true })
         })
     }
-    
+
     render() {
         const accessRight = Cookies.get("accessRight");
         if (this.state.notGetList) {

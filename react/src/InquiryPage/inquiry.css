@@ -1,0 +1,28 @@
+.profileContainer{
+    margin: 10rem auto;
+    max-width:750px;
+    padding: 3rem;
+    background-color: rgb(252, 252, 252);
+}
+
+
+.profileForm{
+    margin: 0 auto;
+    max-width:600px;
+}
+
+.bubble{
+    margin: 0.5rem 1rem;
+}
+.leftBubble{
+    background-color: #f4f7f9;
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+
+.rightBubble{
+    background-color: #4e8cff;
+    border-radius: 1rem;
+    padding: 1rem;
+}

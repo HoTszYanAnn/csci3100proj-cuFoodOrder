@@ -76,7 +76,7 @@ class RestaurantsPage extends React.Component {
                 <div className="orderMenuBox">
                     <Grid container spacing={3}>
                         {this.state.restmenu.map(({ _id, menuName, menuList }, i) => {
-                            return <Grid item xs={12} key={i._id}>
+                            return <Grid item xs={12} key={i}>
                                 <h1> {menuName}</h1>
                                 <Divider style={{margin: '1rem 0'}}/>
                                 <Grid container spacing={3}>

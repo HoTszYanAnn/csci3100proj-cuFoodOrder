@@ -88,8 +88,12 @@ io.on("connection", function(socket){
         console.log("debud "+ customer)
         //message = {author, type, data{text}}
 
-        let cs_name = infocs(customer.customer_room)
+        var cs_name = infocs(customer.customer_room)
         // console.log(cs_name.username);
+
+        if(cs_name===undefined){
+            var cs_name = {username: ''};
+        }
         
 
 

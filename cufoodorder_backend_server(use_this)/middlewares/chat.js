@@ -23,9 +23,9 @@ let quitCustomer = (connection_id) => {
     return customers.splice(index, 1)[0];
 }
 
-let infoCustomer = (connection_id) => customers.find((item, index, array) => {return item.connection_id === connection_id});
+let infoCustomer = (connection_id) => customers.find(customer => customer.connection_id === connection_id);
 
-let infocs = (customer_room) => customers.find((item, index, array) => {return ((item.customer_room === customer_room)&&(item.cs_flag==="yes"))});
+let infocs = (customer_room) => customers.find(customer => ((customer.customer_room === customer_room)&&(customer.cs_flag==="yes")));
 // var addcs = ({cs_name, customer_room}) => {
 //   var index = customers.findIndex((customer) => customer.customer_room === customer_room);
 //   if(index !== -1) {

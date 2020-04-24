@@ -57,10 +57,10 @@ class InquiryPage extends React.Component {
                 messageList: [...this.state.messageList, message]
             })
         })
-        this.socket.on('exit_dialog', (data) => {
+        this.socket.on('exit_message', (data) => {
             console.log(data);
             let message = {
-                author: 'them',
+                author: 'me',
                 type: 'text',
                 data: {
                   text: data.dialog
@@ -108,6 +108,7 @@ class InquiryPage extends React.Component {
         })
     }
     clickInRoom = (roomName) => {
+        this.setState({messageList: []})
         this.socket.emit('csinfo', { customer_room: roomName, cs_name: Cookies.get('username') }, (error) => {
             console.log(error)
         });

@@ -31,4 +31,4 @@ var addcs = ({cs_name, customer_room}) => {
   }
 };
 
-module.exports = { addCustomer, quitCustomer, infoCustomer, addcs};
+module.exports = { addCustomer, quitCustomer, infoCustomer, addcs };

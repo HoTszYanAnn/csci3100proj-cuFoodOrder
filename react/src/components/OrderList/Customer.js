@@ -18,7 +18,7 @@ class Customer extends React.Component {
         };
     }
 
-
+    // get order list from server
     getOrderList = async () => {
         axios.defaults.withCredentials = true
         const data = { custname: Cookies.get("username") };
@@ -47,13 +47,13 @@ class Customer extends React.Component {
             return "delivered"
         }
     }
-
+    // prevent empty name
     findCourierName = (value) => {
         if (value)
             return value.name
         else return "Not Matched"
     }
-
+    // calculate price total
     calculateTotal = (list) => {
         let i = 0;
         let sum = 0;
@@ -63,6 +63,7 @@ class Customer extends React.Component {
         }
         return sum;
     }
+    // delete order
     onClickDelete = async(id) =>{
         axios.defaults.withCredentials = true
         var data={  _id : id }
@@ -74,11 +75,11 @@ class Customer extends React.Component {
             console.log(e);
         });
     }
-
+    // change to payment page
     onClickStartPayment = (id) =>{
         this.setState({redirectPayment: id});
     }
-
+    // customer order list layout
     render() {
         if (this.state.notGetList) {
             this.getOrderList();

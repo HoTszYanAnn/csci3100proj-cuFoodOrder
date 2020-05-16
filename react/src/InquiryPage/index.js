@@ -35,6 +35,8 @@ class InquiryPage extends React.Component {
             this.state.mounted && this.scrollbars.current.scrollToBottom();    
         this.getRoomListData();
     }
+    
+    // listen to socketio server 
     componentWillMount() {
         this.socket.on('saved_dialog', (data) => {
             console.log(data);
@@ -70,9 +72,8 @@ class InquiryPage extends React.Component {
                 messageList: [...this.state.messageList, message]
             })
         });
-
     }
-
+    // send meesage to server 
     _onMessageWasSent = () => {
         let text = this.state.newMessage
         let message = {
@@ -85,7 +86,7 @@ class InquiryPage extends React.Component {
         })
         this.setState({ newMessage: '' })
     }
-
+    // get waiting inquiry room
     getRoomListData = async () => {
         axios.defaults.withCredentials = true
         let getDataUrl = `${process.env.REACT_APP_API_URL}/catalog/inquires/empty_room`
@@ -94,6 +95,7 @@ class InquiryPage extends React.Component {
             this.setState({ emptyRoomList: data })
         })
     }
+    // exit room
     exitRoom = () => {
         this.socket.emit('exit', (error) => {
             console.log(error)
@@ -107,6 +109,7 @@ class InquiryPage extends React.Component {
             getData: false
         })
     }
+    // start socketio
     clickInRoom = (roomName) => {
         this.setState({messageList: []})
         this.socket.emit('csinfo', { customer_room: roomName, cs_name: Cookies.get('username') }, (error) => {
@@ -118,6 +121,8 @@ class InquiryPage extends React.Component {
     handleValueChange = prop => event => {
         this.setState({ [prop]: event.target.value });
     }
+
+    // inquiry page layout
     render() {
         const username = Cookies.get("username");
         const accessRight = Cookies.get("accessRight");

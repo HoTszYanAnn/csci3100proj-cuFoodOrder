@@ -15,6 +15,7 @@ class Chat extends Component {
         
         this.socket = io(process.env.REACT_APP_API_URL)
     }
+    // listen to socketio 
     componentWillMount() {
         this.socket.on('saved_dialog', (data) => {
             console.log(data);
@@ -63,7 +64,7 @@ class Chat extends Component {
             })
         })
       }
-    
+    // join socketio
     joinRoom = () => {
         console.log('clicked')
         if (!this.state.isOpen){
@@ -81,26 +82,13 @@ class Chat extends Component {
         this.setState({isOpen: !this.state.isOpen})
         
     }
-
+    // sent message to socketio
     _onMessageWasSent(message) {
         console.log(message);
         this.socket.emit('chat_dialog', message, (error) =>{
             console.log(error)
         })
     }
-
-    _sendMessage(text) {
-        if (text.length > 0) {
-            this.setState({
-                messageList: [...this.state.messageList, {
-                    author: 'them',
-                    type: 'text',
-                    data: { text }
-                }]
-            })
-        }
-    }
-
     render() {
         return (
         <div>

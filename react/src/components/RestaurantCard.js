@@ -57,7 +57,7 @@ class RestaurantCard extends React.Component {
         console.log(this.state.expanded);
         this.setState({ expanded: !this.state.expanded });
     };
-
+    // restuarant card layout at home page
     render() {
         const { classes } = this.props;
         console.log(this.props);

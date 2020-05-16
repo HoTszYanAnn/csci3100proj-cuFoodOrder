@@ -15,7 +15,7 @@ class Restaurants extends React.Component {
       notGet: true,
     }
   }
-
+  // update restuarant like to server
   plusOne = async (id) => {
     axios.defaults.withCredentials = true
     let addLikeUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/likes_rest_plus`
@@ -26,6 +26,8 @@ class Restaurants extends React.Component {
       this.setState({ notGet: true })
     })
   }
+
+  //get restaurant list from server
   getRestaurantsMenu = async () => {
     axios.defaults.withCredentials = true
     let getRestsDataUrl = `${process.env.REACT_APP_API_URL}/catalog/menus/display_menu_restname`
@@ -33,7 +35,7 @@ class Restaurants extends React.Component {
       this.setState({ showingMenu: "", restaurants: result.data.doc })
     })
   }
-
+  // home page restaurant coumn layout
   render() {
     if (this.state.redirect) {
       return <Redirect to='/error' />;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { WaveTopBottomLoading } from 'react-loadingg';
 import './errorPage.css'
-
-function LoadingPage() {
+//error page layout
+function ErrorPage() {
   return (
     <div className="error">
        <h1>Error. Please back to home page</h1>
@@ -10,4 +10,4 @@ function LoadingPage() {
   );
 }
 
-export default LoadingPage;
+export default ErrorPage;

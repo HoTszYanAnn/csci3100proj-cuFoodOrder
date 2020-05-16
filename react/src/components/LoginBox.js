@@ -49,7 +49,7 @@ class LoginBox extends React.Component {
     handleMouseDownPassword = event => {
         event.preventDefault();
     };
-    
+    // login request to server
     SubmitLoginBox = async () => {
         console.log("enter");
         axios.defaults.withCredentials = true
@@ -73,7 +73,7 @@ class LoginBox extends React.Component {
             return result;
         })
     }
-
+// login box layout
     render() {
         return (
             <Dialog open={this.props.open} onClose={this.props.onClose}>

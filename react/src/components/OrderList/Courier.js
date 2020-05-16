@@ -16,7 +16,7 @@ class Courier extends React.Component {
         };
     }
 
-
+    // get order list from server
     getOrderList = async () => {
         axios.defaults.withCredentials = true
         const data = { couriername: Cookies.get("username") };
@@ -45,13 +45,13 @@ class Courier extends React.Component {
             return "delivered"
         }
     }
-
+    // prevent empty name
     findRestaurantName = (value) => {
         if (value)
             return value[0].name
         else return "Not Matched"
     }
-
+    // calculate total price
     calculateTotal = (list) => {
         let i = 0;
         let sum = 0;
@@ -65,7 +65,7 @@ class Courier extends React.Component {
     onClickChangeStatus = (id, status) => {
         this.changeStatus(id, status);
     }
-
+    // update order status to server
     changeStatus = async (id, status) => {
         axios.defaults.withCredentials = true
         const data = { _id: id, orderStatus: status };
@@ -79,7 +79,7 @@ class Courier extends React.Component {
             return result;
         })
     }
-
+    // courier order list layout
     render() {
         if (this.state.notGetList) {
             this.getOrderList();
@@ -143,7 +143,7 @@ class Courier extends React.Component {
                                 <Grid container item justify="flex-end">
                                     <Grid item xs={3} item className="priceItem">Total: ${this.calculateTotal(order.orderList) + 20}</Grid>
                                 </Grid>
-                        {order.orderStatus == 2
+                                {order.orderStatus == 2
                                     &&
                                     <Grid container item justify="center">
                                         <Button title={order.id} id={order.id} size="large" variant="outlined" color="secondary" onClick={() => this.onClickChangeStatus(order.id, 3)}>Start Delivery</Button>

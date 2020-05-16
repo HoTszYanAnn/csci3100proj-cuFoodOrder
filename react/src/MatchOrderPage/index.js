@@ -17,7 +17,7 @@ class MatchOrderPage extends React.Component {
             notGetList: true,
         };
     }
-
+    // get order list from server
     getOrderList = async () => {
         axios.defaults.withCredentials = true
         let getOrderListUrl = `${process.env.REACT_APP_API_URL}/catalog/orders/empty_courier`
@@ -44,6 +44,7 @@ class MatchOrderPage extends React.Component {
             return "delivered"
         }
     }
+    // calcuate total price
     calculateTotal = (list) => {
         let i = 0;
         let sum = 0;
@@ -56,7 +57,7 @@ class MatchOrderPage extends React.Component {
     onClickChangeStatus = (id) => {
         this.changeStatus(id);
     }
-
+    // update order details (courier info)
     changeStatus = async (id) => {
         axios.defaults.withCredentials = true
         const data = { _id: id, courier_name: Cookies.get("username") };
@@ -70,6 +71,8 @@ class MatchOrderPage extends React.Component {
             return result;
         })
     }
+
+    // match order page layout
     render() {
         const accessRight = Cookies.get("accessRight");
         if (this.state.notGetList) {

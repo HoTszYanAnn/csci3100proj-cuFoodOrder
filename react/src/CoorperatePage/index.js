@@ -23,7 +23,7 @@ import {defaultImage }from '../img/defaultImage'
 import './Coorperate.css';
 
 
-
+// credit card format
 function CreditCardFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
 
@@ -47,7 +47,7 @@ CreditCardFormatCustom.propTypes = {
     inputRef: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
 };
-
+// phone nnumber format
 function PhoneNumberFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
 
@@ -109,13 +109,13 @@ class CoorperatePage extends React.Component {
     this.handleClickShowPassword = this.handleClickShowPassword.bind(this)
     this.handleChangeRegister = this.handleChangeRegister.bind(this)
   }
-
+  //show/hidden password
   handleClickShowPassword = () => {
     this.setState({ showPassword: !this.state.showPassword })
-    //setLoginValues({ ...this.state.loginValues, showPassword: !this.state.showPassword });
   };
+
+  //validation
   handleChangeRegister = prop => event => {
-    //setLoginValues({ ...this.state.loginValues, [prop]: event.target.value });
     if (prop == "password") {
       if (event.target.value.length < 8)
         this.setState({ pwError: true, pwErrorText: "Too Short" })
@@ -182,7 +182,7 @@ class CoorperatePage extends React.Component {
     var data = this.RegisterRequest();
     this.handleOpenRegisterSucc();
   };
-
+  // register request to server
   RegisterRequest = async () => {
     const imageUrl= defaultImage;
     console.log(imageUrl);
@@ -210,6 +210,8 @@ class CoorperatePage extends React.Component {
       return e;
     }
   }
+
+  //compare exist username
   compareUsername = async (input) => {
     const compareData = {
       method: 'POST',
@@ -236,7 +238,7 @@ class CoorperatePage extends React.Component {
       return e;
     }
   }
-
+  // coorperate page layout (for register courier/restaurant users)
   render() {
     if (this.state.redirect){
       return <Redirect to="/"/>

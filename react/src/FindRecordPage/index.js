@@ -21,7 +21,7 @@ class FindRecordPage extends React.Component {
     }
 
 
-
+//  get order list form server
     getOrderList = async () => {
         axios.defaults.withCredentials = true
         let ar = this.state.inputAr
@@ -60,6 +60,7 @@ class FindRecordPage extends React.Component {
             return "delivered"
         }
     }
+    // calculate total price
     calculateTotal = (list) => {
         let i = 0;
         let sum = 0;
@@ -69,17 +70,18 @@ class FindRecordPage extends React.Component {
         }
         return sum;
     }
+
+    // prevent empty name (not paired)
     findCourierName = (value) => {
         if (value)
             return value.name
         else return "Not Matched"
     }
-    onClickChangeStatus = (id) => {
-        this.changeStatus(id);
-    }
+
     onValueChange = prop => event => {
         this.setState({ [prop]: event.target.value })
     }
+    
     render() {
         const accessRight = Cookies.get("accessRight");
         if (accessRight != 3) {

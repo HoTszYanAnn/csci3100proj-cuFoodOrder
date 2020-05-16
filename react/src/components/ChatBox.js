@@ -26,6 +26,7 @@ class ChatBox extends Component {
     openChat = () => {
         this.setState({chatOpen: true});
     }
+    // show chat fab 
     render() {
         let accessRight = Cookies.get('accessRight');
         let display = true
@@ -34,13 +35,6 @@ class ChatBox extends Component {
         }
         return (
             <div>
-               {/*} <Fab color="primary" aria-label="add" style={{
-                    position: 'fixed',
-                    bottom: this.props.theme.spacing(5),
-                    right: this.props.theme.spacing(5),
-                }}>
-                    <ChatIcon onClick={this.openChat}/>
-            </Fab>*/}
                 {display && <Chat open={this.state.chatOpen} onClose={this.handleCloseChat}/>}
             </div>
             )

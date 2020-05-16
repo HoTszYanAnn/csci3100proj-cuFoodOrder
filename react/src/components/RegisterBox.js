@@ -14,7 +14,7 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Cookies from 'js-cookie';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
-
+// credit card format
 function CreditCardFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
 
@@ -38,7 +38,7 @@ CreditCardFormatCustom.propTypes = {
     inputRef: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
 };
-
+// phone number format
 function PhoneNumberFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
 
@@ -96,10 +96,11 @@ class RegisterPage extends React.Component {
     this.handleClickShowPassword = this.handleClickShowPassword.bind(this)
     this.handleChangeLogin = this.handleChangeLogin.bind(this)
   }
-
+// show/hidden password
   handleClickShowPassword = () => {
     this.setState({ showPassword: !this.state.showPassword })
   };
+  //validation
   handleChangeLogin = prop => event => {
     if (prop == "password") {
       if (event.target.value.length < 8)
@@ -150,7 +151,7 @@ class RegisterPage extends React.Component {
     }
     this.setState({ [prop]: event.target.value })
   };
-
+  // check exist username from server
   compareUsername = async (input) => {
     const compareData = {
       method: 'POST',
@@ -186,7 +187,7 @@ class RegisterPage extends React.Component {
     var data = this.RegisterRequest();
     this.props.onSuccClose();
   };
-
+  // resgister request to server
   RegisterRequest = async () => {
     const loginData = {
       method: 'POST',
@@ -213,7 +214,7 @@ class RegisterPage extends React.Component {
     }
   }
 
-
+// register box layout
   render() {
     if (!(this.state.addError) && !(this.state.emailError) && !(this.state.nameError) && !(this.state.unError) && !(this.state.mobileError) && !(this.state.payError) && !(this.state.pwError))
       if (this.state.username && this.state.address && this.state.email && this.state.mobile && this.state.name && this.state.password && this.state.payment) {

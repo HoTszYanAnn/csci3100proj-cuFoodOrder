@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Paper, FormControl, Select, MenuItem, InputLabel, Grid, Input, Button, InputAdornment, IconButton, Card, CardHeader, CardMedia, TextField, Typography } from '@material-ui/core';
 import Cookies from 'js-cookie';
-import RemoveIcon from '@material-ui/icons/Remove';
-import AddIcon from '@material-ui/icons/Add';
 import { Redirect } from 'react-router-dom';
 import axios from "axios";
 import produce from "immer";

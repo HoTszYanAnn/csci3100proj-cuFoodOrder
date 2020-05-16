@@ -1,7 +1,7 @@
 import React from 'react';
 import './css/Footer.css';
 export default function Navigation(props) {
-
+// footer layout
   return (
     <React.Fragment>
         <div className="footer">

@@ -17,7 +17,7 @@ class Restaurant extends React.Component {
         };
     }
 
-
+    // get order list from server
     getOrderList = async () => {
         axios.defaults.withCredentials = true
         const data = { restname: Cookies.get("username") };
@@ -46,13 +46,13 @@ class Restaurant extends React.Component {
             return "delivered"
         }
     }
-
+    // prevent empty name
     findCourierName = (value) => {
         if (value)
             return value.name
         else return "Not Matched"
     }
-
+    // calculate total price
     calculateTotal = (list) => {
         let i = 0;
         let sum = 0;
@@ -66,7 +66,7 @@ class Restaurant extends React.Component {
     onClickStartPreparing = (id) => {
         this.startPreparing(id);
     }
-
+    // update order status to start preparing
     startPreparing = async (id) => {
         axios.defaults.withCredentials = true
         const data = { _id: id, orderStatus: 2 };
@@ -80,7 +80,7 @@ class Restaurant extends React.Component {
             return result;
         })
     }
-
+    // restaurant order list layout
     render() {
         if (this.state.notGetList) {
             this.getOrderList();

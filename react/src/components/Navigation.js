@@ -24,7 +24,7 @@ import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { createHashHistory } from "history";
 import axios from "axios";
 import './css/Navigation.css';
-
+// show bar when scroll up/ hide bar when scroll down
 function HideOnScroll(props) {
   const { children, window } = props;
   const trigger = useScrollTrigger({ target: window ? window() : undefined });
@@ -99,7 +99,7 @@ export default function Navigation(props) {
   const CloseLoginBox = () => {
     setOpenLoginBox(false);
   };
-
+  // logout request
   const Logout = async() => {
     axios.defaults.withCredentials = true
     let logoutUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/logout` 
@@ -135,7 +135,7 @@ export default function Navigation(props) {
       />
     </div>
   );
-
+// Navigation bar layouut
   return (
     <React.Fragment>
       <HideOnScroll {...props}>

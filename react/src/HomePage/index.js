@@ -4,7 +4,7 @@ import Restaurants from '../components/Restaurants.js';
 import { Button } from "@material-ui/core";
 import {Link as RouterLink} from 'react-router-dom';
 import './Home.css';
-
+// home page layout
 function HomePage() {
   return (
     <React.Fragment>

@@ -16,7 +16,7 @@ class OrderPage extends React.Component {
             redirect: false,
         };
     }
-
+    // order page layout
     render() {
         const username = Cookies.get("username");
         const accessRight = Cookies.get("accessRight");

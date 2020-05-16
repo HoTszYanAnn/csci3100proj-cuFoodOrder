@@ -18,7 +18,7 @@ import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import './profile.css'
 
-
+// credit card format
 function CreditCardFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
 
@@ -43,6 +43,7 @@ CreditCardFormatCustom.propTypes = {
     onChange: PropTypes.func.isRequired,
 };
 
+// phone number format
 function PhoneNumberFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
 
@@ -106,13 +107,12 @@ class ProfilePage extends React.Component {
         this.handleClickShowPassword = this.handleClickShowPassword.bind(this)
         this.handleChangeRegister = this.handleChangeRegister.bind(this)
     }
-
+    // show/ hidden password
     handleClickShowPassword = () => {
         this.setState({ showPassword: !this.state.showPassword })
-        //setLoginValues({ ...this.state.loginValues, showPassword: !this.state.showPassword });
     };
+    // validation
     handleChangeRegister = prop => event => {
-        //setLoginValues({ ...this.state.loginValues, [prop]: event.target.value });
         if (prop == "password") {
             if (event.target.value.length < 8 && event.target.value.length != 0)
                 this.setState({ pwError: true, pwErrorText: "Too Short" })
@@ -181,7 +181,7 @@ class ProfilePage extends React.Component {
         var data = this.UpdateRequest();
         this.handleOpenRegisterSucc();
     };
-
+    //update user profile information to server
     UpdateRequest = async () => { 
         axios.defaults.withCredentials = true
         axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
@@ -199,6 +199,7 @@ class ProfilePage extends React.Component {
             console.log(result);
         })
     }
+    //get user information from server
     getUserData = async (input) => {
         axios.defaults.withCredentials = true
         let getDataUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/user_data`
@@ -209,7 +210,7 @@ class ProfilePage extends React.Component {
         })
     }
 
-
+    // profile page layout
     render() {
         const username = Cookies.get("username");
         const accessRight = Cookies.get("accessRight");

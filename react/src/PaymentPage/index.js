@@ -10,7 +10,7 @@ import NoticeBox from '../components/NoticeBox';
 import CreditCards from 'react-credit-cards';
 import './payment.css';
 import 'react-credit-cards/es/styles-compiled.css';
-
+// credit card format
 function CreditCardFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
 
@@ -33,7 +33,7 @@ CreditCardFormatCustom.propTypes = {
     inputRef: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
 };
-
+//expiry date format
 function ExpiryFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
     function limit(val, max) {
@@ -82,7 +82,7 @@ ExpiryFormatCustom.propTypes = {
     inputRef: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
 };
-
+// credit card cvc format
 function cvcFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
 
@@ -106,6 +106,8 @@ cvcFormatCustom.propTypes = {
     inputRef: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
 };
+
+
 class PaymentPage extends React.Component {
     constructor(props) {
         super(props);
@@ -143,7 +145,7 @@ class PaymentPage extends React.Component {
             focused: id,
         });
     };
-
+    // validation
     handleInputChange = prop => ({ target }) => {
         if (prop === 'number') {
             if (target.value.length != 16) {
@@ -173,7 +175,7 @@ class PaymentPage extends React.Component {
         console.log(target)
         this.setState({ [prop]: target.value });
     };
-
+    //get order list information
     getOrder = async (id) => {
         axios.defaults.withCredentials = true
         let getOrderUrl = `${process.env.REACT_APP_API_URL}/catalog/orders/find_order_by_id`
@@ -188,6 +190,8 @@ class PaymentPage extends React.Component {
             return result;
         })
     }
+
+    // get user information
     getUserInfo = async () => {
         axios.defaults.withCredentials = true
         let getOrderUrl = `${process.env.REACT_APP_API_URL}/catalog/customers/user_data`
@@ -201,6 +205,8 @@ class PaymentPage extends React.Component {
             return result;
         })
     }
+
+    //caculate total price
     calculateTotal = (list) => {
         let i = 0;
         let sum = 0;
@@ -210,7 +216,7 @@ class PaymentPage extends React.Component {
         }
         return sum;
     }
-
+    // update order status to paid
     changeStatus = async () => {
         axios.defaults.withCredentials = true
         const data = { _id: this.props.match.params.orderid, orderStatus: 1 };
@@ -220,7 +226,7 @@ class PaymentPage extends React.Component {
             this.setState({ paySuccBox: true })
         })
     }
-
+    // payment page layout
     render() {
         const accessRight = Cookies.get("accessRight");
         if (this.state.notGetList) {

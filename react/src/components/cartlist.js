@@ -28,7 +28,7 @@ function ListItems(props) {
   let carts = props.cart;
   var cartitem = null;
   console.log(carts)
-  if (carts == null) { cartitem = null } else {//layout of items in the shopping cart
+  if (carts == null) { cartitem = null } else {
     cartitem = carts.map(item => {
       return <div className={classes.root} key={item.id}>
         <Card className={classes.paper}>

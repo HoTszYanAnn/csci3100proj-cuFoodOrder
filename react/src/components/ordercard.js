@@ -55,11 +55,11 @@ const Order = props => {
   var [value, setvalue] = useState(1);
   var [disstate, setDisable] = useState(false);
 
-// add the order to the shopping cart
+
   const addToCart = () => {
     let cart = sessionStorage.getItem('myCart')
     cart = JSON.parse(cart);
-
+    //let obj={id:cart.id, name:cart.name, price: cart.price}
     let newobj = [{ id: props.id, dish: props.name, price: props.price, amount: value }]
 
     let obj = [...cart, ...newobj];
@@ -67,12 +67,12 @@ const Order = props => {
     sessionStorage.setItem('myCart', JSON.stringify(obj));
     setDisable(true);
   }
-//function of the quantity plus one
+
   const plusOne = () => {
     var n = parseInt(value) + 1;
     setvalue(n);
   }
-//function of the quantity minus one
+
   const decOne = () => {
     if (value == 1) {
       setvalue(1);
@@ -82,7 +82,6 @@ const Order = props => {
     }
   }
   const colorList=['#D2FFBC', '#BDEAFF','#FFFFBD', '#DCBDFF', '#FFEABD']
-  //layout of the order
   return (
 
     <Card className={classes.root}>

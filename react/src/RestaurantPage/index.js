@@ -42,7 +42,7 @@ class RestaurantsPage extends React.Component {
     }
 
 
-    getMenu = async () => {// get the restaurant menu from data base
+    getMenu = async () => {
         let restName=this.props.match.params.restName
         axios.defaults.withCredentials = true
         var username={username:restName}
@@ -62,7 +62,7 @@ class RestaurantsPage extends React.Component {
     }
 
     render() {
-        return (//layout of the menu in each of the restaurant
+        return (
             <React.Fragment>
                 <div className="container">
                     <img src={this.state.restData.image} className="topbigimage" />

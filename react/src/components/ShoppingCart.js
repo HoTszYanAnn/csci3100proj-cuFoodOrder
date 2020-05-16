@@ -30,7 +30,7 @@ class NavUserMenu extends React.Component {
 
 
   //var n1=parseInt(subtotal)+parseInt(price);
-  deleteItem = id => {// function of delete order in shopping cart
+  deleteItem = id => {
     console.log('delete');
     const filteredItems = this.state.cart.filter(item =>
       item.id != id);
@@ -45,7 +45,7 @@ class NavUserMenu extends React.Component {
   componentDidMount() {
     this.Count();
   }
-  Count = props => {// count the total of the order
+  Count = props => {
     let cart = JSON.parse(sessionStorage.getItem('myCart'))
     if (cart == null) {
       this.setState({
@@ -66,7 +66,7 @@ class NavUserMenu extends React.Component {
       })
     }
   }
-  plusOne = id => {// function of quantity plus one
+  plusOne = id => {
     let cart = this.state.cart;
     cart.map(item => {
       if (item.id === id) {
@@ -80,7 +80,7 @@ class NavUserMenu extends React.Component {
     sessionStorage.setItem('myCart', JSON.stringify(this.state.cart));
     this.Count();
   }
-  decOne = id => {// function of quantity minus one
+  decOne = id => {
     let cart = this.state.cart;
     cart.map(item => {
       if (item.id === id) {
@@ -101,7 +101,7 @@ class NavUserMenu extends React.Component {
     this.Count();
   }
 
-  createOrder = async () => {// pass the order request to datatbase
+  createOrder = async () => {
     axios.defaults.withCredentials = true
     let cart = JSON.parse(sessionStorage.getItem('myCart'))
     var order = { customer_name: Cookies.get("username"), restaurant_name: this.props.history.location.pathname.split("/")[2], orderList: cart, orderStatus: 0 }
@@ -119,7 +119,7 @@ class NavUserMenu extends React.Component {
 
 
   render() {
-    if (this.state.redirectPayment) {// function of payment
+    if (this.state.redirectPayment) {
       return (
         <Redirect to={{ pathname: `/payment/${this.state.redirectPayment}` }} />
       )
@@ -131,7 +131,7 @@ class NavUserMenu extends React.Component {
     }
     if (JSON.parse(sessionStorage.getItem('myCart')).length == 0)
       empty = true;
-    return (// layout of the shopping cart
+    return (
       <React.Fragment>
         <List>
           <ListItem>

@@ -12,7 +12,7 @@ import NoticeBox from '../components/NoticeBox';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import {defaultImage }from '../img/defaultImage'
-
+//price format 
 function PriceFormatCustom(props) {
     const { inputRef, onChange, ...other } = props;
 
@@ -66,6 +66,8 @@ class UpdateMenuPage extends React.Component {
     handleCloseNotice = () => {
         this.setState({ openNotice: false })
     };
+
+    //get menu from server
     getExistMenu = async () => {
         axios.defaults.withCredentials = true
         let data = { username: Cookies.get("username") }
@@ -91,6 +93,8 @@ class UpdateMenuPage extends React.Component {
             this.setState({ nowMenu: this.state.menus[event.target.value] })
 
     }
+
+    //delete menu item
     deleteMenuItem = (index) => {
         this.setState(produce((state) => {
             for (let i = index; i < state.nowMenu.menuList.length; i++) {
@@ -100,6 +104,7 @@ class UpdateMenuPage extends React.Component {
         }))
     }
 
+    // append menu item
     appendMenuItem = () => {
         let value = this.state.nowMenu.menuList.length;
         this.setState(produce((state) => {
@@ -138,6 +143,8 @@ class UpdateMenuPage extends React.Component {
             }
         }
     }
+
+    //update menu to server
     updateMenu = async () => {
         axios.defaults.withCredentials = true
         let getMenuDataUrl = `${process.env.REACT_APP_API_URL}/catalog/menus/update_menu`
@@ -148,9 +155,12 @@ class UpdateMenuPage extends React.Component {
         this.setState({ openNotice: true })
     }
 
+    //cancel change
     cancelMenu = () => {
         this.setState({ nowMenu: this.state.menus[this.state.showingMenu] })
     }
+
+    //add new menu to server
     addMenu = async () => {
         axios.defaults.withCredentials = true
         let getMenuDataUrl = `${process.env.REACT_APP_API_URL}/catalog/menus/upload_menu`
@@ -159,6 +169,8 @@ class UpdateMenuPage extends React.Component {
             console.log(result);
         })
     }
+
+    //delete menu from server
     deleteMenu = async () => {
         axios.defaults.withCredentials = true
         let getMenuDataUrl = `${process.env.REACT_APP_API_URL}/catalog/menus/delete_menu`
@@ -170,6 +182,7 @@ class UpdateMenuPage extends React.Component {
         this.setState({ openNotice: true })
     }
 
+    // update menu page
     render() {
         let username = Cookies.get("username");
         let accessRight = Cookies.get("accessRight");
